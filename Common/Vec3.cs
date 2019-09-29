@@ -1,0 +1,32 @@
+﻿using System;
+
+namespace RayTracer.Common
+{
+    public readonly struct Vec3
+    {
+        public float X { get; }
+        public float Y { get; }
+        public float Z { get; }
+
+        public Vec3(float x = 0, float y = 0, float z = 0)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+        public static Vec3 FromAngle(float xy, float z, float len)
+        {
+            return new Vec3(len * MathF.Cos(z) * MathF.Sin(xy), len * MathF.Cos(z) * MathF.Cos(xy), len * MathF.Sin(z));
+        }
+        public float Length { get { return MathF.Sqrt(X * X + Y * Y + Z * Z); } }
+        public Vec3 Normalize() => this * (1f / Length);
+
+        public static Vec3 operator -(Vec3 a) => a * (-1);
+        public static Vec3 operator +(Vec3 a, Vec3 b) => new Vec3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+        public static Vec3 operator -(Vec3 a, Vec3 b) => new Vec3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+        public static Vec3 operator *(Vec3 a, float f) => new Vec3(a.X * f, a.Y * f, a.Z * f);
+        public static float operator *(Vec3 a, Vec3 b) => a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+        public static Vec3 operator %(Vec3 a, Vec3 b) => new Vec3(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X);
+
+    }
+}
