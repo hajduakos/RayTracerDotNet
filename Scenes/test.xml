@@ -1,0 +1,11 @@
+<scene w="1280" h="720" cameye="7 0 2.5" camlookat="0 0 1" camhfov="50">
+    <light pos="40 40 40" lum="6400 6400 6400" />
+    <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
+    <material id="red" ambient="0.1 0 0" diffuse="0.9 0 0" />
+    <material id="green" ambient="0 0.1 0" diffuse="0 0.45 0" specular="0 0.45 0" shine="5" />
+    <material id="blue" ambient="0 0 0.1" specular="0 0 0.9" shine="10" />
+    <planexy material="brown" />
+    <sphere material="red" center="0 -2 1" radius="1" />
+    <sphere material="green" center="0 0 1" radius="1" />
+    <sphere material="blue" center="0 2 1" radius="1" />
+</scene>
