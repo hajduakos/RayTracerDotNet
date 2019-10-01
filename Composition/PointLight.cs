@@ -1,13 +1,16 @@
 ﻿using RayTracer.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RayTracer.Composition
 {
+    /// <summary>
+    /// Point light source
+    /// </summary>
     public sealed class PointLight
     {
+        /// <summary> Position </summary>
         public Vec3 Pos { get; }
+
+        /// <summary> Luminance </summary>
         public Color Lum { get; }
 
         public PointLight(Vec3 pos, Color lum)

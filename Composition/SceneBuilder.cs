@@ -7,6 +7,9 @@ using System.Xml;
 
 namespace RayTracer.Composition
 {
+    /// <summary>
+    /// Scene loader from file
+    /// </summary>
     public class SceneBuilder
     {
         private static NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;

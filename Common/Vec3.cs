@@ -2,6 +2,9 @@
 
 namespace RayTracer.Common
 {
+    /// <summary>
+    /// 3D vector
+    /// </summary>
     public readonly struct Vec3
     {
         public float X { get; }
@@ -25,7 +28,11 @@ namespace RayTracer.Common
         public static Vec3 operator +(Vec3 a, Vec3 b) => new Vec3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
         public static Vec3 operator -(Vec3 a, Vec3 b) => new Vec3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         public static Vec3 operator *(Vec3 a, float f) => new Vec3(a.X * f, a.Y * f, a.Z * f);
+
+        /// <summary>  Dot product </summary>
         public static float operator *(Vec3 a, Vec3 b) => a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+
+        /// <summary> Cross product </summary>
         public static Vec3 operator %(Vec3 a, Vec3 b) => new Vec3(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X);
 
     }

@@ -1,5 +1,8 @@
 ﻿namespace RayTracer.Common
 {
+    /// <summary>
+    /// RGB color
+    /// </summary>
     public readonly struct Color
     {
         public float R { get; }
