@@ -1,4 +1,5 @@
 ﻿using RayTracer.Common;
+using System;
 
 namespace RayTracer.Objects
 {
@@ -28,6 +29,8 @@ namespace RayTracer.Objects
             AddTriangle(new Triangle(d, a, e));
             AddTriangle(new Triangle(d, b, a));
             AddTriangle(new Triangle(d, c, b));
+
+            SetBound(new Sphere(center, MathF.Sqrt(3 * side * side) / 2 + Global.EPS, material));
         }
     }
 }

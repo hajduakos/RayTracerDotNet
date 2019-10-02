@@ -37,16 +37,21 @@ namespace RayTracer.Objects
         }
 
         private List<Triangle> triangles;
+        private ObjectBase bound;
         
         public MeshObject(Material material) : base(material)
         {
             triangles = new List<Triangle>();
+            bound = null;
         }
 
         protected void AddTriangle(Triangle t) => triangles.Add(t);
+        protected void SetBound(ObjectBase bound) => this.bound = bound;
 
         public override Intersection Intersect(Ray ray)
         {
+            if (bound != null && bound.Intersect(ray) == null) return null;
+
             bool ints = false;
             float tmin = 0;
             int imin = 0;
