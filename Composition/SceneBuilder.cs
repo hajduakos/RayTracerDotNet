@@ -68,6 +68,14 @@ namespace RayTracer.Composition
                         materials[node.Attributes["material"].Value]
                         ));
                 }
+                else if (node.Name == "cube")
+                {
+                    scene.AddObject(new Cube(
+                        Vec3FromString(node.Attributes["center"].Value),
+                        Convert.ToSingle(node.Attributes["side"].Value, nfi),
+                        materials[node.Attributes["material"].Value]
+                        ));
+                }
                 else
                 {
                     throw new Exception("Unknown node: " + node.Name);
