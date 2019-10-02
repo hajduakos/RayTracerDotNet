@@ -2,8 +2,8 @@
     <light pos="20 80 40" lum="6400 6400 6400" />
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
     <material id="red" ambient="0.1 0 0" diffuse="0.9 0 0" />
-    <material id="green" ambient="0 0.1 0" diffuse="0 0.45 0" specular="0 0.45 0" shine="5" />
-    <material id="blue" ambient="0 0 0.1" specular="0 0 0.9" shine="10" />
+    <material id="green" ambient="0 0.1 0" diffuse="0 0.4 0" specular="0.55 0.55 0.55" shine="25" />
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.9" />
     <planexy material="brown" />
     <cube material="red" center="0 -1 1" side="2" />
     <sphere material="green" center="0 -1 3" radius="1" />

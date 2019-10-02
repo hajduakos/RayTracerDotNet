@@ -88,9 +88,9 @@ namespace RayTracer.Composition
                 Ray shadowRay = new Ray(pOffset, light.Pos - pOffset);
                 Intersection shadowInts = FirstInteresction(shadowRay);
                 // If no other object between current object and light source
-                if (shadowInts == null || (ints.IntsPt - shadowInts.IntsPt).Length > (ints.IntsPt - light.Pos).Length)
+                if (shadowInts == null || (pOffset - shadowInts.IntsPt).Length > (pOffset - light.Pos).Length)
                 {
-                    float dist = MathF.Pow((ints.IntsPt - light.Pos).Length, 2);
+                    float dist = MathF.Pow((pOffset - light.Pos).Length, 2);
                     // Diffuse component
                     float costh = shadowRay.Dir * ints.Normal;
                     if (costh < Global.EPS) costh = 0;
