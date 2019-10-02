@@ -56,45 +56,18 @@ namespace RayTracer.Composition
         }
 
         /// <summary>
-        /// Helper class representing an object hit by a ray
-        /// </summary>
-        private class ObjHit
-        {
-            /// <summary> Object being hit </summary>
-            public ObjectBase Obj { get; }
-
-            /// <summary> Intersection point </summary>
-            public Vec3 P { get; }
-
-            /// <summary> Normal vector </summary>
-            public Vec3 N { get; set; }
-
-            public ObjHit(ObjectBase obj, Vec3 p, Vec3 n)
-            {
-                this.Obj = obj;
-                this.P = p;
-                this.N = n;
-            }
-        }
-
-        /// <summary>
         /// Get the first object hit by a given ray
         /// </summary>
         /// <param name="ray">Ray</param>
         /// <returns>First object hit or null if ray hits no object</returns>
-        private ObjHit FirstInteresction(Ray ray)
+        private Intersection FirstInteresction(Ray ray)
         {
-            ObjHit first = null;
-            float tmin = 0;
+            Intersection first = null;
 
             foreach(ObjectBase obj in objects)
             {
                 Intersection ints = obj.Intersect(ray);
-                if (ints.IsHit && (first == null || ints.T < tmin))
-                {
-                    first = new ObjHit(obj, ray.Start + ray.Dir * ints.T, ints.Normal);
-                    tmin = ints.T;
-                }
+                if (ints != null && (first == null || ints.T < first.T)) first = ints;
             }
             return first;
         }
@@ -102,31 +75,31 @@ namespace RayTracer.Composition
         /// <summary>
         /// Calculate the direct light source for an intersected object
         /// </summary>
-        /// <param name="hit">Intersection</param>
+        /// <param name="ints">Intersection</param>
         /// <param name="ray">Ray</param>
         /// <returns>Color coming from direct light sources</returns>
-        private Color DirectLightSource(ObjHit hit, Ray ray)
+        private Color DirectLightSource(Intersection ints, Ray ray)
         {
             Color color = new Color(0, 0, 0); // Start with black
-            Vec3 pOffset = hit.P + hit.N * Global.EPS; // Offset a bit so that shadow ray does not hit the object itself
+            Vec3 pOffset = ints.IntsPt + ints.Normal * Global.EPS; // Offset a bit so that shadow ray does not hit the object itself
             foreach (PointLight light in lights)
             {
                 // Check if light is directly visible
                 Ray shadowRay = new Ray(pOffset, light.Pos - pOffset);
-                ObjHit ints = FirstInteresction(shadowRay);
+                Intersection shadowInts = FirstInteresction(shadowRay);
                 // If no other object between current object and light source
-                if (ints == null || (hit.P - ints.P).Length > (hit.P - light.Pos).Length)
+                if (shadowInts == null || (ints.IntsPt - shadowInts.IntsPt).Length > (ints.IntsPt - light.Pos).Length)
                 {
-                    float dist = MathF.Pow((hit.P - light.Pos).Length, 2);
+                    float dist = MathF.Pow((ints.IntsPt - light.Pos).Length, 2);
                     // Diffuse component
-                    float costh = shadowRay.Dir * hit.N;
+                    float costh = shadowRay.Dir * ints.Normal;
                     if (costh < Global.EPS) costh = 0;
-                    color += light.Lum * (1 / dist) * hit.Obj.Material.Diffuse * costh;
+                    color += light.Lum * (1 / dist) * ints.Obj.Material.Diffuse * costh;
                     // Specular component
                     Vec3 h = (shadowRay.Dir - ray.Dir).Normalize();
-                    float costh2 = h * hit.N;
+                    float costh2 = h * ints.Normal;
                     if (costh2 < Global.EPS) costh2 = 0;
-                    color += light.Lum * (1 / dist) * (hit.Obj.Material.Specular * MathF.Pow(costh2, hit.Obj.Material.Shine));
+                    color += light.Lum * (1 / dist) * (ints.Obj.Material.Specular * MathF.Pow(costh2, ints.Obj.Material.Shine));
                 }
             }
             return color;
@@ -144,24 +117,24 @@ namespace RayTracer.Composition
             if (d > Global.DMAX) return ambient;
 
             // Check for intersection
-            ObjHit hit = FirstInteresction(ray);
-            if (hit == null) return ambient;
+            Intersection ints = FirstInteresction(ray);
+            if (ints == null) return ambient;
 
             // Check if we are inside an object
             bool inside = false;
-            if (ray.Dir * (-1) * hit.N < 0)
+            if (ray.Dir * (-1) * ints.Normal < 0)
             {
                 inside = true;
-                hit.N = hit.N * -1;
+                ints.Normal *= -1;
             }
 
             Color color = new Color(0, 0, 0);
 
             // Rough materials: direct light source
-            if (!hit.Obj.Material.IsReflective && !hit.Obj.Material.IsRefractive)
+            if (!ints.Obj.Material.IsReflective && !ints.Obj.Material.IsRefractive)
             {
-                color = hit.Obj.Material.Ambient * ambient;
-                color += DirectLightSource(hit, ray);
+                color = ints.Obj.Material.Ambient * ambient;
+                color += DirectLightSource(ints, ray);
             }
 
             // TODO reflection / refraction

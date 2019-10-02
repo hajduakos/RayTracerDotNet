@@ -21,7 +21,7 @@ namespace RayTracer.Objects
             float c = (ray.Start - center) * (ray.Start - center) - radius * radius;
             float discr = b * b - 4 * a * c;
 
-            if (discr < 0) return Intersection.Miss();
+            if (discr < 0) return null;
             float t;
             if (MathF.Abs(discr) < Global.EPS)
             {
@@ -37,9 +37,9 @@ namespace RayTracer.Objects
                 else t = -1;
             }
 
-            if (t < Global.EPS) return Intersection.Miss();
+            if (t < Global.EPS) return null;
             Vec3 n = (ray.Start + ray.Dir * t) - center;
-            return Intersection.Hit(t, n);
+            return new Intersection(this, ray, t, n);
         }
     }
 }

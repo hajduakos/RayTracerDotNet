@@ -11,11 +11,11 @@ namespace RayTracer.Objects
 
         public override Intersection Intersect(Ray ray)
         {
-            if (MathF.Abs(ray.Dir.Z) < Global.EPS) return Intersection.Miss();
+            if (MathF.Abs(ray.Dir.Z) < Global.EPS) return null;
             float t = -ray.Start.Z / ray.Dir.Z;
-            if (t < 0) return Intersection.Miss();
+            if (t < 0) return null;
             Vec3 n = new Vec3(0, 0, 1);
-            return Intersection.Hit(t, n);
+            return new Intersection(this, ray, t, n);
         }
     }
 }
