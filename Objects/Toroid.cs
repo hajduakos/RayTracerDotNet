@@ -10,6 +10,7 @@ namespace RayTracer.Objects
         public Toroid(Vec3 center, float ro, float ri, int tessu, int tessv, Material material) : base(material)
         {
             Vec3[,] grid = new Vec3[tessu+1, tessv+1];
+            Vec3[,] norm = new Vec3[tessu + 1, tessv + 1];
             float uf, vf;
             for(int u = 0; u <= tessu; ++u)
             {
@@ -21,6 +22,11 @@ namespace RayTracer.Objects
                         ri * MathF.Sin(vf),
                         (ro + ri * MathF.Cos(vf)) * MathF.Cos(uf),
                         (ro + ri * MathF.Cos(vf)) * MathF.Sin(uf));
+
+                    norm[u, v] = new Vec3(
+                        MathF.Sin(vf),
+                        MathF.Cos(vf) * MathF.Cos(uf),
+                        MathF.Cos(vf) * MathF.Sin(uf)).Normalize();
                 }
             }
 
@@ -28,8 +34,10 @@ namespace RayTracer.Objects
             {
                 for(int v = 0; v < tessv; ++v)
                 {
-                    AddTriangle(new Triangle(grid[u, v], grid[u + 1, v], grid[u, v + 1]));
-                    AddTriangle(new Triangle(grid[u + 1, v], grid[u + 1, v + 1], grid[u, v + 1]));
+                    AddTriangle(new Triangle(grid[u, v], grid[u + 1, v], grid[u, v + 1],
+                        new ShadingNormals(norm[u, v], norm[u + 1, v], norm[u, v + 1])));
+                    AddTriangle(new Triangle(grid[u + 1, v], grid[u + 1, v + 1], grid[u, v + 1],
+                        new ShadingNormals(norm[u + 1, v], norm[u + 1, v + 1], norm[u, v + 1])));
                 }
             }
             SetBound(new Sphere(center, ro + ri + Global.EPS, material));

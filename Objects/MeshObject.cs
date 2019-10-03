@@ -7,17 +7,32 @@ namespace RayTracer.Objects
 {
     public class MeshObject : ObjectBase
     {
+        protected class ShadingNormals
+        {
+            public Vec3 A { get; }
+            public Vec3 B { get; }
+            public Vec3 C { get; }
+            public ShadingNormals(Vec3 a, Vec3 b, Vec3 c)
+            {
+                this.A = a;
+                this.B = b;
+                this.C = c;
+            }
+        }
         protected readonly struct Triangle
         {
             public Vec3 A { get; }
             public Vec3 B { get; }
             public Vec3 C { get; }
 
-            public Triangle(Vec3 a, Vec3 b, Vec3 c)
+            public ShadingNormals SN { get; }
+
+            public Triangle(Vec3 a, Vec3 b, Vec3 c, ShadingNormals sn = null)
             {
                 this.A = a;
                 this.B = b;
                 this.C = c;
+                this.SN = sn;
             }
 
             public float Intersect(Ray ray)
@@ -33,7 +48,30 @@ namespace RayTracer.Objects
                 return t;
             }
 
-            public Vec3 GetNormal() => ((B - A) % (C - A)).Normalize();
+            public Vec3 GetNormal(Vec3 at)
+            {
+                if (SN == null)
+                {
+                    return ((B - A) % (C - A)).Normalize();
+                }
+                else
+                {
+                    float area = Area(A, B, C);
+                    float wa = Area(B, C, at) / area;
+                    float wb = Area(A, C, at) / area;
+                    float wc = 1 - wa - wb;
+                    return (A * wa + B * wb + C * wc).Normalize();
+                }
+            }
+
+            private float Area(Vec3 pa, Vec3 pb, Vec3 pc)
+            {
+                float a = (pb - pc).Length;
+                float b = (pc - pa).Length;
+                float c = (pa - pb).Length;
+                float s = (a + b + c) / 2;
+                return MathF.Sqrt(s * (s - a) * (s - b) * (s - c));
+            }
         }
 
         private List<Triangle> triangles;
@@ -66,7 +104,7 @@ namespace RayTracer.Objects
                     ints = true;
                 }
             }
-            if (ints) return new Intersection(this, ray, tmin, triangles[imin].GetNormal());
+            if (ints) return new Intersection(this, ray, tmin, triangles[imin].GetNormal(ray.Start + ray.Dir * tmin));
             return null;
         }
     }
