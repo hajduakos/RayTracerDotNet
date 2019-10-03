@@ -2,6 +2,10 @@
     <light pos="40 40 40" lum="6400 6400 6400" />
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
     <material id="red" ambient="0.2 0 0" diffuse="0.8 0 0" />
+    <material id="green" ambient="0 0.1 0" diffuse="0 0.4 0" specular="0.55 0.55 0.55" shine="25" />
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.9" />
     <planexy material="brown" />
-    <toroid material="red" center="0 0 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
+    <toroid material="red" center="-1 -2 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
+    <toroid material="green" center="0 0 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
+    <toroid material="blue" center="1 2 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
 </scene>

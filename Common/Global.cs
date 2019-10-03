@@ -7,5 +7,6 @@
     {
         public static readonly float EPS = 0.0001f;
         public static readonly int DMAX = 8;
+        public static readonly bool SHADINGNORMALS = true;
     }
 }
