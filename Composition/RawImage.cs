@@ -36,8 +36,8 @@ namespace RayTracer.Composition
         public void ToneMap()
         {
             float max = 0;
-            for(int x = 0; x < Width; ++x)
-                Parallel.For(0, Height, y => max = Math.Max(max, img[x, y].Lum));
+            for (int x = 0; x < Width; ++x)
+                Parallel.For(0, Height, y => max = Math.Max(max, Math.Max(img[x, y].R, Math.Max(img[x, y].G, img[x, y].B))));
 
             float div = 1 / max;
             for (int x = 0; x < Width; ++x)
