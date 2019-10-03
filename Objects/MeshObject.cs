@@ -60,7 +60,7 @@ namespace RayTracer.Objects
                     float wa = Area(B, C, at) / area;
                     float wb = Area(A, C, at) / area;
                     float wc = 1 - wa - wb;
-                    return (A * wa + B * wb + C * wc).Normalize();
+                    return (SN.A * wa + SN.B * wb + SN.C * wc).Normalize();
                 }
             }
 
