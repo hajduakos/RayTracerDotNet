@@ -1,0 +1,7 @@
+<scene w="640" h="360" cameye="9 -2 5" camlookat="0 0 1.5" camhfov="50">
+    <light pos="40 40 40" lum="6400 6400 6400" />
+    <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
+    <material id="red" ambient="0.1 0 0" diffuse="0.9 0 0" />
+    <planexy material="brown" />
+    <toroid material="red" center="0 0 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
+</scene>

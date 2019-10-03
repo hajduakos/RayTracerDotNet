@@ -76,6 +76,16 @@ namespace RayTracer.Composition
                         materials[node.Attributes["material"].Value]
                         ));
                 }
+                else if (node.Name == "toroid")
+                {
+                    scene.AddObject(new Toroid(
+                        Vec3FromString(node.Attributes["center"].Value),
+                        Convert.ToSingle(node.Attributes["ro"].Value, nfi),
+                        Convert.ToSingle(node.Attributes["ri"].Value, nfi),
+                        Convert.ToInt32(node.Attributes["tessu"].Value),
+                        Convert.ToInt32(node.Attributes["tessv"].Value),
+                        materials[node.Attributes["material"].Value]));
+                }
                 else
                 {
                     throw new Exception("Unknown node: " + node.Name);
