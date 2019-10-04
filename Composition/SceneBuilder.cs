@@ -56,9 +56,12 @@ namespace RayTracer.Composition
                         Vec3FromString(node.Attributes["pos"].Value),
                         ColorFromString(node.Attributes["lum"].Value)));
                 }
-                else if (node.Name == "planexy")
+                else if (node.Name == "plane")
                 {
-                    scene.AddObject(new PlaneXY(materials[node.Attributes["material"].Value]));
+                    scene.AddObject(new Plane(
+                        Vec3FromString(node.Attributes["center"].Value),
+                        Vec3FromString(node.Attributes["normal"].Value),
+                        materials[node.Attributes["material"].Value]));
                 }
                 else if (node.Name == "sphere")
                 {
