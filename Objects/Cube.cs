@@ -3,8 +3,17 @@ using System;
 
 namespace RayTracer.Objects
 {
+    /// <summary>
+    /// Cube
+    /// </summary>
     public class Cube : MeshObject
     {
+        /// <summary>
+        /// Create a new cube with a given center and side length
+        /// </summary>
+        /// <param name="center">Center</param>
+        /// <param name="side">Length of sides</param>
+        /// <param name="material">Material</param>
         public Cube(Vec3 center, float side, Material material) : base(material)
         {
             float s = side / 2;

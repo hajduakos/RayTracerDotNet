@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace RayTracer.Composition
 {
+    /// <summary>
+    /// Scene that holds all objects, lights, etc. and is responsible
+    /// for rendering the image.
+    /// </summary>
     public sealed class Scene
     {
         private readonly int width;
@@ -18,25 +22,33 @@ namespace RayTracer.Composition
         private readonly List<ObjectBase> objects;
         private readonly List<PointLight> lights;
 
-        public Scene(int w, int h, Camera cam)
+        /// <summary>
+        /// Create a scene with a given width, height and camera
+        /// </summary>
+        /// <param name="screenWidth">Scene width (px)</param>
+        /// <param name="screenHeight">Scene height (px)</param>
+        /// <param name="cam">Camera</param>
+        public Scene(int screenWidth, int screenHeight, Camera cam)
         {
-            this.width = w;
-            this.height = h;
+            this.width = screenWidth;
+            this.height = screenHeight;
             this.Cam = cam;
             this.ambient = new Color(.8f, .9f, 1);
             this.lights = new List<PointLight>();
             this.objects = new List<ObjectBase>();
         }
 
-        public void AddObject(ObjectBase obj)
-        {
-            objects.Add(obj);
-        }
+        /// <summary>
+        /// Add a new object to the scene
+        /// </summary>
+        /// <param name="obj">Object to be added</param>
+        public void AddObject(ObjectBase obj) => objects.Add(obj);
 
-        public void AddLight(PointLight light)
-        {
-            lights.Add(light);
-        }
+        /// <summary>
+        /// Add a new light to the scene
+        /// </summary>
+        /// <param name="light">Light to be added</param>
+        public void AddLight(PointLight light) => lights.Add(light);
 
         /// <summary>
         /// Render the scene

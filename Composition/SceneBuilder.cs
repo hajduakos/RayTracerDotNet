@@ -79,9 +79,9 @@ namespace RayTracer.Composition
                         materials[node.Attributes["material"].Value]
                         ));
                 }
-                else if (node.Name == "toroid")
+                else if (node.Name == "torus")
                 {
-                    scene.AddObject(new Toroid(
+                    scene.AddObject(new Torus(
                         Vec3FromString(node.Attributes["center"].Value),
                         Convert.ToSingle(node.Attributes["ro"].Value, nfi),
                         Convert.ToSingle(node.Attributes["ri"].Value, nfi),

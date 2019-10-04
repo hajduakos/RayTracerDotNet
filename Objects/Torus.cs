@@ -1,15 +1,26 @@
 ﻿using RayTracer.Common;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RayTracer.Objects
 {
-    public class Toroid : MeshObject
+    /// <summary>
+    /// Torus (tessellated)
+    /// </summary>
+    public class Torus : MeshObject
     {
-        public Toroid(Vec3 center, float ro, float ri, int tessu, int tessv, Material material) : base(material)
+        /// <summary>
+        /// Create a new torus
+        /// </summary>
+        /// <param name="center">Center point</param>
+        /// <param name="ro">Radius of big circle</param>
+        /// <param name="ri">Radius of small circle</param>
+        /// <param name="tessu">Numer of tessellation points along big circle</param>
+        /// <param name="tessv">Number of tessellation points along small circle</param>
+        /// <param name="material">Material</param>
+        public Torus(Vec3 center, float ro, float ri, int tessu, int tessv, Material material) : base(material)
         {
-            Vec3[,] grid = new Vec3[tessu+1, tessv+1];
+            // Create mesh points and normals
+            Vec3[,] mesh = new Vec3[tessu+1, tessv+1];
             Vec3[,] norm = Global.SHADINGNORMALS ? new Vec3[tessu + 1, tessv + 1] : null;
             float uf, vf;
             for(int u = 0; u <= tessu; ++u)
@@ -18,7 +29,7 @@ namespace RayTracer.Objects
                 for (int v = 0; v <= tessv; ++v)
                 {
                     vf = v / (float)tessv * 2 * MathF.PI;
-                    grid[u, v] = center + new Vec3(
+                    mesh[u, v] = center + new Vec3(
                         ri * MathF.Sin(vf),
                         (ro + ri * MathF.Cos(vf)) * MathF.Cos(uf),
                         (ro + ri * MathF.Cos(vf)) * MathF.Sin(uf));
@@ -29,17 +40,18 @@ namespace RayTracer.Objects
                             MathF.Cos(vf) * MathF.Sin(uf)).Normalize();
                 }
             }
-
+            // Create triangles
             for(int u = 0; u < tessu; ++u)
             {
                 for(int v = 0; v < tessv; ++v)
                 {
-                    AddTriangle(new Triangle(grid[u, v], grid[u + 1, v], grid[u, v + 1],
+                    AddTriangle(new Triangle(mesh[u, v], mesh[u + 1, v], mesh[u, v + 1],
                         norm == null ? null : new ShadingNormals(norm[u, v], norm[u + 1, v], norm[u, v + 1])));
-                    AddTriangle(new Triangle(grid[u + 1, v], grid[u + 1, v + 1], grid[u, v + 1],
+                    AddTriangle(new Triangle(mesh[u + 1, v], mesh[u + 1, v + 1], mesh[u, v + 1],
                         norm == null ? null : new ShadingNormals(norm[u + 1, v], norm[u + 1, v + 1], norm[u, v + 1])));
                 }
             }
+            // Can be bound with a sphere
             SetBound(new Sphere(center, ro + ri + Global.EPS, material));
         }
     }

@@ -5,8 +5,13 @@ using RayTracer.Common;
 
 namespace RayTracer.Objects
 {
+    /// <summary>
+    /// Base class for objects consisting of a triangular mesh.
+    /// Supports shading normals and bounding box.
+    /// </summary>
     public class MeshObject : ObjectBase
     {
+        /// <summary> A triple of shading normals </summary>
         protected class ShadingNormals
         {
             public Vec3 A { get; }
@@ -19,6 +24,8 @@ namespace RayTracer.Objects
                 this.C = c;
             }
         }
+
+        /// <summary> Triangle with optional shading normals </summary>
         protected readonly struct Triangle
         {
             public Vec3 A { get; }
@@ -35,6 +42,11 @@ namespace RayTracer.Objects
                 this.SN = sn;
             }
 
+            /// <summary>
+            /// Intersect triangle with a ray
+            /// </summary>
+            /// <param name="ray">Ray</param>
+            /// <returns>Intersection parameter value, or a negative number if there is no intersection</returns>
             public float Intersect(Ray ray)
             {
                 Vec3 x = (B - A) % (C - A);
@@ -48,13 +60,18 @@ namespace RayTracer.Objects
                 return t;
             }
 
+            /// <summary>
+            /// Get the normal of the triangle at a given point
+            /// </summary>
+            /// <param name="at">Point (should be on the triangle)</param>
+            /// <returns></returns>
             public Vec3 GetNormal(Vec3 at)
             {
-                if (SN == null)
+                if (SN == null) // No shading normals
                 {
                     return ((B - A) % (C - A)).Normalize();
                 }
-                else
+                else // Shading normals: interpolate
                 {
                     float area = Area(A, B, C);
                     float wa = Area(B, C, at) / area;
@@ -83,17 +100,28 @@ namespace RayTracer.Objects
             bound = null;
         }
 
-        protected void AddTriangle(Triangle t) => triangles.Add(t);
+        /// <summary>
+        /// Add a new triangle to the mesh
+        /// </summary>
+        /// <param name="triangle">Triangle</param>
+        protected void AddTriangle(Triangle triangle) => triangles.Add(triangle);
+        
+        /// <summary>
+        /// Set the bounding box
+        /// </summary>
+        /// <param name="bound">Bounding box</param>
         protected void SetBound(ObjectBase bound) => this.bound = bound;
 
         public override Intersection Intersect(Ray ray)
         {
+            // Check bound (if set)
             if (bound != null && bound.Intersect(ray) == null) return null;
 
             bool ints = false;
             float tmin = 0;
             int imin = 0;
 
+            // Get the first intersection among triangles
             for(int i = 0; i < triangles.Count; ++i)
             {
                 float t = triangles[i].Intersect(ray);
