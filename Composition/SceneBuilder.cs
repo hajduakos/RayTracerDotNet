@@ -89,6 +89,15 @@ namespace RayTracer.Composition
                         Convert.ToInt32(node.Attributes["tessv"].Value),
                         materials[node.Attributes["material"].Value]));
                 }
+                else if (node.Name == "cylinder")
+                {
+                    scene.AddObject(new Cylinder(
+                        Vec3FromString(node.Attributes["cap1center"].Value),
+                        Vec3FromString(node.Attributes["cap2center"].Value),
+                        Convert.ToSingle(node.Attributes["radius"].Value, nfi),
+                        materials[node.Attributes["material"].Value]
+                        ));
+                }
                 else
                 {
                     throw new Exception("Unknown node: " + node.Name);
