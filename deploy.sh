@@ -6,11 +6,19 @@ set -e # exit with nonzero exit code if anything fails
 rm -rf out || exit 0
 mkdir out
 
-# copy all pdfs
+# copy all pngs
 cp -r Scenes/*.png out/ || true
 
-# go to the out directory and create a *new* Git repo
 cd out
+touch index.html
+for f in *.png
+do
+    echo "$f<br />" >> index.html
+    echo "<img src=\"$f\" /> <br/><br />" >> index.html
+done
+
+# create a *new* Git repo
+
 git init
 
 # inside this git repo we'll pretend to be a new user
