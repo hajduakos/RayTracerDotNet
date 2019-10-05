@@ -1,4 +1,5 @@
 ﻿using RayTracer.Common;
+using RayTracer.Filters;
 using RayTracer.Objects;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace RayTracer.Composition
         private Color ambient;
         private readonly List<IObject> objects;
         private readonly List<PointLight> lights;
+        private readonly List<IToneMapper> toneMappers;
 
         /// <summary>
         /// Create a scene with a given width, height and camera
@@ -36,6 +38,7 @@ namespace RayTracer.Composition
             this.ambient = new Color(.8f, .9f, 1);
             this.lights = new List<PointLight>();
             this.objects = new List<IObject>();
+            this.toneMappers = new List<IToneMapper>();
         }
 
         /// <summary>
@@ -50,6 +53,8 @@ namespace RayTracer.Composition
         /// <param name="light">Light to be added</param>
         public void AddLight(PointLight light) => lights.Add(light);
 
+        public void AddToneMapper(IToneMapper tm) => toneMappers.Add(tm);
+
         /// <summary>
         /// Render the scene
         /// </summary>
@@ -63,7 +68,8 @@ namespace RayTracer.Composition
                 Parallel.For(0, height, y => img[x, y] = Trace(Cam.GetRay(x, y), 0));
             }
             Console.WriteLine();
-            img.ToneMap();
+            foreach (IToneMapper tm in toneMappers)
+                tm.ToneMap(img);
             return img;
         }
 

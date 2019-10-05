@@ -24,4 +24,6 @@
     <cube material="yellow" center="-2 1 3" side="2" />
     <cube material="cyan" center="-1 -1 3" side="2" />
     <cube material="magenta" center="-1 0 5" side="2" />
+    
+    <tonemapper type="maxlinear" />
 </scene>

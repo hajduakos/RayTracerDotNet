@@ -1,4 +1,5 @@
 ﻿using RayTracer.Common;
+using RayTracer.Filters;
 using RayTracer.Objects;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace RayTracer.Composition
     /// </summary>
     public class SceneBuilder
     {
-        private static NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
+        private static readonly NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
         public static Scene FromXML(string filename)
         {
             XmlDocument doc = new XmlDocument();
@@ -106,6 +107,16 @@ namespace RayTracer.Composition
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
                         materials[node.Attributes["material"].Value]
                         ));
+                }
+                else if(node.Name == "tonemapper")
+                {
+                    if (node.Attributes["type"].Value == "maxlinear")
+                        scene.AddToneMapper(new MaxLinearToneMapper());
+                    else if (node.Attributes["type"].Value == "nonlinear")
+                    {
+                        float p = node.Attributes["p"] == null ? 1 : Convert.ToSingle(node.Attributes["p"].Value, nfi);
+                        scene.AddToneMapper(new NonLinearToneMapper(p));
+                    }
                 }
                 else
                 {

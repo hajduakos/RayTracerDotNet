@@ -4,13 +4,13 @@
     <material id="black" ambient="0 0 0" diffuse="0 0 0" />
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1.5 1.5 1.5" />
     
-    <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="25"/>
-    <material id="green" ambient="0 0.1 0" diffuse="0 0.8 0" specular="0.5 0.5 0.5" shine="25" />
-    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.8" specular="0.5 0.5 0.5" shine="25"/>
+    <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>
+    <material id="green" ambient="0 0.1 0" diffuse="0 0.8 0" specular="0.5 0.5 0.5" shine="50" />
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.8" specular="0.5 0.5 0.5" shine="50"/>
     
-    <material id="yellow" ambient="0.1 0.1 0" diffuse="0.8 0.8 0" specular="0.5 0.5 0.5" shine="25"/>
-    <material id="cyan" ambient="0 0.1 0.1" diffuse="0 0.8 0.8" specular="0.5 0.5 0.5" shine="25"/>
-    <material id="magenta" ambient="0.1 0 0.1" diffuse="0.8 0 0.8" specular="0.5 0.5 0.5" shine="25"/>
+    <material id="yellow" ambient="0.1 0.1 0" diffuse="0.8 0.8 0" specular="0.5 0.5 0.5" shine="50"/>
+    <material id="cyan" ambient="0 0.1 0.1" diffuse="0 0.8 0.8" specular="0.5 0.5 0.5" shine="50"/>
+    <material id="magenta" ambient="0.1 0 0.1" diffuse="0.8 0 0.8" specular="0.5 0.5 0.5" shine="50"/>
     
     <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="3 0 0" />
     <sphere material="red" center="-1 -2 1" radius="1" />
@@ -20,4 +20,7 @@
     <sphere material="cyan" center="-2 0 1" radius="1" />
     <sphere material="yellow" center="-1 2 1" radius="1" />
     <sphere material="magenta" center="-3 2 1" radius="1" />
+    
+    <tonemapper type="nonlinear" p="2" />
+    <tonemapper type="maxlinear" />
 </scene>

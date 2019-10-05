@@ -32,15 +32,6 @@ namespace RayTracer.Composition
         }
 
         /// <summary>
-        /// Perform tone mapping, the original image is modified
-        /// </summary>
-        public void ToneMap()
-        {
-            new NonLinearToneMapper().ToneMap(this);
-            new MaxLinearToneMapper().ToneMap(this);
-        }
-
-        /// <summary>
         /// Convert to a bitmap
         /// </summary>
         /// <returns>Bitmap</returns>
