@@ -12,6 +12,6 @@ addons:
     - libc6-dev
     - libgdiplus
 script:
- - dotnet build
+ - dotnet build -c release
  - ./render-all.sh
  - ./deploy.sh
