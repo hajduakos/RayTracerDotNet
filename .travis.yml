@@ -1,5 +1,13 @@
 language: csharp
 mono: none
+dist: bionic
 dotnet: 3.0
+addons:
+  apt:
+    packages:
+    - libc6-dev
+    - libgdiplus
 script:
  - dotnet build
+ - ./render-all.sh
+ 
