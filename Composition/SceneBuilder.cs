@@ -63,6 +63,15 @@ namespace RayTracer.Composition
                         Vec3FromString(node.Attributes["normal"].Value),
                         materials[node.Attributes["material"].Value]));
                 }
+                else if (node.Name == "checkerboard")
+                {
+                    scene.AddObject(new CheckerBoard(
+                        Vec3FromString(node.Attributes["center"].Value),
+                        Vec3FromString(node.Attributes["normal"].Value),
+                        Vec3FromString(node.Attributes["matdir"].Value),
+                        materials[node.Attributes["mat1"].Value],
+                        materials[node.Attributes["mat2"].Value]));
+                }
                 else if (node.Name == "sphere")
                 {
                     scene.AddObject(new Sphere(
