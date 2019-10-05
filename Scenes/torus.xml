@@ -1,14 +1,13 @@
 <scene w="640" h="360" cameye="9 -2 5" camlookat="0 0 1.5" camhfov="50">
-    <light pos="40 40 40" lum="6400 6400 6400" />
+    <light pos="14 7 10" lum="500 500 500" />
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
-    <material id="red" ambient="0.2 0 0" diffuse="0.8 0 0" />
-    <material id="green" ambient="0 0.1 0" diffuse="0 0.4 0" specular="0.55 0.55 0.55" shine="25" />
-    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.9" />
+    <material id="red" ambient="0.2 0 0" diffuse="0.4 0 0" specular="0.5 0.5 0.5" shine="25" />
+    <material id="green" ambient="0 0.1 0" diffuse="0 0.4 0" specular="0.5 0.5 0.5" shine="25" />
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.4" specular="0.5 0.5 0.5" shine="25" />
     <plane material="brown" center="0 0 0" normal="0 0 1" />
-    <torus material="red" center="-1 -2 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
-    <torus material="green" center="0 0 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
-    <torus material="blue" center="1 2 1.5" ro="1" ri="0.5" tessu="20" tessv="20" />
+    <torus material="red" center="-1 -2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" />
+    <torus material="green" center="0 0 1.5" ro="1" ri="0.5" tessu="40" tessv="25" />
+    <torus material="blue" center="1 2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <tonemapper type="shlick" />
 </scene>
