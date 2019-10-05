@@ -112,6 +112,8 @@ namespace RayTracer.Composition
                 {
                     if (node.Attributes["type"].Value == "maxlinear")
                         scene.AddToneMapper(new MaxLinearToneMapper());
+                    else if (node.Attributes["type"].Value == "shlick")
+                        scene.AddToneMapper(new MaxLinearToneMapper());
                     else if (node.Attributes["type"].Value == "nonlinear")
                     {
                         float p = node.Attributes["p"] == null ? 1 : Convert.ToSingle(node.Attributes["p"].Value, nfi);

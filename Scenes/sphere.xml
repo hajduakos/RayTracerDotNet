@@ -21,6 +21,5 @@
     <sphere material="yellow" center="-1 2 1" radius="1" />
     <sphere material="magenta" center="-3 2 1" radius="1" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <tonemapper type="shlick" />
 </scene>
