@@ -1,6 +1,10 @@
 language: csharp
 mono: none
 dist: bionic
+env:
+  global:
+    - GH_REF=github.com/hajduakos/RayTracerDotNet.git
+    - secure: T7PIsH02jrZnyX9/Wn9VRBVE8ZnyXH3iiNKyCEHr0moJmycD33e/Cy6x+dEEncG18fSFkPh/yz/XSQBMbODNiRatMTG562J3TWmRBLx0giYug1P7PCD9dma5pfVfUn3JSsA+XxRSDMRktUUQawbh+7TToL4+gO1sNlyuRySXob7ODcAbkDvaQiB325/I5X/THR6o6BwoNEIA9gm5ofnIoyhbEhxTJC77QL98+E/9yI9Q3Gs5u0Rcl+pwng6+Li5PJ3sCJBO/z3y0rqvdubrbWuZfMKttueYAnqvbA743r3bz5E/aYT2E5/UJJwaQ9xDURzr+JYGYkyE3nnj647B/2RwH2oZZK4J/29C4vPeuYrpHoecusKuq/xHHp1zmN+hGe4GLOvUbqDiLBsD9HkDMVg/GvqDofTPn6C6FwvPCa6X8bx9QoadZqJHcRgcuWbBpMR4bcM1NwHLWVEUnBxmqJhIfPM89ohsklADWYGGdgSr/hjf2SH9v1oLsD//13DOi79PC1SfZ2pbdqTZAtPWZXo9FSO+vmKWZv7bm+6Nfi442PFYMIaYa/3SgFcYdoHSlmbuSQjCfb+xDrPeQggUlTK7kiUgH3KWC555SM2kQScmn93FUwbpiYBs0OotV4asImvgLu0Y/iaS/H6EIDyIjLb6QOWN04XwLjlqXSMGMESY=
 dotnet: 3.0
 addons:
   apt:
@@ -10,4 +14,4 @@ addons:
 script:
  - dotnet build
  - ./render-all.sh
- 
+ - ./deploy.sh
