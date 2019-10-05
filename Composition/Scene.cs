@@ -19,7 +19,7 @@ namespace RayTracer.Composition
         public Camera Cam { get; set; }
 
         private Color ambient;
-        private readonly List<ObjectBase> objects;
+        private readonly List<IObject> objects;
         private readonly List<PointLight> lights;
 
         /// <summary>
@@ -35,14 +35,14 @@ namespace RayTracer.Composition
             this.Cam = cam;
             this.ambient = new Color(.8f, .9f, 1);
             this.lights = new List<PointLight>();
-            this.objects = new List<ObjectBase>();
+            this.objects = new List<IObject>();
         }
 
         /// <summary>
         /// Add a new object to the scene
         /// </summary>
         /// <param name="obj">Object to be added</param>
-        public void AddObject(ObjectBase obj) => objects.Add(obj);
+        public void AddObject(IObject obj) => objects.Add(obj);
 
         /// <summary>
         /// Add a new light to the scene
@@ -76,7 +76,7 @@ namespace RayTracer.Composition
         {
             Intersection first = null;
 
-            foreach(ObjectBase obj in objects)
+            foreach(IObject obj in objects)
             {
                 Intersection ints = obj.Intersect(ray);
                 if (ints != null && (first == null || ints.T < first.T)) first = ints;
@@ -106,12 +106,12 @@ namespace RayTracer.Composition
                     // Diffuse component
                     float costh = shadowRay.Dir * ints.Normal;
                     if (costh < Global.EPS) costh = 0;
-                    color += light.Lum * (1 / dist) * ints.Obj.Material.Diffuse * costh;
+                    color += light.Lum * (1 / dist) * ints.Mat.Diffuse * costh;
                     // Specular component
                     Vec3 h = (shadowRay.Dir - ray.Dir).Normalize();
                     float costh2 = h * ints.Normal;
                     if (costh2 < Global.EPS) costh2 = 0;
-                    color += light.Lum * (1 / dist) * (ints.Obj.Material.Specular * MathF.Pow(costh2, ints.Obj.Material.Shine));
+                    color += light.Lum * (1 / dist) * (ints.Mat.Specular * MathF.Pow(costh2, ints.Mat.Shine));
                 }
             }
             return color;
@@ -143,9 +143,9 @@ namespace RayTracer.Composition
             Color color = new Color(0, 0, 0);
 
             // Rough materials: direct light source
-            if (!ints.Obj.Material.IsReflective && !ints.Obj.Material.IsRefractive)
+            if (!ints.Mat.IsReflective && !ints.Mat.IsRefractive)
             {
-                color = ints.Obj.Material.Ambient * ambient;
+                color = ints.Mat.Ambient * ambient;
                 color += DirectLightSource(ints, ray);
             }
 

@@ -3,20 +3,10 @@
 namespace RayTracer.Objects
 {
     /// <summary>
-    /// Base class for objects
+    /// Base interface for objects
     /// </summary>
-    public abstract class ObjectBase
+    public interface IObject
     {
-        /// <summary>
-        /// Material of the object
-        /// </summary>
-        public Material Material { get; }
-
-        public ObjectBase(Material material)
-        {
-            this.Material = material;
-        }
-
         /// <summary>
         /// Intersect object with a given ray
         /// </summary>

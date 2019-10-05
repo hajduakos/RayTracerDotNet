@@ -9,7 +9,7 @@ namespace RayTracer.Objects
     /// Base class for objects consisting of a triangular mesh.
     /// Supports shading normals and bounding box.
     /// </summary>
-    public class MeshObject : ObjectBase
+    public class MeshObject : IObject
     {
         /// <summary> A triple of shading normals </summary>
         protected class ShadingNormals
@@ -92,12 +92,14 @@ namespace RayTracer.Objects
         }
 
         private List<Triangle> triangles;
-        private ObjectBase bound;
+        private IObject bound;
+        private Material mat;
         
-        public MeshObject(Material material) : base(material)
+        public MeshObject(Material material)
         {
             triangles = new List<Triangle>();
             bound = null;
+            mat = material;
         }
 
         /// <summary>
@@ -110,9 +112,9 @@ namespace RayTracer.Objects
         /// Set the bounding box
         /// </summary>
         /// <param name="bound">Bounding box</param>
-        protected void SetBound(ObjectBase bound) => this.bound = bound;
+        protected void SetBound(IObject bound) => this.bound = bound;
 
-        public override Intersection Intersect(Ray ray)
+        public Intersection Intersect(Ray ray)
         {
             // Check bound (if set)
             if (bound != null && bound.Intersect(ray) == null) return null;
@@ -132,7 +134,7 @@ namespace RayTracer.Objects
                     ints = true;
                 }
             }
-            if (ints) return new Intersection(this, ray, tmin, triangles[imin].GetNormal(ray.Start + ray.Dir * tmin));
+            if (ints) return new Intersection(this, ray, tmin, triangles[imin].GetNormal(ray.Start + ray.Dir * tmin), mat);
             return null;
         }
     }

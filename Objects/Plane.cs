@@ -6,10 +6,11 @@ namespace RayTracer.Objects
     /// <summary>
     /// Plane
     /// </summary>
-    public class Plane : ObjectBase
+    public class Plane : IObject
     {
         private readonly Vec3 center;
         private readonly Vec3 normal;
+        private readonly Material mat;
 
         /// <summary>
         /// Create a new plane with a given center and normal
@@ -17,19 +18,20 @@ namespace RayTracer.Objects
         /// <param name="center">Center</param>
         /// <param name="normal">Normal</param>
         /// <param name="material">Material</param>
-        public Plane(Vec3 center, Vec3 normal, Material material) : base(material)
+        public Plane(Vec3 center, Vec3 normal, Material material)
         {
             this.center = center;
             this.normal = normal.Normalize();
+            this.mat = material;
         }
 
-        public override Intersection Intersect(Ray ray)
+        public Intersection Intersect(Ray ray)
         {
             float div = ray.Dir * normal;
             if (MathF.Abs(div) < Global.EPS) return null; // Parallel ray
             float t = (center - ray.Start) * normal / div;
             if (t < Global.EPS) return null;
-            return new Intersection(this, ray, t, normal);
+            return new Intersection(this, ray, t, normal, mat);
         }
     }
 }

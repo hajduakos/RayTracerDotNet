@@ -6,10 +6,11 @@ namespace RayTracer.Objects
     /// <summary>
     /// Sphere
     /// </summary>
-    public sealed class Sphere : ObjectBase
+    public sealed class Sphere : IObject
     {
         private readonly Vec3 center;
         private readonly float radius;
+        private readonly Material mat;
 
         /// <summary>
         /// Create a new sphere with a given center and radius
@@ -17,13 +18,14 @@ namespace RayTracer.Objects
         /// <param name="center">Center</param>
         /// <param name="radius">Radius</param>
         /// <param name="material">Material</param>
-        public Sphere(Vec3 center, float radius, Material material) : base(material)
+        public Sphere(Vec3 center, float radius, Material material)
         {
             this.center = center;
             this.radius = radius;
+            this.mat = material;
         }
 
-        public override Intersection Intersect(Ray ray)
+        public Intersection Intersect(Ray ray)
         {
             float a = ray.Dir * ray.Dir;
             float b = 2 * (ray.Dir * (ray.Start - center));
@@ -48,7 +50,7 @@ namespace RayTracer.Objects
 
             if (t < Global.EPS) return null; // No intersection
             Vec3 n = (ray.Start + ray.Dir * t) - center;
-            return new Intersection(this, ray, t, n);
+            return new Intersection(this, ray, t, n, mat);
         }
     }
 }

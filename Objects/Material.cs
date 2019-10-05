@@ -3,7 +3,7 @@ using System;
 
 namespace RayTracer.Objects
 {
-    public readonly struct Material
+    public class Material
     {
         public Color Ambient { get; }
         public Color Diffuse { get; }

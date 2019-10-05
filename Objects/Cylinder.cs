@@ -6,11 +6,12 @@ namespace RayTracer.Objects
     /// <summary>
     /// Cyliner
     /// </summary>
-    public class Cylinder : ObjectBase
+    public class Cylinder : IObject
     {
         private readonly Vec3 c1;
         private readonly Vec3 c2;
         private readonly float r;
+        private Material mat;
 
         /// <summary>
         /// Create new cylinder
@@ -19,11 +20,12 @@ namespace RayTracer.Objects
         /// <param name="cap2center">Center of the other cap</param>
         /// <param name="r">Radius</param>
         /// <param name="material">Material</param>
-        public Cylinder(Vec3 cap1center, Vec3 cap2center, float r, Material material) : base(material)
+        public Cylinder(Vec3 cap1center, Vec3 cap2center, float r, Material material)
         {
             this.c1 = cap1center;
             this.c2 = cap2center;
             this.r = r;
+            this.mat = material;
         }
 
         private Intersection IntersectSide(Ray ray)
@@ -56,7 +58,7 @@ namespace RayTracer.Objects
             if (t < Global.EPS) return null; // No intersection
             Vec3 pt = ray.Start + ray.Dir * t;
             Vec3 n = (pt - (c1 + va * MathF.Sqrt(MathF.Pow((pt - c1).Length, 2) - r * r))).Normalize();
-            return new Intersection(this, ray, t, n);
+            return new Intersection(this, ray, t, n, mat);
         }
 
         private Intersection IntersectBottomCap(Ray ray)
@@ -68,7 +70,7 @@ namespace RayTracer.Objects
             if (t < Global.EPS) return null;
             Vec3 pt = ray.Start + ray.Dir * t;
             if ((pt - c1).Length > r) return null;
-            return new Intersection(this, ray, t, normal);
+            return new Intersection(this, ray, t, normal, mat);
         }
 
         private Intersection IntersectTopCap(Ray ray)
@@ -80,10 +82,10 @@ namespace RayTracer.Objects
             if (t < Global.EPS) return null;
             Vec3 pt = ray.Start + ray.Dir * t;
             if ((pt - c2).Length > r) return null;
-            return new Intersection(this, ray, t, normal);
+            return new Intersection(this, ray, t, normal, mat);
         }
 
-        public override Intersection Intersect(Ray ray)
+        public Intersection Intersect(Ray ray)
         {
             // Try to intersect side, top cap, bottom cap and get minimum
             Intersection imin = null;
