@@ -1,4 +1,5 @@
 ﻿using RayTracer.Common;
+using RayTracer.Filters;
 using System;
 using System.Threading.Tasks;
 
@@ -35,13 +36,8 @@ namespace RayTracer.Composition
         /// </summary>
         public void ToneMap()
         {
-            float max = 0;
-            for (int x = 0; x < Width; ++x)
-                Parallel.For(0, Height, y => max = Math.Max(max, Math.Max(img[x, y].R, Math.Max(img[x, y].G, img[x, y].B))));
-
-            float div = 1 / max;
-            for (int x = 0; x < Width; ++x)
-                Parallel.For(0, Height, y => img[x, y] = img[x, y] * div);
+            new NonLinearToneMapper().ToneMap(this);
+            new MaxLinearToneMapper().ToneMap(this);
         }
 
         /// <summary>
