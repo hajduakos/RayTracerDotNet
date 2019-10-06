@@ -13,5 +13,5 @@ addons:
     - libgdiplus
 script:
  - dotnet build -c release
- - ./render-all.sh 120
+ - ./render-all.sh 180
  - ./deploy.sh
