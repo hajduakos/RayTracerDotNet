@@ -11,7 +11,7 @@ namespace RayTracer.Composition
     /// <summary>
     /// Scene loader from file
     /// </summary>
-    public class SceneBuilder
+    public static class SceneBuilder
     {
         private static readonly NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
         public static Scene FromXML(string filename)
@@ -132,7 +132,7 @@ namespace RayTracer.Composition
                 }
                 else
                 {
-                    throw new Exception("Unknown node: " + node.Name);
+                    throw new ArgumentException("Unknown node: " + node.Name);
                 }
             }
 

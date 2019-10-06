@@ -12,8 +12,8 @@ namespace RayTracer.Composition
         private readonly Vec3 lookat;
         private readonly Vec3 right;
         private readonly Vec3 up;
-        private readonly int w;
-        private readonly int h;
+        private readonly int width;
+        private readonly int height;
 
         /// <summary>
         /// Create a new camera
@@ -28,8 +28,8 @@ namespace RayTracer.Composition
             Vec3 vup = new Vec3(0, 0, 1);
             this.eye = eye;
             this.lookat = lookat;
-            this.w = screenWidthPx;
-            this.h = screenHeightPx;
+            this.width = screenWidthPx;
+            this.height = screenHeightPx;
             Vec3 w = eye - lookat;
             float f = w.Length;
             right = vup % w;
@@ -46,7 +46,7 @@ namespace RayTracer.Composition
         /// <returns>Ray</returns>
         public Ray GetRay(int x, int y)
         {
-            Vec3 dir = lookat + right * (2 * (x + .5f) / w - 1) + up * (2 * (y + .5f) / h - 1) - eye;
+            Vec3 dir = lookat + right * (2 * (x + .5f) / width - 1) + up * (2 * (y + .5f) / height - 1) - eye;
             return new Ray(eye, dir);
         }
     }

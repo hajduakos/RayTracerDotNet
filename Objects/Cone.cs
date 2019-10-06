@@ -108,7 +108,7 @@ namespace RayTracer.Objects
             Intersection top = IntersectTopCap(ray);
             Intersection bottom = IntersectBottomCap(ray);
 
-            if (side != null && (imin == null || side.T < imin.T)) imin = side;
+            if (side != null) imin = side;
             if (top != null && (imin == null || top.T < imin.T)) imin = top;
             if (bottom != null && (imin == null || bottom.T < imin.T)) imin = bottom;
 
