@@ -15,6 +15,7 @@ namespace RayTracer.Composition
     {
         private readonly int width;
         private readonly int height;
+        private readonly int samplesPerPixel;
 
         /// <summary> Camera </summary>
         public Camera Cam { get; set; }
@@ -29,12 +30,14 @@ namespace RayTracer.Composition
         /// </summary>
         /// <param name="screenWidth">Scene width (px)</param>
         /// <param name="screenHeight">Scene height (px)</param>
+        /// <param name="samplesPerPixel">Samples per pixel (in both directions)</param>
         /// <param name="cam">Camera</param>
-        public Scene(int screenWidth, int screenHeight, Camera cam)
+        public Scene(int screenWidth, int screenHeight, Camera cam, int samplesPerPixel = 1)
         {
             this.width = screenWidth;
             this.height = screenHeight;
             this.Cam = cam;
+            this.samplesPerPixel = samplesPerPixel;
             this.ambient = new Color(.8f, .9f, 1);
             this.lights = new List<PointLight>();
             this.objects = new List<IObject>();
@@ -65,12 +68,37 @@ namespace RayTracer.Composition
             for (int x = 0; x < width; ++x)
             {
                 Console.Write("\rRendering {0}/{1}", (x + 1), width);
-                Parallel.For(0, height, y => img[x, y] = Trace(Cam.GetRay(x, y), 0));
+                Parallel.For(0, height, y => img[x, y] = TracePixel(x, y));
             }
             Console.WriteLine();
             foreach (IToneMapper tm in toneMappers)
                 tm.ToneMap(img);
             return img;
+        }
+
+        /// <summary>
+        /// Trace the color for a given pixel
+        /// </summary>
+        /// <param name="x">Pixel X</param>
+        /// <param name="y">Pixel Y</param>
+        /// <returns></returns>
+        Color TracePixel(int x, int y)
+        {
+            // One sample in the middle
+            if (samplesPerPixel == 1) return Trace(Cam.GetRay(x, y), 0);
+
+            // Multiple samples: N x N grid and average
+            Color result = new Color(0, 0, 0);
+            for(int dx = 0; dx < samplesPerPixel; ++dx)
+            {
+                float xOff = 1.0f / samplesPerPixel / 2.0f + dx * 1.0f / samplesPerPixel;
+                for (int dy = 0; dy < samplesPerPixel; ++dy)
+                {
+                    float yOff = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
+                    result += Trace(Cam.GetRay(x, y, xOff, yOff), 0);
+                }
+            }
+            return result / (samplesPerPixel * samplesPerPixel);
         }
 
         /// <summary>

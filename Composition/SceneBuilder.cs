@@ -24,6 +24,7 @@ namespace RayTracer.Composition
             Vec3 cameye = new Vec3(1, 1, 1);
             Vec3 camlookat = new Vec3(0, 0, 0);
             float camhfov = 50;
+            int spp = 1;
 
             XmlNode sceneNode = doc.ChildNodes[0];
             if (sceneNode.Attributes != null)
@@ -33,8 +34,9 @@ namespace RayTracer.Composition
                 if (sceneNode.Attributes["cameye"] != null) cameye = Vec3FromString(sceneNode.Attributes["cameye"].Value);
                 if (sceneNode.Attributes["camlookat"] != null) camlookat = Vec3FromString(sceneNode.Attributes["camlookat"].Value);
                 if (sceneNode.Attributes["camhfov"] != null) camhfov = Convert.ToSingle(sceneNode.Attributes["camhfov"].Value, nfi);
+                if (sceneNode.Attributes["samplesperpixel"] != null) spp = Convert.ToInt32(sceneNode.Attributes["samplesperpixel"].Value);
             }
-            Scene scene = new Scene(scenew, sceneh, new Camera(cameye, camlookat, camhfov * MathF.PI / 180, scenew, sceneh));
+            Scene scene = new Scene(scenew, sceneh, new Camera(cameye, camlookat, camhfov * MathF.PI / 180, scenew, sceneh), spp);
             Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
             foreach (XmlNode node in sceneNode.ChildNodes)

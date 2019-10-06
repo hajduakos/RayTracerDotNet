@@ -1,4 +1,4 @@
-<scene w="640" h="360" cameye="9 -2 5" camlookat="0 0 1.5" camhfov="50">
+<scene w="640" h="360" cameye="9 -2 5" camlookat="0 0 1.5" camhfov="50" samplesperpixel="2">
     <light pos="14 7 10" lum="500 500 500" />
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
     <material id="red" ambient="0.2 0 0" diffuse="0.4 0 0" specular="0.5 0.5 0.5" shine="25" />

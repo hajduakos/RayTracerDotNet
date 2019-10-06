@@ -23,5 +23,6 @@
         public static Color operator *(Color a, Color b) => new Color(a.R * b.R, a.G * b.G, a.B * b.B);
         public static Color operator *(Color a, float f) => new Color(a.R * f, a.G * f, a.B * f);
         public static Color operator /(Color a, Color b) => new Color(a.R / b.R, a.G / b.G, a.B / b.B);
+        public static Color operator /(Color a, float f) => new Color(a.R / f, a.G / f, a.B / f);
     }
 }
