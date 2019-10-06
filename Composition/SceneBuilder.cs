@@ -108,6 +108,16 @@ namespace RayTracer.Composition
                         materials[node.Attributes["material"].Value]
                         ));
                 }
+                else if (node.Name == "cone")
+                {
+                    scene.AddObject(new Cone(
+                        Vec3FromString(node.Attributes["cap1center"].Value),
+                        Vec3FromString(node.Attributes["cap2center"].Value),
+                        Convert.ToSingle(node.Attributes["cap1radius"].Value, nfi),
+                        Convert.ToSingle(node.Attributes["cap2radius"].Value, nfi),
+                        materials[node.Attributes["material"].Value]
+                        ));
+                }
                 else if(node.Name == "tonemapper")
                 {
                     if (node.Attributes["type"].Value == "maxlinear")

@@ -1,0 +1,15 @@
+<scene w="640" h="360" cameye="9 -2 5" camlookat="0 0 0.5" camhfov="50">
+    <light pos="40 40 40" lum="6400 6400 6400" />
+    <material id="black" ambient="0 0 0" diffuse="0 0 0" />
+    <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
+    <material id="red" ambient="0.2 0 0" diffuse="0.8 0 0" />
+    <material id="green" ambient="0 0.2 0" diffuse="0 0.8 0" />
+    <material id="blue" ambient="0 0 0.2" diffuse="0 0 0.8" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="2 0 0" />
+    <cone material="red" cap1center="-1 -1 0" cap2center="1 -2.5 1" cap1radius="0" cap2radius="1" />
+    <cone material="green" cap1center="0 0 0" cap2center="0 0 2" cap1radius="1" cap2radius="0.5" />
+    <cone material="blue" cap1center="2 1 0" cap2center="0 2 1" cap1radius="0" cap2radius="1" />
+    
+    <tonemapper type="nonlinear" p="1" />
+    <tonemapper type="maxlinear" />
+</scene>

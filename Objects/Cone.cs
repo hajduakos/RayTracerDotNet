@@ -1,40 +1,40 @@
-﻿using RayTracer.Common;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using RayTracer.Common;
 
 namespace RayTracer.Objects
 {
-    /// <summary>
-    /// Cyliner
-    /// </summary>
-    public class Cylinder : IObject
+    public class Cone : IObject
     {
         private readonly Vec3 c1;
         private readonly Vec3 c2;
-        private readonly float r;
+        private readonly float r1;
+        private readonly float r2;
         private readonly Material mat;
 
-        /// <summary>
-        /// Create new cylinder
-        /// </summary>
-        /// <param name="cap1center">Center of one cap</param>
-        /// <param name="cap2center">Center of the other cap</param>
-        /// <param name="r">Radius</param>
-        /// <param name="material">Material</param>
-        public Cylinder(Vec3 cap1center, Vec3 cap2center, float r, Material material)
+        public Cone(Vec3 cap1center, Vec3 cap2center, float cap1radius, float cap2radius, Material material)
         {
             this.c1 = cap1center;
             this.c2 = cap2center;
-            this.r = r;
+            this.r1 = cap1radius;
+            this.r2 = cap2radius;
             this.mat = material;
         }
 
         private Intersection IntersectSide(Ray ray)
         {
             Vec3 va = (c2 - c1).Normalize();
-            Vec3 dp = ray.Start - c1;
-            float a = (ray.Dir - va * (ray.Dir * va)) * (ray.Dir - va * (ray.Dir * va));
-            float b = (ray.Dir - va * (ray.Dir * va)) * (dp - va * (dp * va)) * 2;
-            float c = (dp - va * (dp * va)) * (dp - va * (dp * va)) - r * r;
+            Vec3 pa = c1 + (c2 - c1) * (r1 / (r1 - r2));
+            float alpha = MathF.Atan2(r1 - r2, (c2 - c1).Length);
+            Vec3 dp = ray.Start - pa;
+
+            float a = MathF.Pow(MathF.Cos(alpha), 2) * ((ray.Dir - va * (ray.Dir * va)) * (ray.Dir - va * (ray.Dir * va))) -
+                MathF.Pow(MathF.Sin(alpha), 2) * ((ray.Dir * va) * (ray.Dir * va));
+            float b = 2 * MathF.Pow(MathF.Cos(alpha), 2) * ((ray.Dir - va * (ray.Dir * va)) * (dp - va * (dp * va))) -
+                2 * MathF.Pow(MathF.Sin(alpha), 2) * (ray.Dir * va) * (dp * va);
+            float c = MathF.Pow(MathF.Cos(alpha), 2) * ((dp - va * (dp * va)) * (dp - va * (dp * va))) -
+                MathF.Pow(MathF.Sin(alpha), 2) * ((dp * va) * (dp * va));
             float discr = b * b - 4 * a * c;
 
             if (discr < 0) return null; // No intersection
@@ -57,7 +57,10 @@ namespace RayTracer.Objects
 
             if (t < Global.EPS) return null; // No intersection
             Vec3 pt = ray.Start + ray.Dir * t;
-            Vec3 n = (pt - (c1 + va * MathF.Sqrt(MathF.Pow((pt - c1).Length, 2) - r * r))).Normalize();
+            float x = (pt - c1).Length;
+            float r = ((c1 - pt) - va * ((c1 - pt) * va)).Length;
+            Vec3 p0 = c1 + va * (MathF.Sqrt(x * x - r * r) - r * MathF.Tan(alpha));
+            Vec3 n = (pt - p0).Normalize();
             return new Intersection(this, ray, t, n, mat);
         }
 
@@ -69,7 +72,7 @@ namespace RayTracer.Objects
             float t = (c1 - ray.Start) * normal / div;
             if (t < Global.EPS) return null;
             Vec3 pt = ray.Start + ray.Dir * t;
-            if ((pt - c1).Length > r) return null;
+            if ((pt - c1).Length > r1) return null;
             return new Intersection(this, ray, t, normal, mat);
         }
 
@@ -81,7 +84,7 @@ namespace RayTracer.Objects
             float t = (c2 - ray.Start) * normal / div;
             if (t < Global.EPS) return null;
             Vec3 pt = ray.Start + ray.Dir * t;
-            if ((pt - c2).Length > r) return null;
+            if ((pt - c2).Length > r2) return null;
             return new Intersection(this, ray, t, normal, mat);
         }
 
