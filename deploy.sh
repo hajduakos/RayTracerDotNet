@@ -10,12 +10,13 @@ mkdir out
 cp -r Scenes/*.png out/ || true
 
 cd out
-touch index.html
+echo "<html><head></head><body style=\"color: white; background-color: black\">" > index.html
 for f in *.png
 do
     echo "$f<br />" >> index.html
     echo "<img src=\"$f\" /> <br/><br />" >> index.html
 done
+echo "</body></html>" >> index.html
 
 # create a *new* Git repo
 
