@@ -29,12 +29,12 @@ namespace RayTracer.Objects
             float alpha = MathF.Atan2(r1 - r2, (c2 - c1).Length);
             Vec3 dp = ray.Start - pa;
 
-            float a = MathF.Pow(MathF.Cos(alpha), 2) * ((ray.Dir - va * (ray.Dir * va)) * (ray.Dir - va * (ray.Dir * va))) -
-                MathF.Pow(MathF.Sin(alpha), 2) * ((ray.Dir * va) * (ray.Dir * va));
+            float a = MathF.Pow(MathF.Cos(alpha), 2) * (ray.Dir - va * (ray.Dir * va)).Square() -
+                MathF.Pow(MathF.Sin(alpha), 2) * MathF.Pow(ray.Dir * va, 2);
             float b = 2 * MathF.Pow(MathF.Cos(alpha), 2) * ((ray.Dir - va * (ray.Dir * va)) * (dp - va * (dp * va))) -
                 2 * MathF.Pow(MathF.Sin(alpha), 2) * (ray.Dir * va) * (dp * va);
-            float c = MathF.Pow(MathF.Cos(alpha), 2) * ((dp - va * (dp * va)) * (dp - va * (dp * va))) -
-                MathF.Pow(MathF.Sin(alpha), 2) * ((dp * va) * (dp * va));
+            float c = MathF.Pow(MathF.Cos(alpha), 2) * (dp - va * (dp * va)).Square() -
+                MathF.Pow(MathF.Sin(alpha), 2) * MathF.Pow(dp * va, 2);
             float discr = b * b - 4 * a * c;
 
             if (discr < 0) return null; // No intersection

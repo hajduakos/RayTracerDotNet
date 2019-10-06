@@ -32,9 +32,9 @@ namespace RayTracer.Objects
         {
             Vec3 va = (c2 - c1).Normalize();
             Vec3 dp = ray.Start - c1;
-            float a = (ray.Dir - va * (ray.Dir * va)) * (ray.Dir - va * (ray.Dir * va));
+            float a = (ray.Dir - va * (ray.Dir * va)).Square();
             float b = (ray.Dir - va * (ray.Dir * va)) * (dp - va * (dp * va)) * 2;
-            float c = (dp - va * (dp * va)) * (dp - va * (dp * va)) - r * r;
+            float c = (dp - va * (dp * va)).Square() - r * r;
             float discr = b * b - 4 * a * c;
 
             if (discr < 0) return null; // No intersection
