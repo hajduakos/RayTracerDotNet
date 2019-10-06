@@ -1,0 +1,14 @@
+<scene w="640" h="360" cameye="4 0 4" camlookat="0 0 1" camhfov="50" samplesperpixel="2">
+    <arealight pos="10 10 10" lum="400 400 400" radius="1.5" samples="200"/>
+    
+    <material id="orange" ambient="0.1 0.03 0" diffuse="1 0.3 0" />
+    <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
+    
+    <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>
+    
+    <checkerboard mat1="orange" mat2="white" center="0 0 0" normal="0 0 1" matdir="0.5 0 0" />
+    <sphere material="red" center="0 0 1" radius="1" />
+    
+    <tonemapper type="nonlinear" p="3" />
+    <tonemapper type="maxlinear" />
+</scene>
