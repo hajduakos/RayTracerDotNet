@@ -4,7 +4,7 @@ using System;
 namespace RayTracer.Objects
 {
     /// <summary>
-    /// Cyliner
+    /// Finite cylinder with top and bottom caps
     /// </summary>
     public class Cylinder : IObject
     {

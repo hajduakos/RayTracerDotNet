@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using RayTracer.Common;
+﻿using RayTracer.Common;
+using System;
 
 namespace RayTracer.Objects
 {
+    /// <summary>
+    /// Finite cone with top and bottom caps
+    /// </summary>
     public class Cone : IObject
     {
         private readonly Vec3 c1;
@@ -13,6 +14,15 @@ namespace RayTracer.Objects
         private readonly float r2;
         private readonly Material mat;
 
+        /// <summary>
+        /// Create a new cone with given caps and radiuses (which must not be equal
+        /// because then it should be a cylinder)
+        /// </summary>
+        /// <param name="cap1center">Center of one cap</param>
+        /// <param name="cap2center">Center of the other cap</param>
+        /// <param name="cap1radius">Radius of one cap</param>
+        /// <param name="cap2radius">Radius of the other cap</param>
+        /// <param name="material">Material</param>
         public Cone(Vec3 cap1center, Vec3 cap2center, float cap1radius, float cap2radius, Material material)
         {
             this.c1 = cap1center;
@@ -20,12 +30,14 @@ namespace RayTracer.Objects
             this.r1 = cap1radius;
             this.r2 = cap2radius;
             this.mat = material;
+            if (MathF.Abs(r1 - r2) < Global.EPS)
+                throw new ArgumentException("Two radiuses are equal, use cylinder instead of cone");
         }
 
         private Intersection IntersectSide(Ray ray)
         {
             Vec3 va = (c2 - c1).Normalize();
-            Vec3 pa = c1 + (c2 - c1) * (r1 / (r1 - r2));
+            Vec3 pa = c1 + (c2 - c1) * (r1 / (r1 - r2)); // Apex point assuming r1 != r2
             float alpha = MathF.Atan2(r1 - r2, (c2 - c1).Length);
             Vec3 dp = ray.Start - pa;
 
