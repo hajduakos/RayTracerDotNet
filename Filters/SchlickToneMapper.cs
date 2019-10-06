@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using RayTracer.Common;
+﻿using RayTracer.Common;
 using RayTracer.Composition;
+using System;
+using System.Threading.Tasks;
 
 namespace RayTracer.Filters
 {

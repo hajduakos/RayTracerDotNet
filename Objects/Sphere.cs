@@ -1,5 +1,5 @@
-﻿using System;
-using RayTracer.Common;
+﻿using RayTracer.Common;
+using System;
 
 namespace RayTracer.Objects
 {

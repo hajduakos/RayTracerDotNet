@@ -1,7 +1,6 @@
-﻿using System;
+﻿using RayTracer.Common;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using RayTracer.Common;
 
 namespace RayTracer.Objects
 {
@@ -91,10 +90,10 @@ namespace RayTracer.Objects
             }
         }
 
-        private List<Triangle> triangles;
+        private readonly List<Triangle> triangles;
         private IObject bound;
-        private Material mat;
-        
+        private readonly Material mat;
+
         public MeshObject(Material material)
         {
             triangles = new List<Triangle>();
@@ -107,7 +106,7 @@ namespace RayTracer.Objects
         /// </summary>
         /// <param name="triangle">Triangle</param>
         protected void AddTriangle(Triangle triangle) => triangles.Add(triangle);
-        
+
         /// <summary>
         /// Set the bounding box
         /// </summary>
@@ -124,7 +123,7 @@ namespace RayTracer.Objects
             int imin = 0;
 
             // Get the first intersection among triangles
-            for(int i = 0; i < triangles.Count; ++i)
+            for (int i = 0; i < triangles.Count; ++i)
             {
                 float t = triangles[i].Intersect(ray);
                 if (t > Global.EPS && (!ints || t < tmin))

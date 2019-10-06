@@ -24,7 +24,7 @@ namespace RayTracer.Objects
 
         /// <summary> Normal at the intersection </summary>
         public Vec3 Normal { get; set; }
-    
+
         public Intersection(IObject obj, Ray ray, float t, Vec3 n, Material mat)
         {
             this.Obj = obj;

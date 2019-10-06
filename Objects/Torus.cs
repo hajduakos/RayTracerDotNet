@@ -20,10 +20,10 @@ namespace RayTracer.Objects
         public Torus(Vec3 center, float ro, float ri, int tessu, int tessv, Material material) : base(material)
         {
             // Create mesh points and normals
-            Vec3[,] mesh = new Vec3[tessu+1, tessv+1];
+            Vec3[,] mesh = new Vec3[tessu + 1, tessv + 1];
             Vec3[,] norm = Global.SHADINGNORMALS ? new Vec3[tessu + 1, tessv + 1] : null;
             float uf, vf;
-            for(int u = 0; u <= tessu; ++u)
+            for (int u = 0; u <= tessu; ++u)
             {
                 uf = u / (float)tessu * 2 * MathF.PI;
                 for (int v = 0; v <= tessv; ++v)
@@ -41,9 +41,9 @@ namespace RayTracer.Objects
                 }
             }
             // Create triangles
-            for(int u = 0; u < tessu; ++u)
+            for (int u = 0; u < tessu; ++u)
             {
-                for(int v = 0; v < tessv; ++v)
+                for (int v = 0; v < tessv; ++v)
                 {
                     AddTriangle(new Triangle(mesh[u, v], mesh[u + 1, v], mesh[u, v + 1],
                         norm == null ? null : new ShadingNormals(norm[u, v], norm[u + 1, v], norm[u, v + 1])));

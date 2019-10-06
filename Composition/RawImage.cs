@@ -1,7 +1,5 @@
 ﻿using RayTracer.Common;
-using RayTracer.Filters;
 using System;
-using System.Threading.Tasks;
 
 namespace RayTracer.Composition
 {

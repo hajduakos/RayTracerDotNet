@@ -118,7 +118,7 @@ namespace RayTracer.Composition
                         materials[node.Attributes["material"].Value]
                         ));
                 }
-                else if(node.Name == "tonemapper")
+                else if (node.Name == "tonemapper")
                 {
                     if (node.Attributes["type"].Value == "maxlinear")
                         scene.AddToneMapper(new MaxLinearToneMapper());
@@ -135,7 +135,7 @@ namespace RayTracer.Composition
                     throw new Exception("Unknown node: " + node.Name);
                 }
             }
-            
+
             return scene;
         }
 

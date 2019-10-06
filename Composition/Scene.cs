@@ -19,7 +19,7 @@ namespace RayTracer.Composition
         /// <summary> Camera </summary>
         public Camera Cam { get; set; }
 
-        private Color ambient;
+        private readonly Color ambient;
         private readonly List<IObject> objects;
         private readonly List<PointLight> lights;
         private readonly List<IToneMapper> toneMappers;
@@ -82,7 +82,7 @@ namespace RayTracer.Composition
         {
             Intersection first = null;
 
-            foreach(IObject obj in objects)
+            foreach (IObject obj in objects)
             {
                 Intersection ints = obj.Intersect(ray);
                 if (ints != null && (first == null || ints.T < first.T)) first = ints;
