@@ -10,7 +10,7 @@ mkdir out
 cp -r Scenes/*.png out/ || true
 
 cd out
-echo "<html><head></head><body style=\"color: white; background-color: black\">" > index.html
+echo "<html><head></head><body style=\"color: white; background-color: #333; text-align: center;\">" > index.html
 for f in *.png
 do
     echo "$f<br />" >> index.html
