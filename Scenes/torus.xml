@@ -5,9 +5,9 @@
     <material id="green" ambient="0 0.1 0" diffuse="0 0.4 0" specular="0.5 0.5 0.5" shine="25" />
     <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.4" specular="0.5 0.5 0.5" shine="25" />
     <plane material="brown" center="0 0 0" normal="0 0 1" />
-    <torus material="red" center="-1 -2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" />
-    <torus material="green" center="0 0 1.5" ro="1" ri="0.5" tessu="40" tessv="25" />
-    <torus material="blue" center="1 2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" />
+    <torus material="red" center="-1 -2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" shadingnormals="true" />
+    <torus material="green" center="0 0 1.5" ro="1" ri="0.5" tessu="40" tessv="25" shadingnormals="true" />
+    <torus material="blue" center="1 2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" shadingnormals="true" />
     
     <tonemapper type="nonlinear" p="2" />
     <tonemapper type="maxlinear" />

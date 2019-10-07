@@ -109,6 +109,7 @@ namespace RayTracer.Composition
                         Convert.ToSingle(node.Attributes["ri"].Value, nfi),
                         Convert.ToInt32(node.Attributes["tessu"].Value),
                         Convert.ToInt32(node.Attributes["tessv"].Value),
+                        Convert.ToBoolean(node.Attributes["shadingnormals"].Value),
                         materials[node.Attributes["material"].Value]));
                 }
                 else if (node.Name == "cylinder")

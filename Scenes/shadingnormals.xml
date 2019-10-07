@@ -1,0 +1,13 @@
+<scene w="720" h="405" cameye="9 -2 5" camlookat="0 0 1.5" camhfov="50" samplesperpixel="1">
+    <light pos="14 7 10" lum="500 500 500" />
+    <material id="black" ambient="0 0 0" diffuse="0 0 0" />
+    <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
+    <material id="red" ambient="0.2 0 0" diffuse="0.4 0 0" specular="0.5 0.5 0.5" shine="25" />
+
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="2 0 0" />
+    <torus material="red" center="0 -2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" shadingnormals="false" />
+    <torus material="red" center="0 2 1.5" ro="1" ri="0.5" tessu="40" tessv="25" shadingnormals="true" />
+    
+    <tonemapper type="nonlinear" p="2" />
+    <tonemapper type="maxlinear" />
+</scene>

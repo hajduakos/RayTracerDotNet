@@ -16,12 +16,13 @@ namespace RayTracer.Objects
         /// <param name="ri">Radius of small circle</param>
         /// <param name="tessu">Numer of tessellation points along big circle</param>
         /// <param name="tessv">Number of tessellation points along small circle</param>
+        /// <param name="shadingNormals">Use shading normals</param>
         /// <param name="material">Material</param>
-        public Torus(Vec3 center, float ro, float ri, int tessu, int tessv, Material material) : base(material)
+        public Torus(Vec3 center, float ro, float ri, int tessu, int tessv, bool shadingNormals, Material material) : base(material)
         {
             // Create mesh points and normals
             Vec3[,] mesh = new Vec3[tessu + 1, tessv + 1];
-            Vec3[,] norm = Global.SHADINGNORMALS ? new Vec3[tessu + 1, tessv + 1] : null;
+            Vec3[,] norm = shadingNormals ? new Vec3[tessu + 1, tessv + 1] : null;
             float uf, vf;
             for (int u = 0; u <= tessu; ++u)
             {
