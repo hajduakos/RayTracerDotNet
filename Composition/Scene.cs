@@ -177,13 +177,28 @@ namespace RayTracer.Composition
             Color color = new Color(0, 0, 0);
 
             // Rough materials: direct light source
-            if (!ints.Mat.IsReflective && !ints.Mat.IsRefractive)
+            if (ints.Mat.IsRough)
             {
-                color = ints.Mat.Ambient * ambient;
-                color += DirectLightSource(ints, ray);
+                color = ints.Mat.Ambient * ambient * ints.Mat.Rough;
+                color += DirectLightSource(ints, ray) * ints.Mat.Rough;
             }
 
-            // TODO reflection / refraction
+            // Smooth objects: reflection / refraction
+            if (ints.Mat.IsSmooth)
+            {
+                float costh = ray.Dir * (1) * ints.Normal;
+                if (costh < 0) costh = 0;
+                Color kr = ints.Mat.GetFresnel(costh);
+                Color kt = new Color(1, 1, 1) - kr;
+
+                // TODO: Refraction
+
+                if (ints.Mat.IsReflective)
+                {
+                    Ray refl = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
+                    color += kr * Trace(refl, d + 1) * ints.Mat.Smooth;
+                }
+            }
 
             return color;
         }

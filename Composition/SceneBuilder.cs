@@ -44,6 +44,7 @@ namespace RayTracer.Composition
                 if (node.Name == "material")
                 {
                     string id = node.Attributes["id"].Value;
+                    float rough = node.Attributes["rough"] == null ? 1 : Convert.ToSingle(node.Attributes["rough"].Value, nfi);
                     Color ambient = node.Attributes["ambient"] == null ?
                         new Color(0, 0, 0) : ColorFromString(node.Attributes["ambient"].Value);
                     Color diffuse = node.Attributes["diffuse"] == null ?
@@ -51,7 +52,16 @@ namespace RayTracer.Composition
                     Color specular = node.Attributes["specular"] == null ?
                         new Color(0, 0, 0) : ColorFromString(node.Attributes["specular"].Value);
                     float shine = node.Attributes["shine"] == null ? 0 : Convert.ToSingle(node.Attributes["shine"].Value, nfi);
-                    materials.Add(id, new Material(ambient, diffuse, specular, shine));
+
+                    float smooth = node.Attributes["smooth"] == null ? 0 : Convert.ToSingle(node.Attributes["smooth"].Value, nfi);
+                    Color n = node.Attributes["n"] == null ?
+                        new Color(0, 0, 0) : ColorFromString(node.Attributes["n"].Value);
+                    Color kap = node.Attributes["kap"] == null ?
+                        new Color(0, 0, 0) : ColorFromString(node.Attributes["kap"].Value);
+                    bool isReflective = node.Attributes["isreflective"] == null ? false : Convert.ToBoolean(node.Attributes["isreflective"].Value);
+                    bool isRefractive = node.Attributes["isrefractive"] == null ? false : Convert.ToBoolean(node.Attributes["isrefractive"].Value);
+
+                    materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap));
                 }
                 else if (node.Name == "light")
                 {

@@ -5,32 +5,36 @@ namespace RayTracer.Objects
 {
     public class Material
     {
+        public bool IsRough { get { return Rough > Global.EPS; } }
+        public float Rough { get; }
         public Color Ambient { get; }
         public Color Diffuse { get; }
         public Color Specular { get; }
 
         public float Shine { get; }
 
+        public bool IsSmooth { get { return Smooth > Global.EPS; } }
+        public float Smooth { get; }
         public bool IsReflective { get; }
         public bool IsRefractive { get; }
 
         public Color N { get; } // Index of reflection
         public Color Kap { get; } // Absorbtion coefficient
 
-        public Material(Color ambient, Color diffuse, Color specular, float shine,
-            bool isReflective, bool isRefractive, Color n, Color kap)
+        public Material(float rough, Color ambient, Color diffuse, Color specular, float shine,
+            float smooth, bool isReflective, bool isRefractive, Color n, Color kap)
         {
+            this.Rough = rough;
             this.Ambient = ambient;
             this.Diffuse = diffuse;
             this.Specular = specular;
             this.Shine = shine;
+            this.Smooth = smooth;
             this.IsReflective = isReflective;
             this.IsRefractive = isRefractive;
             this.N = n;
             this.Kap = kap;
         }
-
-        public Material(Color ambient, Color diffuse, Color specular, float shine) : this(ambient, diffuse, specular, shine, false, false, new Color(), new Color()) { }
 
         public Color GetFresnel(float costh)
         {
