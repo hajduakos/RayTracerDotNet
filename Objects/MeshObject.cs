@@ -86,7 +86,9 @@ namespace RayTracer.Objects
                 float b = (pc - pa).Length;
                 float c = (pa - pb).Length;
                 float s = (a + b + c) / 2;
-                return MathF.Sqrt(s * (s - a) * (s - b) * (s - c));
+                float d = s * (s - a) * (s - b) * (s - c);
+                if (d < 0) return 0;
+                return MathF.Sqrt(d);
             }
         }
 

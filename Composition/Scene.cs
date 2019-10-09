@@ -186,7 +186,7 @@ namespace RayTracer.Composition
             // Smooth objects: reflection / refraction
             if (ints.Mat.IsSmooth)
             {
-                float costh = ray.Dir * (1) * ints.Normal;
+                float costh = ray.Dir * (-1) * ints.Normal;
                 if (costh < 0) costh = 0;
                 Color kr = ints.Mat.GetFresnel(costh);
                 Color kt = new Color(1, 1, 1) - kr;
