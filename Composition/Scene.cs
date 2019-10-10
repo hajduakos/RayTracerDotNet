@@ -1,6 +1,7 @@
 ﻿using RayTracer.Common;
 using RayTracer.Filters;
 using RayTracer.Objects;
+using RayTracer.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace RayTracer.Composition
         private readonly List<IObject> objects;
         private readonly List<PointLight> lights;
         private readonly List<IToneMapper> toneMappers;
+
+        public IReporter Reporter { get; set; }
 
         /// <summary>
         /// Create a scene with a given width, height and camera
@@ -64,15 +67,19 @@ namespace RayTracer.Composition
         /// <returns>Rendered raw image</returns>
         public RawImage Render()
         {
+            if (Reporter != null) Reporter.Restart("Rendering");
             RawImage img = new RawImage(width, height);
             for (int x = 0; x < width; ++x)
             {
-                Console.Write("\rRendering {0}/{1}", (x + 1), width);
                 Parallel.For(0, height, y => img[x, y] = TracePixel(x, y));
+                if (Reporter != null) Reporter.Report(x, width - 1, "Rendering");
             }
-            Console.WriteLine();
+            if (Reporter != null) Reporter.End("Rendering");
             foreach (IToneMapper tm in toneMappers)
+            {
+                tm.Reporter = this.Reporter;
                 tm.ToneMap(img);
+            }
             return img;
         }
 
