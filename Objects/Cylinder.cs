@@ -57,7 +57,9 @@ namespace RayTracer.Objects
 
             if (t < Global.EPS) return null; // No intersection
             Vec3 pt = ray.Start + ray.Dir * t;
-            Vec3 n = (pt - (c1 + va * MathF.Sqrt(MathF.Pow((pt - c1).Length, 2) - r * r))).Normalize();
+            float d = MathF.Pow((pt - c1).Length, 2) - r * r;
+            if (d < Global.EPS) d = 0;
+            Vec3 n = (pt - (c1 + va * MathF.Sqrt(d))).Normalize();
             return new Intersection(this, ray, t, n, mat);
         }
 
