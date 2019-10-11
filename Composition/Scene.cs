@@ -158,6 +158,18 @@ namespace RayTracer.Composition
             return color;
         }
 
+        private Nullable<Vec3> RefractRay(Ray ray, Vec3 normal, float n)
+        {
+            float cosIn = ray.Dir * (-1) * normal;
+            if (MathF.Abs(cosIn) < Global.EPS) return null;
+
+            // Snellius-Descartes
+            float disc = 1 - (1 - cosIn * cosIn) / n / n;
+            if (disc < 0) return null;
+
+            return normal * (cosIn / n - MathF.Sqrt(disc)) + ray.Dir * (1 / n);
+        }
+
         /// <summary>
         /// Recursively trace the color coming from a ray
         /// </summary>
@@ -198,8 +210,19 @@ namespace RayTracer.Composition
                 Color kr = ints.Mat.GetFresnel(costh);
                 Color kt = new Color(1, 1, 1) - kr;
 
-                // TODO: Refraction
+                if (ints.Mat.IsRefractive)
+                {
+                    float nv = ints.Mat.N.Lum; // Index of refraction (average)
+                    if (inside) nv = 1 / nv; // Invert if inside
 
+                    Nullable<Vec3> refractDir = RefractRay(ray, ints.Normal, nv);
+                    if (refractDir.HasValue)
+                    {
+                        Ray refracted = new Ray(ints.IntsPt, refractDir.Value).Offset();
+                        color += kt * Trace(refracted, d + 1) * ints.Mat.Smooth;
+                    }
+                    else kr = new Color(1, 1, 1); // If no refraction, reflection should be 100%
+                }
                 if (ints.Mat.IsReflective)
                 {
                     Ray refl = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
