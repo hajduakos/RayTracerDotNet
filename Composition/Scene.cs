@@ -175,7 +175,7 @@ namespace RayTracer.Composition
         /// <param name="normal">Intersection normal</param>
         /// <param name="n">Index of refraction</param>
         /// <returns>Refracted ray or null</returns>
-        private Nullable<Vec3> RefractRay(Ray ray, Vec3 normal, float n)
+        private Vec3? RefractRay(Ray ray, Vec3 normal, float n)
         {
             float cosIn = ray.Dir * (-1) * normal;
             if (MathF.Abs(cosIn) < Global.EPS) return null; // No refraction
@@ -261,7 +261,7 @@ namespace RayTracer.Composition
                         float nv = ints.Mat.N.Lum; // Index of refraction (average)
                         if (inside) nv = 1 / nv; // Invert if inside
 
-                        Nullable<Vec3> refractedDir = RefractRay(ray, ints.Normal, nv);
+                        Vec3? refractedDir = RefractRay(ray, ints.Normal, nv);
                         if (refractedDir.HasValue)
                         {
                             Ray refractedRay = new Ray(ints.IntsPt, refractedDir.Value).Offset();
