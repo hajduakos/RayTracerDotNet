@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RayTracer.Filters
 {
-    class NonLinearToneMapper : IToneMapper
+    public class NonLinearToneMapper : IToneMapper
     {
         public IReporter Reporter { get; set; }
 

@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 namespace RayTracer
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Stopwatch sw = Stopwatch.StartNew();
             Scene scene = SceneBuilder.FromXML(args[0]);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RayTracer.Filters
 {
-    class SchlickToneMapper : IToneMapper
+    public class SchlickToneMapper : IToneMapper
     {
         public IReporter Reporter { get; set; }
         public void ToneMap(RawImage image)

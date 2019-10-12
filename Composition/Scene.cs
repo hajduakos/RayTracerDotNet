@@ -99,7 +99,7 @@ namespace RayTracer.Composition
         /// <param name="x">Pixel X</param>
         /// <param name="y">Pixel Y</param>
         /// <returns></returns>
-        Color TracePixel(int x, int y)
+        private Color TracePixel(int x, int y)
         {
             // One sample in the middle
             if (samplesPerPixel == 1) return Trace(Cam.GetRay(x, y), 0);
