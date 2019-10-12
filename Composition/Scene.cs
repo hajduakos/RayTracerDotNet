@@ -28,6 +28,8 @@ namespace RayTracer.Composition
 
         public IReporter Reporter { get; set; }
 
+        private readonly ThreadSafeRandom rnd;
+
         /// <summary>
         /// Create a scene with a given width, height and camera
         /// </summary>
@@ -45,6 +47,7 @@ namespace RayTracer.Composition
             this.lights = new List<PointLight>();
             this.objects = new List<IObject>();
             this.toneMappers = new List<IToneMapper>();
+            rnd = new ThreadSafeRandom();
         }
 
         /// <summary>
@@ -170,6 +173,17 @@ namespace RayTracer.Composition
             return normal * (cosIn / n - MathF.Sqrt(disc)) + ray.Dir * (1 / n);
         }
 
+        private Vec3 RndVec(float r)
+        {
+            float theta = rnd.NextFloat() * MathF.PI;
+            float phi = rnd.NextFloat() * MathF.PI * 2;
+            float r2 = rnd.NextFloat() * r;
+            float x = r2 * MathF.Sin(theta) * MathF.Cos(phi);
+            float y = r2 * MathF.Sin(theta) * MathF.Sin(phi);
+            float z = r2 * MathF.Cos(theta);
+            return new Vec3(x, y, z);
+        }
+
         /// <summary>
         /// Recursively trace the color coming from a ray
         /// </summary>
@@ -205,29 +219,46 @@ namespace RayTracer.Composition
             // Smooth objects: reflection / refraction
             if (ints.Mat.IsSmooth)
             {
-                float costh = ray.Dir * (-1) * ints.Normal;
-                if (costh < 0) costh = 0;
-                Color kr = ints.Mat.GetFresnel(costh);
-                Color kt = new Color(1, 1, 1) - kr;
+                Color smooth = new Color(0, 0, 0);
+                Vec3 originalNormal = ints.Normal;
 
-                if (ints.Mat.IsRefractive)
+                int blurn = Math.Max(ints.Mat.BlurSamples, 1); // Do at least one
+                if (d > 0) blurn = 1; // Only sample multiple at first hit
+                for (int blur = 0; blur < blurn; ++blur)
                 {
-                    float nv = ints.Mat.N.Lum; // Index of refraction (average)
-                    if (inside) nv = 1 / nv; // Invert if inside
-
-                    Nullable<Vec3> refractDir = RefractRay(ray, ints.Normal, nv);
-                    if (refractDir.HasValue)
+                    // Smooth materials: blur (only at first hit)
+                    if (ints.Mat.Blur > Global.EPS && d == 0)
                     {
-                        Ray refracted = new Ray(ints.IntsPt, refractDir.Value).Offset();
-                        color += kt * Trace(refracted, d + 1) * ints.Mat.Smooth;
+                        Vec3 offset = RndVec(ints.Mat.Blur);
+                        ints.Normal = (originalNormal + offset).Normalize();
                     }
-                    else kr = new Color(1, 1, 1); // If no refraction, reflection should be 100%
+
+                    float costh = ray.Dir * (-1) * ints.Normal;
+                    if (costh < 0) costh = 0;
+                    Color kr = ints.Mat.GetFresnel(costh);
+                    Color kt = new Color(1, 1, 1) - kr;
+
+                    if (ints.Mat.IsRefractive)
+                    {
+                        float nv = ints.Mat.N.Lum; // Index of refraction (average)
+                        if (inside) nv = 1 / nv; // Invert if inside
+
+                        Nullable<Vec3> refractDir = RefractRay(ray, ints.Normal, nv);
+                        if (refractDir.HasValue)
+                        {
+                            Ray refracted = new Ray(ints.IntsPt, refractDir.Value).Offset();
+                            smooth += kt * Trace(refracted, d + 1) * ints.Mat.Smooth / blurn;
+                        }
+                        else kr = new Color(1, 1, 1); // If no refraction, reflection should be 100%
+                    }
+                    if (ints.Mat.IsReflective)
+                    {
+                        Ray refl = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
+                        smooth += kr * Trace(refl, d + 1) * ints.Mat.Smooth / blurn;
+                    }
                 }
-                if (ints.Mat.IsReflective)
-                {
-                    Ray refl = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
-                    color += kr * Trace(refl, d + 1) * ints.Mat.Smooth;
-                }
+
+                color += smooth;
             }
 
             return color;

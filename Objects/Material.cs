@@ -20,9 +20,11 @@ namespace RayTracer.Objects
 
         public Color N { get; } // Index of reflection
         public Color Kap { get; } // Absorbtion coefficient
+        public float Blur { get; }
+        public int BlurSamples { get; }
 
         public Material(float rough, Color ambient, Color diffuse, Color specular, float shine,
-            float smooth, bool isReflective, bool isRefractive, Color n, Color kap)
+            float smooth, bool isReflective, bool isRefractive, Color n, Color kap, float blur, int blurSamples)
         {
             this.Rough = rough;
             this.Ambient = ambient;
@@ -34,6 +36,8 @@ namespace RayTracer.Objects
             this.IsRefractive = isRefractive;
             this.N = n;
             this.Kap = kap;
+            this.Blur = blur;
+            this.BlurSamples = blurSamples;
         }
 
         public Color GetFresnel(float costh)

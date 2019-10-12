@@ -1,0 +1,17 @@
+<scene w="720" h="405" cameye="8 -2 2.5" camlookat="0 0 1" camhfov="50" samplesperpixel="2">    
+    <light pos="10 2 5" lum="400 400 400" />
+    
+    <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>
+    <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
+    
+    <material id="refl0" rough="0" smooth="0.6" isreflective="true" n="0 0 0" kap="0 0 0" />
+    <material id="refl2" rough="0" smooth="0.6" isreflective="true" n="0 0 0" kap="0 0 0" blur="0.2" blursamples="50" />
+    
+    <plane material="brown" center="0 0 0" normal="0 0 1"/>
+    <sphere material="refl0" center="0.2 -2.2 1" radius="1" />
+    <sphere material="red" center="0 0 1" radius="1" />
+    <sphere material="refl2" center="0.2 2.2 1" radius="1" />
+    
+    <tonemapper type="nonlinear" p="2" />
+    <tonemapper type="maxlinear" />
+</scene>

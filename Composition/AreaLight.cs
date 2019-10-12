@@ -29,14 +29,14 @@ namespace RayTracer.Composition
         {
             List<PointLight> pl = new List<PointLight>(Samples);
             float x, y, z;
-            Random rnd = new Random();
+            ThreadSafeRandom trnd = new ThreadSafeRandom();
             while (pl.Count < Samples)
             {
                 do
                 {
-                    x = (float)(rnd.NextDouble() * 2 * Radius - Radius);
-                    y = (float)(rnd.NextDouble() * 2 * Radius - Radius);
-                    z = (float)(rnd.NextDouble() * 2 * Radius - Radius);
+                    x = trnd.NextFloat() * 2 * Radius - Radius;
+                    y = trnd.NextFloat() * 2 * Radius - Radius;
+                    z = trnd.NextFloat() * 2 * Radius - Radius;
                 } while (x * x + y * y + z * z > Radius * Radius);
                 pl.Add(new PointLight(Pos + new Vec3(x, y, z), Lum / Samples));
             }

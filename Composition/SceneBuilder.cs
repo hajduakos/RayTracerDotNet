@@ -60,8 +60,10 @@ namespace RayTracer.Composition
                         new Color(0, 0, 0) : ColorFromString(node.Attributes["kap"].Value);
                     bool isReflective = node.Attributes["isreflective"] == null ? false : Convert.ToBoolean(node.Attributes["isreflective"].Value);
                     bool isRefractive = node.Attributes["isrefractive"] == null ? false : Convert.ToBoolean(node.Attributes["isrefractive"].Value);
+                    float blur = node.Attributes["blur"] == null ? 0 : Convert.ToSingle(node.Attributes["blur"].Value, nfi);
+                    int blursamples = node.Attributes["blursamples"] == null ? 1 : Convert.ToInt32(node.Attributes["blursamples"].Value);
 
-                    materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap));
+                    materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap, blur, blursamples));
                 }
                 else if (node.Name == "light")
                 {
