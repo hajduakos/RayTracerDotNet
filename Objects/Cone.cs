@@ -1,5 +1,6 @@
 ﻿using RayTracer.Common;
 using System;
+using System.Diagnostics.Contracts;
 
 namespace RayTracer.Objects
 {
@@ -25,13 +26,12 @@ namespace RayTracer.Objects
         /// <param name="material">Material</param>
         public Cone(Vec3 cap1center, Vec3 cap2center, float cap1radius, float cap2radius, Material material)
         {
+            Contract.Requires(MathF.Abs(r1 - r2) > Global.EPS, "Two radiuses are equal, use cylinder instead of cone");
             this.c1 = cap1center;
             this.c2 = cap2center;
             this.r1 = cap1radius;
             this.r2 = cap2radius;
             this.mat = material;
-            if (MathF.Abs(r1 - r2) < Global.EPS)
-                throw new ArgumentException("Two radiuses are equal, use cylinder instead of cone");
         }
 
         private Intersection IntersectSide(Ray ray)

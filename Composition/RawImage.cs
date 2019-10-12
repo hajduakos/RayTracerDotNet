@@ -1,5 +1,6 @@
 ﻿using RayTracer.Common;
 using System;
+using System.Diagnostics.Contracts;
 
 namespace RayTracer.Composition
 {
@@ -13,11 +14,13 @@ namespace RayTracer.Composition
 
         private readonly Color[,] img; // Internal image
 
-        public RawImage(int w, int h)
+        public RawImage(int width, int height)
         {
-            this.Width = w;
-            this.Height = h;
-            this.img = new Color[w, h];
+            Contract.Requires(width > 0, "Width must be greater than 0");
+            Contract.Requires(height > 0, "Height must be greater than 0");
+            this.Width = width;
+            this.Height = height;
+            this.img = new Color[width, height];
         }
 
         /// <summary>

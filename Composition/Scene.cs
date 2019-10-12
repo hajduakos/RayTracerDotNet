@@ -105,17 +105,17 @@ namespace RayTracer.Composition
             if (samplesPerPixel == 1) return Trace(Cam.GetRay(x, y), 0);
 
             // Multiple samples: trace N x N grid and calculate average
-            Color result = new Color(0, 0, 0);
+            Color totalColor = new Color(0, 0, 0);
             for (int dx = 0; dx < samplesPerPixel; ++dx)
             {
-                float xOff = 1.0f / samplesPerPixel / 2.0f + dx * 1.0f / samplesPerPixel;
+                float xOffset = 1.0f / samplesPerPixel / 2.0f + dx * 1.0f / samplesPerPixel;
                 for (int dy = 0; dy < samplesPerPixel; ++dy)
                 {
-                    float yOff = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
-                    result += Trace(Cam.GetRay(x, y, xOff, yOff), 0);
+                    float yOffset = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
+                    totalColor += Trace(Cam.GetRay(x, y, xOffset, yOffset), 0);
                 }
             }
-            return result / (samplesPerPixel * samplesPerPixel);
+            return totalColor / (samplesPerPixel * samplesPerPixel);
         }
 
         /// <summary>
@@ -143,29 +143,29 @@ namespace RayTracer.Composition
         /// <returns>Color coming from direct light sources</returns>
         private Color DirectLightSource(Intersection ints, Ray ray)
         {
-            Color color = new Color(0, 0, 0); // Start with black
-            Vec3 pOffset = ints.IntsPt + ints.Normal * Global.EPS; // Offset a bit so that shadow ray does not hit the object itself
+            Color totalColor = new Color(0, 0, 0); // Start with black
+            Vec3 intsPtOffset = ints.IntsPt + ints.Normal * Global.EPS; // Offset a bit so that shadow ray does not hit the object itself
             foreach (PointLight light in lights)
             {
                 // Check if light is directly visible
-                Ray shadowRay = new Ray(pOffset, light.Pos - pOffset);
+                Ray shadowRay = new Ray(intsPtOffset, light.Pos - intsPtOffset);
                 Intersection shadowInts = FirstInteresction(shadowRay);
                 // If no other object between current object and light source
-                if (shadowInts == null || (pOffset - shadowInts.IntsPt).Length > (pOffset - light.Pos).Length)
+                if (shadowInts == null || (intsPtOffset - shadowInts.IntsPt).Length > (intsPtOffset - light.Pos).Length)
                 {
-                    float dist = MathF.Pow((pOffset - light.Pos).Length, 2);
+                    float squaredDistance = MathF.Pow((intsPtOffset - light.Pos).Length, 2);
                     // Diffuse component
-                    float costh = shadowRay.Dir * ints.Normal;
-                    if (costh < Global.EPS) costh = 0;
-                    color += light.Lum * (1 / dist) * ints.Mat.Diffuse * costh;
+                    float costhd = shadowRay.Dir * ints.Normal;
+                    if (costhd < Global.EPS) costhd = 0;
+                    totalColor += light.Lum * (1 / squaredDistance) * ints.Mat.Diffuse * costhd;
                     // Specular component
                     Vec3 h = (shadowRay.Dir - ray.Dir).Normalize();
-                    float costh2 = h * ints.Normal;
-                    if (costh2 < Global.EPS) costh2 = 0;
-                    color += light.Lum * (1 / dist) * (ints.Mat.Specular * MathF.Pow(costh2, ints.Mat.Shine));
+                    float cosths = h * ints.Normal;
+                    if (cosths < Global.EPS) cosths = 0;
+                    totalColor += light.Lum * (1 / squaredDistance) * (ints.Mat.Specular * MathF.Pow(cosths, ints.Mat.Shine));
                 }
             }
-            return color;
+            return totalColor;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace RayTracer.Composition
         /// <returns>Refracted ray or null</returns>
         private Vec3? RefractRay(Ray ray, Vec3 normal, float n)
         {
-            float cosIn = ray.Dir * (-1) * normal;
+            float cosIn = ray.Dir * -normal;
             if (MathF.Abs(cosIn) < Global.EPS) return null; // No refraction
 
             // Snellius-Descartes
@@ -197,22 +197,19 @@ namespace RayTracer.Composition
             float theta = rnd.NextFloat() * MathF.PI;
             float phi = rnd.NextFloat() * MathF.PI * 2;
             float r2 = rnd.NextFloat() * radius;
-            float x = r2 * MathF.Sin(theta) * MathF.Cos(phi);
-            float y = r2 * MathF.Sin(theta) * MathF.Sin(phi);
-            float z = r2 * MathF.Cos(theta);
-            return new Vec3(x, y, z);
+            return new Vec3(r2 * MathF.Sin(theta) * MathF.Cos(phi), r2 * MathF.Sin(theta) * MathF.Sin(phi), r2 * MathF.Cos(theta));
         }
 
         /// <summary>
         /// Recursively trace the color coming from a ray
         /// </summary>
         /// <param name="ray">Ray</param>
-        /// <param name="d">Current depth</param>
+        /// <param name="currentDepth">Current depth</param>
         /// <returns>Accummulated color</returns>
-        private Color Trace(Ray ray, int d)
+        private Color Trace(Ray ray, int currentDepth)
         {
             // Recursion limit reached
-            if (d > Global.DMAX) return ambient;
+            if (currentDepth > Global.MAXDEPTH) return ambient;
 
             // Check for intersection
             Intersection ints = FirstInteresction(ray);
@@ -220,7 +217,7 @@ namespace RayTracer.Composition
 
             // Check if we are inside an object
             bool inside = false;
-            if (ray.Dir * (-1) * ints.Normal < 0)
+            if (ray.Dir * -ints.Normal < 0)
             {
                 inside = true;
                 ints.Normal *= -1;
@@ -241,17 +238,17 @@ namespace RayTracer.Composition
                 Vec3 originalNormal = ints.Normal;
 
                 int blurSamples = ints.Mat.BlurSamples;
-                if (d > 0) blurSamples = 1; // Only sample multiple at first hit
+                if (currentDepth > 0) blurSamples = 1; // Only sample multiple at first hit
                 for (int blur = 0; blur < blurSamples; ++blur)
                 {
                     // Smooth materials: blur using random offset (only at first hit)
-                    if (ints.Mat.Blur > Global.EPS && d == 0)
+                    if (ints.Mat.Blur > Global.EPS && currentDepth == 0)
                     {
                         Vec3 offset = RndVec(ints.Mat.Blur);
                         ints.Normal = (originalNormal + offset).Normalize();
                     }
 
-                    float costh = ray.Dir * (-1) * ints.Normal;
+                    float costh = ray.Dir * -ints.Normal;
                     if (costh < 0) costh = 0;
                     Color kr = ints.Mat.GetFresnel(costh); // Reflection ratio
                     Color kt = new Color(1, 1, 1) - kr; // Refraction ratio
@@ -265,14 +262,14 @@ namespace RayTracer.Composition
                         if (refractedDir.HasValue)
                         {
                             Ray refractedRay = new Ray(ints.IntsPt, refractedDir.Value).Offset();
-                            smoothColor += kt * Trace(refractedRay, d + 1);
+                            smoothColor += kt * Trace(refractedRay, currentDepth + 1);
                         }
                         else kr = new Color(1, 1, 1); // If no refraction, reflection should be 100%
                     }
                     if (ints.Mat.IsReflective)
                     {
                         Ray reflectedRay = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
-                        smoothColor += kr * Trace(reflectedRay, d + 1);
+                        smoothColor += kr * Trace(reflectedRay, currentDepth + 1);
                     }
                 }
                 smoothColor /= blurSamples;

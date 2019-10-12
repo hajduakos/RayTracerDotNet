@@ -17,10 +17,6 @@ namespace RayTracer.Common
             this.Y = y;
             this.Z = z;
         }
-        public static Vec3 FromAngle(float xy, float z, float len)
-        {
-            return new Vec3(len * MathF.Cos(z) * MathF.Sin(xy), len * MathF.Cos(z) * MathF.Cos(xy), len * MathF.Sin(z));
-        }
         public float Length { get { return MathF.Sqrt(X * X + Y * Y + Z * Z); } }
         public Vec3 Normalize() => this * (1f / Length);
 
@@ -35,6 +31,7 @@ namespace RayTracer.Common
         /// <summary> Cross product </summary>
         public static Vec3 operator %(Vec3 a, Vec3 b) => new Vec3(a.Y * b.Z - a.Z * b.Y, a.Z * b.X - a.X * b.Z, a.X * b.Y - a.Y * b.X);
 
+        /// <summary> Dot product with itself </summary>
         public float Square() => this * this;
     }
 }

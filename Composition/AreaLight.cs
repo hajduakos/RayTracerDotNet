@@ -1,5 +1,6 @@
 ﻿using RayTracer.Common;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace RayTracer.Composition
 {
@@ -11,20 +12,37 @@ namespace RayTracer.Composition
         /// <summary> Luminance </summary>
         public Color Lum { get; }
 
+        /// <summary> Radius </summary>
         public float Radius { get; }
 
+        /// <summary> Number of samples </summary>
         public int Samples { get; }
 
+        /// <summary>
+        /// Create a new area light
+        /// </summary>
+        /// <param name="pos">Position</param>
+        /// <param name="lum">Luminance</param>
+        /// <param name="radius">Radius</param>
+        /// <param name="samples">Samples</param>
         public AreaLight(Vec3 pos, Color lum, float radius, int samples)
         {
+            Contract.Requires(samples > 0, "Number of samples must be greater than 0");
             this.Pos = pos;
             this.Lum = lum;
             this.Radius = radius;
             this.Samples = samples;
         }
 
+        /// <summary>
+        /// Convert light to a list of point lights by random sampling
+        /// </summary>
+        /// <returns>List of point lights</returns>
         public List<PointLight> ToPointLights()
         {
+            // For only one sample, return the center
+            if (Samples == 1) return new List<PointLight>() { new PointLight(Pos, Lum) };
+
             List<PointLight> pl = new List<PointLight>(Samples);
             float x, y, z;
             ThreadSafeRandom trnd = new ThreadSafeRandom();
