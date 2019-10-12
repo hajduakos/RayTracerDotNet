@@ -106,7 +106,7 @@ namespace RayTracer.Composition
 
             // Multiple samples: trace N x N grid and calculate average
             Color result = new Color(0, 0, 0);
-            for(int dx = 0; dx < samplesPerPixel; ++dx)
+            for (int dx = 0; dx < samplesPerPixel; ++dx)
             {
                 float xOff = 1.0f / samplesPerPixel / 2.0f + dx * 1.0f / samplesPerPixel;
                 for (int dy = 0; dy < samplesPerPixel; ++dy)
@@ -278,7 +278,7 @@ namespace RayTracer.Composition
                 smoothColor /= blurSamples;
             }
 
-            return roughColor * ints.Mat.Rough + smoothColor*ints.Mat.Smooth;
+            return roughColor * ints.Mat.Rough + smoothColor * ints.Mat.Smooth;
         }
 
     }

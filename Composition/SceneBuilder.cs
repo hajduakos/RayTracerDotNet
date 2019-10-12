@@ -71,7 +71,7 @@ namespace RayTracer.Composition
                         Vec3FromString(node.Attributes["pos"].Value),
                         ColorFromString(node.Attributes["lum"].Value)));
                 }
-                else if(node.Name == "arealight")
+                else if (node.Name == "arealight")
                 {
                     AreaLight al = new AreaLight(
                         Vec3FromString(node.Attributes["pos"].Value),
