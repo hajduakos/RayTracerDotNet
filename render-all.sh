@@ -1,3 +1,4 @@
+rm Scenes/*.png
 for f in Scenes/*.xml
 do
     echo "Rendering $f with $1 s timeout"

@@ -15,7 +15,8 @@ namespace RayTracer.Filters
             float max = 0;
             for (int x = 0; x < image.Width; ++x)
             {
-                Parallel.For(0, image.Height, y => max = Math.Max(max, Math.Max(image[x, y].R, Math.Max(image[x, y].G, image[x, y].B))));
+                Parallel.For(0, image.Height, y =>
+                max = Math.Max(max, Math.Max(NoNaN(image[x, y].R), Math.Max(NoNaN(image[x, y].G), NoNaN(image[x, y].B)))));
                 if (Reporter != null) Reporter.Report(x, image.Width * 2 - 1, "Tone mapping");
             }
 
@@ -26,6 +27,12 @@ namespace RayTracer.Filters
                 if (Reporter != null) Reporter.Report(image.Width + x, image.Width * 2 - 1, "Tone mapping");
             }
             if (Reporter != null) Reporter.End("Tone mapping");
+        }
+
+        private float NoNaN(float f)
+        {
+            if (Single.IsNaN(f)) return 0;
+            return f;
         }
     }
 }
