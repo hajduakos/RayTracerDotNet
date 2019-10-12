@@ -4,6 +4,7 @@ using RayTracer.Objects;
 using RayTracer.Reporting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 
 namespace RayTracer.Composition
@@ -39,6 +40,10 @@ namespace RayTracer.Composition
         /// <param name="cam">Camera</param>
         public Scene(int screenWidth, int screenHeight, Camera cam, int samplesPerPixel = 1)
         {
+            Contract.Requires(screenWidth > 0, "Screen width must be greater than 0");
+            Contract.Requires(screenHeight > 0, "Screen height must be greater than 0");
+            Contract.Requires(cam != null, "Camera must not be null");
+            Contract.Requires(samplesPerPixel > 0, "Samples per pixel must be greater than 0");
             this.width = screenWidth;
             this.height = screenHeight;
             this.Cam = cam;
@@ -47,7 +52,7 @@ namespace RayTracer.Composition
             this.lights = new List<PointLight>();
             this.objects = new List<IObject>();
             this.toneMappers = new List<IToneMapper>();
-            rnd = new ThreadSafeRandom();
+            this.rnd = new ThreadSafeRandom();
         }
 
         /// <summary>
@@ -71,6 +76,7 @@ namespace RayTracer.Composition
         public RawImage Render()
         {
             if (Reporter != null) Reporter.Restart("Rendering");
+            // Step 1: render the raw image
             RawImage img = new RawImage(width, height);
             for (int x = 0; x < width; ++x)
             {
@@ -78,6 +84,7 @@ namespace RayTracer.Composition
                 if (Reporter != null) Reporter.Report(x, width - 1, "Rendering");
             }
             if (Reporter != null) Reporter.End("Rendering");
+            // Step 2: apply tone mapping
             foreach (IToneMapper tm in toneMappers)
             {
                 tm.Reporter = this.Reporter;
@@ -97,7 +104,7 @@ namespace RayTracer.Composition
             // One sample in the middle
             if (samplesPerPixel == 1) return Trace(Cam.GetRay(x, y), 0);
 
-            // Multiple samples: N x N grid and average
+            // Multiple samples: trace N x N grid and calculate average
             Color result = new Color(0, 0, 0);
             for(int dx = 0; dx < samplesPerPixel; ++dx)
             {
@@ -161,23 +168,35 @@ namespace RayTracer.Composition
             return color;
         }
 
+        /// <summary>
+        /// Calculate refracted ray (if any)
+        /// </summary>
+        /// <param name="ray">Original ray</param>
+        /// <param name="normal">Intersection normal</param>
+        /// <param name="n">Index of refraction</param>
+        /// <returns>Refracted ray or null</returns>
         private Nullable<Vec3> RefractRay(Ray ray, Vec3 normal, float n)
         {
             float cosIn = ray.Dir * (-1) * normal;
-            if (MathF.Abs(cosIn) < Global.EPS) return null;
+            if (MathF.Abs(cosIn) < Global.EPS) return null; // No refraction
 
             // Snellius-Descartes
             float disc = 1 - (1 - cosIn * cosIn) / n / n;
-            if (disc < 0) return null;
+            if (disc < 0) return null; // No refraction
 
             return normal * (cosIn / n - MathF.Sqrt(disc)) + ray.Dir * (1 / n);
         }
 
-        private Vec3 RndVec(float r)
+        /// <summary>
+        /// Generate a random vector within a sphere with a given radius
+        /// </summary>
+        /// <param name="radius">Radius</param>
+        /// <returns>Random vector with length <= radius</returns>
+        private Vec3 RndVec(float radius)
         {
             float theta = rnd.NextFloat() * MathF.PI;
             float phi = rnd.NextFloat() * MathF.PI * 2;
-            float r2 = rnd.NextFloat() * r;
+            float r2 = rnd.NextFloat() * radius;
             float x = r2 * MathF.Sin(theta) * MathF.Cos(phi);
             float y = r2 * MathF.Sin(theta) * MathF.Sin(phi);
             float z = r2 * MathF.Cos(theta);
@@ -207,26 +226,25 @@ namespace RayTracer.Composition
                 ints.Normal *= -1;
             }
 
-            Color color = new Color(0, 0, 0);
-
-            // Rough materials: direct light source
+            // Rough materials: ambient and direct light source
+            Color roughColor = new Color(0, 0, 0);
             if (ints.Mat.IsRough)
             {
-                color = ints.Mat.Ambient * ambient * ints.Mat.Rough;
-                color += DirectLightSource(ints, ray) * ints.Mat.Rough;
+                roughColor = ints.Mat.Ambient * ambient;
+                roughColor += DirectLightSource(ints, ray);
             }
 
             // Smooth objects: reflection / refraction
+            Color smoothColor = new Color(0, 0, 0);
             if (ints.Mat.IsSmooth)
             {
-                Color smooth = new Color(0, 0, 0);
                 Vec3 originalNormal = ints.Normal;
 
-                int blurn = Math.Max(ints.Mat.BlurSamples, 1); // Do at least one
-                if (d > 0) blurn = 1; // Only sample multiple at first hit
-                for (int blur = 0; blur < blurn; ++blur)
+                int blurSamples = ints.Mat.BlurSamples;
+                if (d > 0) blurSamples = 1; // Only sample multiple at first hit
+                for (int blur = 0; blur < blurSamples; ++blur)
                 {
-                    // Smooth materials: blur (only at first hit)
+                    // Smooth materials: blur using random offset (only at first hit)
                     if (ints.Mat.Blur > Global.EPS && d == 0)
                     {
                         Vec3 offset = RndVec(ints.Mat.Blur);
@@ -235,33 +253,32 @@ namespace RayTracer.Composition
 
                     float costh = ray.Dir * (-1) * ints.Normal;
                     if (costh < 0) costh = 0;
-                    Color kr = ints.Mat.GetFresnel(costh);
-                    Color kt = new Color(1, 1, 1) - kr;
+                    Color kr = ints.Mat.GetFresnel(costh); // Reflection ratio
+                    Color kt = new Color(1, 1, 1) - kr; // Refraction ratio
 
                     if (ints.Mat.IsRefractive)
                     {
                         float nv = ints.Mat.N.Lum; // Index of refraction (average)
                         if (inside) nv = 1 / nv; // Invert if inside
 
-                        Nullable<Vec3> refractDir = RefractRay(ray, ints.Normal, nv);
-                        if (refractDir.HasValue)
+                        Nullable<Vec3> refractedDir = RefractRay(ray, ints.Normal, nv);
+                        if (refractedDir.HasValue)
                         {
-                            Ray refracted = new Ray(ints.IntsPt, refractDir.Value).Offset();
-                            smooth += kt * Trace(refracted, d + 1) * ints.Mat.Smooth / blurn;
+                            Ray refractedRay = new Ray(ints.IntsPt, refractedDir.Value).Offset();
+                            smoothColor += kt * Trace(refractedRay, d + 1);
                         }
                         else kr = new Color(1, 1, 1); // If no refraction, reflection should be 100%
                     }
                     if (ints.Mat.IsReflective)
                     {
-                        Ray refl = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
-                        smooth += kr * Trace(refl, d + 1) * ints.Mat.Smooth / blurn;
+                        Ray reflectedRay = new Ray(ints.IntsPt, ray.Dir - ints.Normal * 2 * (ints.Normal * ray.Dir)).Offset();
+                        smoothColor += kr * Trace(reflectedRay, d + 1);
                     }
                 }
-
-                color += smooth;
+                smoothColor /= blurSamples;
             }
 
-            return color;
+            return roughColor * ints.Mat.Rough + smoothColor*ints.Mat.Smooth;
         }
 
     }
