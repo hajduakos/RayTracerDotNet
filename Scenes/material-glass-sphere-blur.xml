@@ -7,8 +7,8 @@
     <material id="glass2" rough="0" smooth="1" isreflective="true" isrefractive="true" n="1.5 1.5 1.5" kap="0 0 0"  blur="0.1" blursamples="10" />
     
     <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="1 0 0" />
-    <sphere material="glass1" center="0 -1.2 1" radius="1" />
-    <sphere material="glass2" center="0 1.2 1" radius="1" />
+    <sphere material="glass1" center="0 -1.2 1.01" radius="1" />
+    <sphere material="glass2" center="0 1.2 1.01" radius="1" />
     
     <tonemapper type="nonlinear" p="2" />
     <tonemapper type="maxlinear" />
