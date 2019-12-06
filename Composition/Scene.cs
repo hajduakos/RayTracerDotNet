@@ -18,6 +18,8 @@ namespace RayTracer.Composition
         private readonly int width;
         private readonly int height;
         private readonly int samplesPerPixel;
+        private readonly int dofSamples;
+        private readonly float dofRadius;
 
         /// <summary> Camera </summary>
         public Camera Cam { get; set; }
@@ -38,16 +40,19 @@ namespace RayTracer.Composition
         /// <param name="screenHeight">Scene height (px)</param>
         /// <param name="samplesPerPixel">Samples per pixel (in both directions)</param>
         /// <param name="cam">Camera</param>
-        public Scene(int screenWidth, int screenHeight, Camera cam, int samplesPerPixel = 1)
+        public Scene(int screenWidth, int screenHeight, Camera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
         {
             Contract.Requires(screenWidth > 0, "Screen width must be greater than 0");
             Contract.Requires(screenHeight > 0, "Screen height must be greater than 0");
             Contract.Requires(cam != null, "Camera must not be null");
             Contract.Requires(samplesPerPixel > 0, "Samples per pixel must be greater than 0");
+            Contract.Requires(dofSamples > 0, "DoF samples must be greater than 0");
             this.width = screenWidth;
             this.height = screenHeight;
             this.Cam = cam;
             this.samplesPerPixel = samplesPerPixel;
+            this.dofSamples = dofSamples;
+            this.dofRadius = dofRadius;
             this.ambient = new Color(.8f, .9f, 1);
             this.lights = new List<PointLight>();
             this.objects = new List<IObject>();
@@ -101,9 +106,6 @@ namespace RayTracer.Composition
         /// <returns></returns>
         private Color TracePixel(int x, int y)
         {
-            // One sample in the middle
-            if (samplesPerPixel == 1) return Trace(Cam.GetRay(x, y), 0);
-
             // Multiple samples: trace N x N grid and calculate average
             Color totalColor = new Color(0, 0, 0);
             for (int dx = 0; dx < samplesPerPixel; ++dx)
@@ -112,10 +114,14 @@ namespace RayTracer.Composition
                 for (int dy = 0; dy < samplesPerPixel; ++dy)
                 {
                     float yOffset = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
-                    totalColor += Trace(Cam.GetRay(x, y, xOffset, yOffset), 0);
+                    for (int dof = 0; dof < dofSamples; ++dof)
+                    {
+                        Vec3 eyeOffset = RndVec(dofRadius);
+                        totalColor += Trace(Cam.GetRay(x, y, xOffset, yOffset, eyeOffset), 0);
+                    }
                 }
             }
-            return totalColor / (samplesPerPixel * samplesPerPixel);
+            return totalColor / (samplesPerPixel * samplesPerPixel * dofSamples);
         }
 
         /// <summary>
