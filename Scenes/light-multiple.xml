@@ -1,6 +1,6 @@
 <scene w="720" h="405" cameye="2 0 8" camlookat="-1 0 0" camhfov="50" samplesperpixel="1">
-    <light pos="10 10 10" lum="200 200 200"/>
-    <light pos="10 -10 10" lum="200 200 200"/>
+    <pointlight pos="10 10 10" lum="200 200 200"/>
+    <pointlight pos="10 -10 10" lum="200 200 200"/>
     
     <material id="black" ambient="0.01 0.01 0.01" diffuse="0.1 0.1 0.1" />
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />

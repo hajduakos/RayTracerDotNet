@@ -69,7 +69,7 @@ namespace RayTracer.Composition
 
                     materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap, blur, blursamples));
                 }
-                else if (node.Name == "light")
+                else if (node.Name == "pointlight")
                 {
                     scene.AddLight(new PointLight(
                         Vec3FromString(node.Attributes["pos"].Value),
@@ -161,7 +161,7 @@ namespace RayTracer.Composition
                 }
                 else
                 {
-                    throw new ArgumentException("Unknown node: " + node.Name);
+                    throw new XmlException("Unknown node: " + node.Name);
                 }
             }
 

@@ -1,5 +1,5 @@
 <scene w="720" h="405" cameye="9 -3 6" camlookat="0 0 0.5" camhfov="50" samplesperpixel="1" dofsamples="50" dofradius="1.0">
-    <light pos="40 40 40" lum="6400 6400 6400" />
+    <pointlight pos="40 40 40" lum="6400 6400 6400" />
 
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
     
