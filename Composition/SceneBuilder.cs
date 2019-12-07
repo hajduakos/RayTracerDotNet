@@ -75,6 +75,12 @@ namespace RayTracer.Composition
                         Vec3FromString(node.Attributes["pos"].Value),
                         ColorFromString(node.Attributes["lum"].Value)));
                 }
+                else if (node.Name == "dirlight")
+                {
+                    scene.AddLight(new DirLight(
+                        Vec3FromString(node.Attributes["dir"].Value),
+                        ColorFromString(node.Attributes["lum"].Value)));
+                }
                 else if (node.Name == "arealight")
                 {
                     scene.AddLight(new AreaLight(

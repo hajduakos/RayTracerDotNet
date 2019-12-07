@@ -26,7 +26,8 @@ namespace RayTracer.Composition
 
         private readonly Color ambient;
         private readonly List<IObject> objects;
-        private readonly List<PointLight> lights;
+        private readonly List<PointLight> pointLights;
+        private readonly List<DirLight> dirLights;
         private readonly List<IToneMapper> toneMappers;
 
         public IReporter Reporter { get; set; }
@@ -56,7 +57,8 @@ namespace RayTracer.Composition
             this.dofSamples = dofSamples;
             this.dofRadius = dofRadius;
             this.ambient = new Color(.8f, .9f, 1);
-            this.lights = new List<PointLight>();
+            this.pointLights = new List<PointLight>();
+            this.dirLights = new List<DirLight>();
             this.objects = new List<IObject>();
             this.toneMappers = new List<IToneMapper>();
             this.rnd = new ThreadSafeRandom();
@@ -72,13 +74,19 @@ namespace RayTracer.Composition
         /// Add a new light to the scene
         /// </summary>
         /// <param name="light">Light to be added</param>
-        public void AddLight(PointLight light) => lights.Add(light);
+        public void AddLight(PointLight light) => pointLights.Add(light);
 
         /// <summary>
         /// Add a new light to the scene
         /// </summary>
         /// <param name="light">Light to be added</param>
-        public void AddLight(AreaLight light) => lights.AddRange(light.ToPointLights());
+        public void AddLight(DirLight light) => dirLights.Add(light);
+
+        /// <summary>
+        /// Add a new light to the scene
+        /// </summary>
+        /// <param name="light">Light to be added</param>
+        public void AddLight(AreaLight light) => pointLights.AddRange(light.ToPointLights());
 
         public void AddToneMapper(IToneMapper tm) => toneMappers.Add(tm);
 
@@ -159,7 +167,7 @@ namespace RayTracer.Composition
         {
             Color totalColor = new Color(0, 0, 0); // Start with black
             Vec3 intsPtOffset = ints.IntsPt + ints.Normal * Global.EPS; // Offset a bit so that shadow ray does not hit the object itself
-            foreach (PointLight light in lights)
+            foreach (PointLight light in pointLights)
             {
                 // Check if light is directly visible
                 Ray shadowRay = new Ray(intsPtOffset, light.Pos - intsPtOffset);
@@ -177,6 +185,24 @@ namespace RayTracer.Composition
                     float cosths = h * ints.Normal;
                     if (cosths < Global.EPS) cosths = 0;
                     totalColor += light.Lum * (1 / squaredDistance) * (ints.Mat.Specular * MathF.Pow(cosths, ints.Mat.Shine));
+                }
+            }
+            foreach (DirLight light in dirLights)
+            {
+                // Check if light is directly visible
+                Ray shadowRay = new Ray(intsPtOffset, light.Dir);
+                Intersection shadowInts = FirstInteresction(shadowRay);
+                if (shadowInts == null)
+                {
+                    // Diffuse component
+                    float costhd = shadowRay.Dir * ints.Normal;
+                    if (costhd < Global.EPS) costhd = 0;
+                    totalColor += light.Lum * ints.Mat.Diffuse * costhd;
+                    // Specular component
+                    Vec3 h = (shadowRay.Dir - ray.Dir).Normalize();
+                    float cosths = h * ints.Normal;
+                    if (cosths < Global.EPS) cosths = 0;
+                    totalColor += light.Lum * (ints.Mat.Specular * MathF.Pow(cosths, ints.Mat.Shine));
                 }
             }
             return totalColor;
