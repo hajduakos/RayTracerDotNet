@@ -77,13 +77,11 @@ namespace RayTracer.Composition
                 }
                 else if (node.Name == "arealight")
                 {
-                    AreaLight al = new AreaLight(
+                    scene.AddLight(new AreaLight(
                         Vec3FromString(node.Attributes["pos"].Value),
                         ColorFromString(node.Attributes["lum"].Value),
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
-                        Convert.ToInt32(node.Attributes["samples"].Value));
-                    foreach (PointLight pl in al.ToPointLights())
-                        scene.AddLight(pl);
+                        Convert.ToInt32(node.Attributes["samples"].Value)));
                 }
                 else if (node.Name == "plane")
                 {

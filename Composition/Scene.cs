@@ -39,6 +39,8 @@ namespace RayTracer.Composition
         /// <param name="screenWidth">Scene width (px)</param>
         /// <param name="screenHeight">Scene height (px)</param>
         /// <param name="samplesPerPixel">Samples per pixel (in both directions)</param>
+        /// <param name="dofSamples">Samples to simulate depth of field</param>
+        /// <param name="dofRadius">Radius for depth of field (aperture)</param>
         /// <param name="cam">Camera</param>
         public Scene(int screenWidth, int screenHeight, Camera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
         {
@@ -71,6 +73,12 @@ namespace RayTracer.Composition
         /// </summary>
         /// <param name="light">Light to be added</param>
         public void AddLight(PointLight light) => lights.Add(light);
+
+        /// <summary>
+        /// Add a new light to the scene
+        /// </summary>
+        /// <param name="light">Light to be added</param>
+        public void AddLight(AreaLight light) => lights.AddRange(light.ToPointLights());
 
         public void AddToneMapper(IToneMapper tm) => toneMappers.Add(tm);
 
