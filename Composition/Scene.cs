@@ -130,10 +130,13 @@ namespace RayTracer.Composition
                 for (int dy = 0; dy < samplesPerPixel; ++dy)
                 {
                     float yOffset = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
+                    Ray ray = Cam.GetRay(x, y, xOffset, yOffset);
+                    // Move around eye randomly to simulate depth of field
                     for (int dof = 0; dof < dofSamples; ++dof)
                     {
                         Vec3 eyeOffset = RndVec(dofRadius);
-                        totalColor += Trace(Cam.GetRay(x, y, xOffset, yOffset, eyeOffset), 0);
+                        Ray rayOffset = new Ray(ray.Start + eyeOffset, ray.Dir * Cam.FocalLength - eyeOffset);
+                        totalColor += Trace(rayOffset, 0);
                     }
                 }
             }

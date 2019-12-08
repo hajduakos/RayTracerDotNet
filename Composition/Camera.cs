@@ -46,11 +46,12 @@ namespace RayTracer.Composition
         /// <param name="xOffset">X offset within the pixel [0;1]</param>
         /// <param name="yOffset">Y offset within the pixel [0;1]</param>
         /// <returns>Ray</returns>
-        public Ray GetRay(int x, int y, float xOffset = .5f, float yOffset = .5f, Vec3 eyeOffSet = new Vec3())
+        public Ray GetRay(int x, int y, float xOffset = .5f, float yOffset = .5f)
         {
-            Vec3 newEye = eye + eyeOffSet;
-            Vec3 dir = lookat + right * (2 * (x + xOffset) / width - 1) + up * (2 * (y + yOffset) / height - 1) - newEye;
-            return new Ray(newEye, dir);
+            Vec3 dir = lookat + right * (2 * (x + xOffset) / width - 1) + up * (2 * (y + yOffset) / height - 1) - eye;
+            return new Ray(eye, dir);
         }
+
+        public float FocalLength { get { return (lookat - eye).Length; } }
     }
 }
