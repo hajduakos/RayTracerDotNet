@@ -166,16 +166,15 @@ namespace RayTracer.Composition
         private Color DirectLightSource(Intersection ints, Ray ray)
         {
             Color totalColor = new Color(0, 0, 0); // Start with black
-            Vec3 intsPtOffset = ints.IntsPt + ints.Normal * Global.EPS; // Offset a bit so that shadow ray does not hit the object itself
             foreach (PointLight light in pointLights)
             {
                 // Check if light is directly visible
-                Ray shadowRay = new Ray(intsPtOffset, light.Pos - intsPtOffset);
+                Ray shadowRay = new Ray(ints.IntsPt, light.Pos - ints.IntsPt).Offset();
                 Intersection shadowInts = FirstInteresction(shadowRay);
                 // If no other object between current object and light source
-                if (shadowInts == null || (intsPtOffset - shadowInts.IntsPt).Length > (intsPtOffset - light.Pos).Length)
+                if (shadowInts == null || (ints.IntsPt - shadowInts.IntsPt).Length > (ints.IntsPt - light.Pos).Length)
                 {
-                    float squaredDistance = MathF.Pow((intsPtOffset - light.Pos).Length, 2);
+                    float squaredDistance = MathF.Pow((ints.IntsPt - light.Pos).Length, 2);
                     // Diffuse component
                     float costhd = shadowRay.Dir * ints.Normal;
                     if (costhd < Global.EPS) costhd = 0;
@@ -190,7 +189,7 @@ namespace RayTracer.Composition
             foreach (DirLight light in dirLights)
             {
                 // Check if light is directly visible
-                Ray shadowRay = new Ray(intsPtOffset, light.Dir);
+                Ray shadowRay = new Ray(ints.IntsPt, light.Dir).Offset();
                 Intersection shadowInts = FirstInteresction(shadowRay);
                 if (shadowInts == null)
                 {
