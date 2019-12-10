@@ -53,5 +53,9 @@ namespace RayTracer.Composition
         }
 
         public float FocalLength { get { return (lookat - eye).Length; } }
+
+        public Vec3 Up { get { return up; } }
+
+        public Vec3 Right { get { return right; } }
     }
 }

@@ -122,6 +122,7 @@ namespace RayTracer.Composition
         /// <returns></returns>
         private Color TracePixel(int x, int y)
         {
+            int samples = 0;
             // Multiple samples: trace N x N grid and calculate average
             Color totalColor = new Color(0, 0, 0);
             for (int dx = 0; dx < samplesPerPixel; ++dx)
@@ -131,16 +132,26 @@ namespace RayTracer.Composition
                 {
                     float yOffset = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
                     Ray ray = Cam.GetRay(x, y, xOffset, yOffset);
-                    // Move around eye randomly to simulate depth of field
-                    for (int dof = 0; dof < dofSamples; ++dof)
+                    // Sample for depth of field uniformly in square with +/- radius
+                    Vec3 camr = Cam.Right.Normalize();
+                    Vec3 camu = Cam.Up.Normalize();
+                    for (int dofx = 0; dofx < dofSamples; ++dofx)
                     {
-                        Vec3 eyeOffset = RndVec(dofRadius);
-                        Ray rayOffset = new Ray(ray.Start + eyeOffset, ray.Dir * Cam.FocalLength - eyeOffset);
-                        totalColor += Trace(rayOffset, 0);
+                        Vec3 dofXoff = camr * (-dofRadius + (dofx + 1) * 2 * dofRadius / (dofSamples + 1));
+                        for (int dofy = 0; dofy < dofSamples; ++dofy)
+                        {
+                            Vec3 dofYoff = camu * (-dofRadius + (dofy + 1) * 2 * dofRadius / (dofSamples + 1));
+                            Vec3 eyeOffset = dofXoff + dofYoff;
+                            if (eyeOffset.Length > dofRadius + Global.EPS) continue; // Drop points outside of circle
+                            Ray rayOffset = new Ray(ray.Start + eyeOffset, ray.Dir * Cam.FocalLength - eyeOffset);
+                            totalColor += Trace(rayOffset, 0);
+
+                            ++samples;
+                        }
                     }
                 }
             }
-            return totalColor / (samplesPerPixel * samplesPerPixel * dofSamples);
+            return totalColor / samples;
         }
 
         /// <summary>
