@@ -96,15 +96,15 @@ namespace RayTracer.Composition
         /// <returns>Rendered raw image</returns>
         public RawImage Render()
         {
-            if (Reporter != null) Reporter.Restart("Rendering");
+            Reporter?.Restart("Rendering");
             // Step 1: render the raw image
             RawImage img = new RawImage(width, height);
             for (int x = 0; x < width; ++x)
             {
                 Parallel.For(0, height, y => img[x, y] = TracePixel(x, y));
-                if (Reporter != null) Reporter.Report(x, width - 1, "Rendering");
+                Reporter?.Report(x, width - 1, "Rendering");
             }
-            if (Reporter != null) Reporter.End("Rendering");
+            Reporter?.End("Rendering");
             // Step 2: apply tone mapping
             foreach (IToneMapper tm in toneMappers)
             {

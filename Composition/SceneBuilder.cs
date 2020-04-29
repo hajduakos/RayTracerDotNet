@@ -49,19 +49,14 @@ namespace RayTracer.Composition
                 {
                     string id = node.Attributes["id"].Value;
                     float rough = node.Attributes["rough"] == null ? 1 : Convert.ToSingle(node.Attributes["rough"].Value, nfi);
-                    Color ambient = node.Attributes["ambient"] == null ?
-                        new Color(0, 0, 0) : ColorFromString(node.Attributes["ambient"].Value);
-                    Color diffuse = node.Attributes["diffuse"] == null ?
-                        new Color(0, 0, 0) : ColorFromString(node.Attributes["diffuse"].Value);
-                    Color specular = node.Attributes["specular"] == null ?
-                        new Color(0, 0, 0) : ColorFromString(node.Attributes["specular"].Value);
+                    Color ambient = node.Attributes["ambient"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["ambient"].Value);
+                    Color diffuse = node.Attributes["diffuse"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["diffuse"].Value);
+                    Color specular = node.Attributes["specular"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["specular"].Value);
                     float shine = node.Attributes["shine"] == null ? 0 : Convert.ToSingle(node.Attributes["shine"].Value, nfi);
 
                     float smooth = node.Attributes["smooth"] == null ? 0 : Convert.ToSingle(node.Attributes["smooth"].Value, nfi);
-                    Color n = node.Attributes["n"] == null ?
-                        new Color(0, 0, 0) : ColorFromString(node.Attributes["n"].Value);
-                    Color kap = node.Attributes["kap"] == null ?
-                        new Color(0, 0, 0) : ColorFromString(node.Attributes["kap"].Value);
+                    Color n = node.Attributes["n"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["n"].Value);
+                    Color kap = node.Attributes["kap"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["kap"].Value);
                     bool isReflective = node.Attributes["isreflective"] == null ? false : Convert.ToBoolean(node.Attributes["isreflective"].Value);
                     bool isRefractive = node.Attributes["isrefractive"] == null ? false : Convert.ToBoolean(node.Attributes["isrefractive"].Value);
                     float blur = node.Attributes["blur"] == null ? 0 : Convert.ToSingle(node.Attributes["blur"].Value, nfi);
@@ -110,16 +105,14 @@ namespace RayTracer.Composition
                     scene.AddObject(new Sphere(
                         Vec3FromString(node.Attributes["center"].Value),
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
-                        materials[node.Attributes["material"].Value]
-                        ));
+                        materials[node.Attributes["material"].Value]));
                 }
                 else if (node.Name == "cube")
                 {
                     scene.AddObject(new Cube(
                         Vec3FromString(node.Attributes["center"].Value),
                         Convert.ToSingle(node.Attributes["side"].Value, nfi),
-                        materials[node.Attributes["material"].Value]
-                        ));
+                        materials[node.Attributes["material"].Value]));
                 }
                 else if (node.Name == "torus")
                 {
@@ -138,8 +131,7 @@ namespace RayTracer.Composition
                         Vec3FromString(node.Attributes["cap1center"].Value),
                         Vec3FromString(node.Attributes["cap2center"].Value),
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
-                        materials[node.Attributes["material"].Value]
-                        ));
+                        materials[node.Attributes["material"].Value]));
                 }
                 else if (node.Name == "cone")
                 {
@@ -148,8 +140,7 @@ namespace RayTracer.Composition
                         Vec3FromString(node.Attributes["cap2center"].Value),
                         Convert.ToSingle(node.Attributes["cap1radius"].Value, nfi),
                         Convert.ToSingle(node.Attributes["cap2radius"].Value, nfi),
-                        materials[node.Attributes["material"].Value]
-                        ));
+                        materials[node.Attributes["material"].Value]));
                 }
                 else if (node.Name == "tonemapper")
                 {
@@ -162,10 +153,12 @@ namespace RayTracer.Composition
                         float p = node.Attributes["p"] == null ? 1 : Convert.ToSingle(node.Attributes["p"].Value, nfi);
                         scene.AddToneMapper(new NonLinearToneMapper(p));
                     }
+                    else
+                        throw new XmlException($"Unknown tone mapper: {node.Attributes["type"]}");
                 }
                 else
                 {
-                    throw new XmlException("Unknown node: " + node.Name);
+                    throw new XmlException($"Unknown node: {node.Name}");
                 }
             }
 
