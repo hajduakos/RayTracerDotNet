@@ -19,7 +19,7 @@ namespace RayTracer.Composition
         /// Create a new camera
         /// </summary>
         /// <param name="eye">Position of the camera</param>
-        /// <param name="lookat">Point where camera is looking</param>
+        /// <param name="lookat">Point where camera is looking (defines focal plane)</param>
         /// <param name="hfov">Horizontal field of view (in radians)</param>
         /// <param name="screenWidthPx">Width of the screen (in pixels)</param>
         /// <param name="screenHeightPx">Height of the screen (in pixels)</param>
@@ -39,23 +39,22 @@ namespace RayTracer.Composition
         }
 
         /// <summary>
-        /// Create a ray corresponding to a pixel
+        /// Create endpoint of a ray corresponding to a pixel
         /// </summary>
         /// <param name="x">Pixel X</param>
         /// <param name="y">Pixel Y</param>
         /// <param name="xOffset">X offset within the pixel [0;1]</param>
         /// <param name="yOffset">Y offset within the pixel [0;1]</param>
-        /// <returns>Ray</returns>
-        public Ray GetRay(int x, int y, float xOffset = .5f, float yOffset = .5f)
+        /// <returns>Ray endpoint</returns>
+        public Vec3 GetRayEnd(int x, int y, float xOffset = .5f, float yOffset = .5f)
         {
-            Vec3 dir = lookat + right * (2 * (x + xOffset) / width - 1) + up * (2 * (y + yOffset) / height - 1) - eye;
-            return new Ray(eye, dir);
+            return lookat + right * (2 * (x + xOffset) / width - 1) + up * (2 * (y + yOffset) / height - 1);
         }
-
-        public float FocalLength { get { return (lookat - eye).Length; } }
 
         public Vec3 Up { get { return up; } }
 
         public Vec3 Right { get { return right; } }
+
+        public Vec3 Eye { get { return eye; } }
     }
 }
