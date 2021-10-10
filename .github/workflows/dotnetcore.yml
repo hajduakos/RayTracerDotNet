@@ -23,3 +23,13 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+    - name: Render
+      run: ./render-all.sh 180
+    - name: Create HTML
+      run: ./deploy.sh
+    - name: Deploy to gh-pages
+      if: github.ref == 'refs/heads/master'
+      uses: maxheld83/ghpages@68f783a4f5313d776c1599e18479607e71c9c738  # v0.3.0
+      env:
+        BUILD_DIR: out/
+        GH_PAT: ${{ secrets.GH_PAT }}
