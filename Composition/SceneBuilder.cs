@@ -14,10 +14,10 @@ namespace RayTracer.Composition
     public static class SceneBuilder
     {
         private static readonly NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
-        public static Scene FromXML(string filename)
+        public static Scene FromXML(string text)
         {
             XmlDocument doc = new XmlDocument();
-            doc.Load(filename);
+            doc.LoadXml(text);
 
             int scenew = 1080;
             int sceneh = 720;
