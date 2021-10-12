@@ -23,6 +23,7 @@ namespace RayTracer.Composition
             int sceneh = 720;
             Vec3 cameye = new Vec3(1, 1, 1);
             Vec3 camlookat = new Vec3(0, 0, 0);
+            float focalDist = (camlookat - cameye).Length;
             float camhfov = 50;
             int spp = 1;
             int dofs = 1;
@@ -39,8 +40,10 @@ namespace RayTracer.Composition
                 if (sceneNode.Attributes["samplesperpixel"] != null) spp = Convert.ToInt32(sceneNode.Attributes["samplesperpixel"].Value);
                 if (sceneNode.Attributes["dofsamples"] != null) dofs = Convert.ToInt32(sceneNode.Attributes["dofsamples"].Value);
                 if (sceneNode.Attributes["dofradius"] != null) dofr = Convert.ToSingle(sceneNode.Attributes["dofradius"].Value, nfi);
+                if (sceneNode.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(sceneNode.Attributes["focaldist"].Value, nfi);
+                else focalDist = (camlookat - cameye).Length;
             }
-            Scene scene = new Scene(scenew, sceneh, new Camera(cameye, camlookat, camhfov * MathF.PI / 180, scenew, sceneh), spp, dofs, dofr);
+            Scene scene = new Scene(scenew, sceneh, new Camera(cameye, camlookat, camhfov * MathF.PI / 180, focalDist, scenew, sceneh), spp, dofs, dofr);
             Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
             foreach (XmlNode node in sceneNode.ChildNodes)
