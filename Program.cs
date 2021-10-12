@@ -11,9 +11,9 @@ namespace RayTracer
     {
         public static int Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 1)
             {
-                Console.WriteLine("Two arguments are required: input scene (xml) and output image (png)");
+                Console.WriteLine("One arguments is required: input scene (xml)");
                 return 1;
             }
             try
@@ -22,7 +22,7 @@ namespace RayTracer
                 Scene scene = SceneBuilder.FromXML(File.ReadAllText(args[0]));
                 scene.Reporter = new ConsoleReporter();
                 using System.Drawing.Bitmap bmp = scene.Render().ToBitmap();
-                bmp.Save(args[1]);
+                bmp.Save(args[0] + ".png");
                 sw.Stop();
                 Console.WriteLine("Elapsed: " + sw.Elapsed);
                 return 0;
