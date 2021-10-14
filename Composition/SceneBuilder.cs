@@ -50,6 +50,18 @@ namespace RayTracer.Composition
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
                     scene.Cam = new Camera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
                 }
+                else if (node.Name == "anglecamera")
+                {
+                    Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
+                    float xyangle = Convert.ToSingle(node.Attributes["xyangle"].Value, nfi);
+                    float zangle = Convert.ToSingle(node.Attributes["zangle"].Value, nfi);
+                    float dist = Convert.ToSingle(node.Attributes["dist"].Value, nfi);
+                    float hfov = 50;
+                    float focalDist = dist;
+                    if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
+                    if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
+                    scene.Cam = Camera.FromAngle(lookat, xyangle * MathF.PI / 180, zangle * MathF.PI / 180, hfov * MathF.PI / 180, dist, focalDist, scenew, sceneh);
+                }
                 else if (node.Name == "material")
                 {
                     string id = node.Attributes["id"].Value;

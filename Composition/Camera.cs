@@ -39,6 +39,12 @@ namespace RayTracer.Composition
             up = up.Normalize() * f * MathF.Tan(hfov / 2) * (screenHeightPx / (float)screenWidthPx);
         }
 
+        public static Camera FromAngle(Vec3 lookat, float xyangle, float zangle, float hfov, float dist, float focalDist, int screenWidthPx, int screenHeightPx)
+        {
+            Vec3 diff = new Vec3(MathF.Cos(zangle) * MathF.Sin(xyangle), MathF.Cos(zangle) * MathF.Cos(xyangle), MathF.Sin(zangle)) * dist;
+            return new Camera(lookat + diff, lookat, hfov, focalDist, screenWidthPx, screenHeightPx);
+        }
+
         /// <summary>
         /// Create endpoint of a ray corresponding to a pixel
         /// </summary>

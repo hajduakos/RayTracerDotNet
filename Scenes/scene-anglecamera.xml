@@ -1,0 +1,15 @@
+<scene w="720" h="405" samplesperpixel="1">
+	<anglecamera lookat="0 0 1" xyangle="45" zangle="30" dist="8" hfov="50"/>
+    <pointlight pos="6 14 12" lum="400 400 400" radius="1.5"/>
+    
+    <material id="orange" ambient="0 0.03 0.1" diffuse="0 0.3 1" />
+    <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
+    
+    <material id="red" ambient="0 0 0.1" diffuse="0 0 0.9"/>
+    
+    <checkerboard mat1="orange" mat2="white" center="0 0 0" normal="0 0 1" matdir="0.5 0 0" />
+    <cube material="red" center="0 0 1" side="2" />
+    
+    <tonemapper type="nonlinear" p="3" />
+    <tonemapper type="maxlinear" />
+</scene>
