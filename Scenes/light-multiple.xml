@@ -1,4 +1,5 @@
-<scene w="720" h="405" cameye="2 0 8" camlookat="-1 0 0" camhfov="50" samplesperpixel="1">
+<scene w="720" h="405" samplesperpixel="1">
+	<camera eye="2 0 8" lookat="-1 0 0" hfov="50"/>
     <pointlight pos="10 10 10" lum="200 200 200"/>
     <pointlight pos="10 -10 10" lum="200 200 200"/>
     

@@ -1,4 +1,5 @@
-<scene w="720" h="405" cameye="9 -2 5" camlookat="0 0 1.5" camhfov="50" samplesperpixel="1">
+<scene w="720" h="405" samplesperpixel="1">
+	<camera eye="9 -2 5" lookat="0 0 1.5" hfov="50"/>
     <pointlight pos="14 7 10" lum="500 500 500" />
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
     <material id="red" ambient="0.2 0 0" diffuse="0.4 0 0" specular="0.5 0.5 0.5" shine="25" />

@@ -21,10 +21,7 @@ namespace RayTracer.Composition
 
             int scenew = 1080;
             int sceneh = 720;
-            Vec3 cameye = new Vec3(1, 1, 1);
-            Vec3 camlookat = new Vec3(0, 0, 0);
-            float focalDist = (camlookat - cameye).Length;
-            float camhfov = 50;
+            Camera camera = new Camera(new Vec3(1, 1, 1), new Vec3(0, 0, 0), 50 * MathF.PI / 180, 1, scenew, sceneh);
             int spp = 1;
             int dofs = 1;
             float dofr = 0;
@@ -34,21 +31,26 @@ namespace RayTracer.Composition
             {
                 if (sceneNode.Attributes["w"] != null) scenew = Convert.ToInt32(sceneNode.Attributes["w"].Value);
                 if (sceneNode.Attributes["h"] != null) sceneh = Convert.ToInt32(sceneNode.Attributes["h"].Value);
-                if (sceneNode.Attributes["cameye"] != null) cameye = Vec3FromString(sceneNode.Attributes["cameye"].Value);
-                if (sceneNode.Attributes["camlookat"] != null) camlookat = Vec3FromString(sceneNode.Attributes["camlookat"].Value);
-                if (sceneNode.Attributes["camhfov"] != null) camhfov = Convert.ToSingle(sceneNode.Attributes["camhfov"].Value, nfi);
                 if (sceneNode.Attributes["samplesperpixel"] != null) spp = Convert.ToInt32(sceneNode.Attributes["samplesperpixel"].Value);
                 if (sceneNode.Attributes["dofsamples"] != null) dofs = Convert.ToInt32(sceneNode.Attributes["dofsamples"].Value);
                 if (sceneNode.Attributes["dofradius"] != null) dofr = Convert.ToSingle(sceneNode.Attributes["dofradius"].Value, nfi);
-                if (sceneNode.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(sceneNode.Attributes["focaldist"].Value, nfi);
-                else focalDist = (camlookat - cameye).Length;
             }
-            Scene scene = new Scene(scenew, sceneh, new Camera(cameye, camlookat, camhfov * MathF.PI / 180, focalDist, scenew, sceneh), spp, dofs, dofr);
+            Scene scene = new Scene(scenew, sceneh, camera, spp, dofs, dofr);
             Dictionary<string, Material> materials = new Dictionary<string, Material>();
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                if (node.Name == "material")
+                if (node.Name == "camera")
+                {
+                    Vec3 eye = Vec3FromString(node.Attributes["eye"].Value);
+                    Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
+                    float hfov = 50;
+                    float focalDist = (lookat - eye).Length;
+                    if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
+                    if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
+                    scene.Cam = new Camera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
+                }
+                else if (node.Name == "material")
                 {
                     string id = node.Attributes["id"].Value;
                     float rough = node.Attributes["rough"] == null ? 1 : Convert.ToSingle(node.Attributes["rough"].Value, nfi);

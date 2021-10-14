@@ -1,4 +1,5 @@
-<scene w="720" h="405" cameye="8 -6 8" camlookat="-2 -2 1" camhfov="50" samplesperpixel="1">
+<scene w="720" h="405" samplesperpixel="1">
+	<camera eye="8 -6 8" lookat="-2 -2 1" hfov="50"/>
     <dirlight dir="1 2 3" lum="1 1 1"/>
     
     <material id="orange" ambient="0 0.03 0.1" diffuse="0 0.3 1" />
