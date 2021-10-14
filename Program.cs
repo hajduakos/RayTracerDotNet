@@ -19,10 +19,15 @@ namespace RayTracer
             try
             {
                 Stopwatch sw = Stopwatch.StartNew();
-                Scene scene = SceneBuilder.FromXML(File.ReadAllText(args[0]));
-                scene.Reporter = new ConsoleReporter();
-                using System.Drawing.Bitmap bmp = scene.Render().ToBitmap();
-                bmp.Save(args[0] + ".png");
+                AnimationPreprocessor ap = new AnimationPreprocessor(File.ReadAllText(args[0]));
+                for (int f = 0; f < ap.Frames; ++f)
+                {
+                    Console.WriteLine("Frame " + (f + 1) + "/" + ap.Frames);
+                    Scene scene = SceneBuilder.FromXML(ap.GetFrame(f));
+                    scene.Reporter = new ConsoleReporter();
+                    using System.Drawing.Bitmap bmp = scene.Render().ToBitmap();
+                    bmp.Save(args[0] + f.ToString("D3") + ".png");
+                }
                 sw.Stop();
                 Console.WriteLine("Elapsed: " + sw.Elapsed);
                 return 0;
