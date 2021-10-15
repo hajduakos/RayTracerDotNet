@@ -33,5 +33,13 @@ namespace RayTracer.Common
 
         /// <summary> Dot product with itself </summary>
         public float Square() => this * this;
+
+        public static Vec3 FromAngle(Vec3 origin, float xyangle, float zangle, float dist)
+        {
+            return origin +  new Vec3(
+                MathF.Cos(zangle) * MathF.Sin(xyangle),
+                MathF.Cos(zangle) * MathF.Cos(xyangle),
+                MathF.Sin(zangle)) * dist;
+        }
     }
 }

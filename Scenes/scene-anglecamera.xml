@@ -1,5 +1,5 @@
 <scene w="720" h="405" samplesperpixel="1">
-	<anglecamera lookat="0 0 1" xyangle="45" zangle="30" dist="8" hfov="50"/>
+	<camera lookat="0 0 1" eye="0 0 1 45 30 8" hfov="50"/>
     <pointlight pos="6 14 12" lum="400 400 400" radius="1.5"/>
     
     <material id="orange" ambient="0 0.03 0.1" diffuse="0 0.3 1" />
