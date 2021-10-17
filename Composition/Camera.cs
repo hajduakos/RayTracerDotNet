@@ -6,7 +6,7 @@ namespace RayTracer.Composition
     /// <summary>
     /// Camera
     /// </summary>
-    public sealed class Camera
+    public sealed class Camera : ICamera
     {
         private readonly Vec3 eye;
         private readonly Vec3 lookat;
@@ -47,7 +47,7 @@ namespace RayTracer.Composition
         /// <param name="xOffset">X offset within the pixel [0;1]</param>
         /// <param name="yOffset">Y offset within the pixel [0;1]</param>
         /// <returns>Ray endpoint</returns>
-        public Vec3 GetRayEnd(int x, int y, float xOffset = .5f, float yOffset = .5f)
+        public Vec3? GetRayEnd(int x, int y, float xOffset = .5f, float yOffset = .5f)
         {
             return lookat + right * (2 * (x + xOffset) / width - 1) + up * (2 * (y + yOffset) / height - 1);
         }

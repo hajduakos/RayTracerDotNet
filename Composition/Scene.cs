@@ -22,7 +22,7 @@ namespace RayTracer.Composition
         private readonly float dofRadius;
 
         /// <summary> Camera </summary>
-        public Camera Cam { get; set; }
+        public ICamera Cam { get; set; }
 
         private readonly Color ambient;
         private readonly List<IObject> objects;
@@ -43,7 +43,7 @@ namespace RayTracer.Composition
         /// <param name="dofSamples">Samples to simulate depth of field</param>
         /// <param name="dofRadius">Radius for depth of field (aperture)</param>
         /// <param name="cam">Camera</param>
-        public Scene(int screenWidth, int screenHeight, Camera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
+        public Scene(int screenWidth, int screenHeight, ICamera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
         {
             Contract.Requires(screenWidth > 0, "Screen width must be greater than 0");
             Contract.Requires(screenHeight > 0, "Screen height must be greater than 0");
@@ -133,7 +133,9 @@ namespace RayTracer.Composition
                 for (int dy = 0; dy < samplesPerPixel; ++dy)
                 {
                     float yOffset = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
-                    Vec3 rayEnd = Cam.GetRayEnd(x, y, xOffset, yOffset);
+                    Vec3? maybeRayEnd = Cam.GetRayEnd(x, y, xOffset, yOffset);
+                    if (maybeRayEnd == null) continue;
+                    Vec3 rayEnd = maybeRayEnd.Value;
                     // Depth of field: keep endpoint of original ray (which is on the focal plane)
                     // but offset origin (eye), sampled uniformly in square with +/- radius
                     for (int dofx = 0; dofx < dofSamples; ++dofx)
@@ -153,6 +155,7 @@ namespace RayTracer.Composition
                     }
                 }
             }
+            if (samples == 0) return totalColor;
             return totalColor / samples;
         }
 

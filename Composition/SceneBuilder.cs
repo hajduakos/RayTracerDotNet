@@ -21,7 +21,7 @@ namespace RayTracer.Composition
 
             int scenew = 1080;
             int sceneh = 720;
-            Camera camera = new Camera(new Vec3(1, 1, 1), new Vec3(0, 0, 0), 50 * MathF.PI / 180, 1, scenew, sceneh);
+            ICamera camera = new Camera(new Vec3(1, 1, 1), new Vec3(0, 0, 0), 50 * MathF.PI / 180, 1, scenew, sceneh);
             int spp = 1;
             int dofs = 1;
             float dofr = 0;
@@ -40,7 +40,7 @@ namespace RayTracer.Composition
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                if (node.Name == "camera")
+                if (node.Name == "camera" || node.Name == "fisheye")
                 {
                     Vec3 eye = Vec3FromString(node.Attributes["eye"].Value);
                     Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
@@ -48,7 +48,10 @@ namespace RayTracer.Composition
                     float focalDist = (lookat - eye).Length;
                     if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
-                    scene.Cam = new Camera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
+                    if (node.Name == "camera")
+                        scene.Cam = new Camera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
+                    else
+                        scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh);
                 }
                 else if (node.Name == "material")
                 {
