@@ -129,13 +129,12 @@ namespace RayTracer.Composition
             Vec3 camu = Cam.Up.Normalize();
             for (int dx = 0; dx < samplesPerPixel; ++dx)
             {
-                float xOffset = 1.0f / samplesPerPixel / 2.0f + dx * 1.0f / samplesPerPixel;
+                float xOffset = (.5f + dx) / samplesPerPixel;
                 for (int dy = 0; dy < samplesPerPixel; ++dy)
                 {
-                    float yOffset = 1.0f / samplesPerPixel / 2.0f + dy * 1.0f / samplesPerPixel;
-                    Vec3? maybeRayEnd = Cam.GetRayEnd(x, y, xOffset, yOffset);
-                    if (maybeRayEnd == null) continue;
-                    Vec3 rayEnd = maybeRayEnd.Value;
+                    float yOffset = (.5f + dy) / samplesPerPixel;
+                    Vec3? rayEnd = Cam.GetRayEnd(x, y, xOffset, yOffset);
+                    if (!rayEnd.HasValue) continue;
                     // Depth of field: keep endpoint of original ray (which is on the focal plane)
                     // but offset origin (eye), sampled uniformly in square with +/- radius
                     for (int dofx = 0; dofx < dofSamples; ++dofx)
@@ -147,7 +146,7 @@ namespace RayTracer.Composition
                             Vec3 eyeOffset = dofXoff + dofYoff;
                             if (eyeOffset.Length > dofRadius + Global.EPS) continue; // Drop points outside of circle
                             Vec3 eyePos = Cam.Eye + eyeOffset;
-                            Ray ray = new Ray(eyePos, rayEnd - eyePos);
+                            Ray ray = new Ray(eyePos, rayEnd.Value - eyePos);
                             totalColor += Trace(ray, 0);
 
                             ++samples;
