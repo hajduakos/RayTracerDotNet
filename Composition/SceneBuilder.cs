@@ -46,12 +46,14 @@ namespace RayTracer.Composition
                     Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
                     float hfov = 50;
                     float focalDist = (lookat - eye).Length;
+                    bool diagonal = false;
                     if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
+                    if (node.Attributes["diagonal"] != null) diagonal = Convert.ToBoolean(node.Attributes["diagonal"].Value);
                     if (node.Name == "camera")
                         scene.Cam = new Camera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
                     else
-                        scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh);
+                        scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
                 }
                 else if (node.Name == "material")
                 {
@@ -65,8 +67,8 @@ namespace RayTracer.Composition
                     float smooth = node.Attributes["smooth"] == null ? 0 : Convert.ToSingle(node.Attributes["smooth"].Value, nfi);
                     Color n = node.Attributes["n"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["n"].Value);
                     Color kap = node.Attributes["kap"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["kap"].Value);
-                    bool isReflective = node.Attributes["isreflective"] == null ? false : Convert.ToBoolean(node.Attributes["isreflective"].Value);
-                    bool isRefractive = node.Attributes["isrefractive"] == null ? false : Convert.ToBoolean(node.Attributes["isrefractive"].Value);
+                    bool isReflective = node.Attributes["isreflective"] != null && Convert.ToBoolean(node.Attributes["isreflective"].Value);
+                    bool isRefractive = node.Attributes["isrefractive"] != null && Convert.ToBoolean(node.Attributes["isrefractive"].Value);
                     float blur = node.Attributes["blur"] == null ? 0 : Convert.ToSingle(node.Attributes["blur"].Value, nfi);
                     int blursamples = node.Attributes["blursamples"] == null ? 1 : Convert.ToInt32(node.Attributes["blursamples"].Value);
 
