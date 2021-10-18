@@ -6,6 +6,7 @@ using RayTracer.Objects;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using System.Xml;
 
 namespace RayTracer.Composition
@@ -78,81 +79,43 @@ namespace RayTracer.Composition
                 }
                 else if (Eq(node.Name, typeof(PointLight)))
                 {
-                    scene.AddLight(new PointLight(
-                        Vec3FromString(node.Attributes["pos"].Value),
-                        ColorFromString(node.Attributes["lum"].Value)));
+                    scene.AddLight(Construct<PointLight>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(DirLight)))
                 {
-                    scene.AddLight(new DirLight(
-                        Vec3FromString(node.Attributes["dir"].Value),
-                        ColorFromString(node.Attributes["lum"].Value)));
+                    scene.AddLight(Construct<DirLight>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(AreaLight)))
                 {
-                    scene.AddLight(new AreaLight(
-                        Vec3FromString(node.Attributes["pos"].Value),
-                        ColorFromString(node.Attributes["lum"].Value),
-                        Convert.ToSingle(node.Attributes["radius"].Value, nfi),
-                        Convert.ToInt32(node.Attributes["samples"].Value)));
+                    scene.AddLight(Construct<AreaLight>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(Plane)))
                 {
-                    scene.AddObject(new Plane(
-                        Vec3FromString(node.Attributes["center"].Value),
-                        Vec3FromString(node.Attributes["normal"].Value),
-                        materials[node.Attributes["material"].Value]));
+                    scene.AddObject(Construct<Plane>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(CheckerBoard)))
                 {
-                    scene.AddObject(new CheckerBoard(
-                        Vec3FromString(node.Attributes["center"].Value),
-                        Vec3FromString(node.Attributes["normal"].Value),
-                        Vec3FromString(node.Attributes["matdir"].Value),
-                        materials[node.Attributes["mat1"].Value],
-                        materials[node.Attributes["mat2"].Value]));
+                    scene.AddObject(Construct<CheckerBoard>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(Sphere)))
                 {
-                    scene.AddObject(new Sphere(
-                        Vec3FromString(node.Attributes["center"].Value),
-                        Convert.ToSingle(node.Attributes["radius"].Value, nfi),
-                        materials[node.Attributes["material"].Value]));
+                    scene.AddObject(Construct<Sphere>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(Cube)))
                 {
-                    scene.AddObject(new Cube(
-                        Vec3FromString(node.Attributes["center"].Value),
-                        Convert.ToSingle(node.Attributes["side"].Value, nfi),
-                        materials[node.Attributes["material"].Value]));
+                    scene.AddObject(Construct<Cube>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(Torus)))
                 {
-                    scene.AddObject(new Torus(
-                        Vec3FromString(node.Attributes["center"].Value),
-                        Convert.ToSingle(node.Attributes["ro"].Value, nfi),
-                        Convert.ToSingle(node.Attributes["ri"].Value, nfi),
-                        Convert.ToInt32(node.Attributes["tessu"].Value),
-                        Convert.ToInt32(node.Attributes["tessv"].Value),
-                        Convert.ToBoolean(node.Attributes["shadingnormals"].Value),
-                        materials[node.Attributes["material"].Value]));
+                    scene.AddObject(Construct<Torus>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(Cylinder)))
                 {
-                    scene.AddObject(new Cylinder(
-                        Vec3FromString(node.Attributes["cap1center"].Value),
-                        Vec3FromString(node.Attributes["cap2center"].Value),
-                        Convert.ToSingle(node.Attributes["radius"].Value, nfi),
-                        materials[node.Attributes["material"].Value]));
+                    scene.AddObject(Construct<Cylinder>(node, materials));
                 }
                 else if (Eq(node.Name, typeof(Cone)))
                 {
-                    scene.AddObject(new Cone(
-                        Vec3FromString(node.Attributes["cap1center"].Value),
-                        Vec3FromString(node.Attributes["cap2center"].Value),
-                        Convert.ToSingle(node.Attributes["cap1radius"].Value, nfi),
-                        Convert.ToSingle(node.Attributes["cap2radius"].Value, nfi),
-                        materials[node.Attributes["material"].Value]));
+                    scene.AddObject(Construct<Cone>(node, materials));
                 }
                 else if (node.Name == "tonemapper")
                 {
@@ -180,6 +143,32 @@ namespace RayTracer.Composition
         private static bool Eq(string str, Type t)
         {
             return string.Equals(str, t.Name, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private static T Construct<T>(XmlNode n, Dictionary<string, Material> materials)
+        {
+            ConstructorInfo ci = typeof(T).GetConstructors()[0];
+            object[] parameters = new object[ci.GetParameters().Length];
+            for (int i = 0; i < ci.GetParameters().Length; ++i)
+            {
+                var pi = ci.GetParameters()[i];
+                if (n.Attributes[pi.Name] == null)
+                    throw new Exception($"Attribute {pi.Name} not found for {typeof(T).Name}");
+                string txt = n.Attributes[pi.Name].Value;
+                if (pi.ParameterType == typeof(Vec3))
+                    parameters[i] = Vec3FromString(txt);
+                else if (pi.ParameterType == typeof(Color))
+                    parameters[i] = ColorFromString(txt);
+                else if (pi.ParameterType == typeof(Int32))
+                    parameters[i] = Convert.ToInt32(txt);
+                else if (pi.ParameterType == typeof(Single))
+                    parameters[i] = Convert.ToSingle(txt, nfi);
+                else if (pi.ParameterType == typeof(Boolean))
+                    parameters[i] = Convert.ToBoolean(txt);
+                else if (pi.ParameterType == typeof(Material))
+                    parameters[i] = materials[txt];
+            }
+            return (T)ci.Invoke(parameters);
         }
 
         private static Vec3 Vec3FromString(string s)

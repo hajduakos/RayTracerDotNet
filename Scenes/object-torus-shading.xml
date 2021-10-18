@@ -5,9 +5,9 @@
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
     <material id="red" ambient="0.2 0 0" diffuse="0.4 0 0" specular="0.5 0.5 0.5" shine="25" />
 
-    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="2 0 0" />
-    <torus material="red" center="0 -2 1.5" ro="1" ri="0.5" tessu="30" tessv="15" shadingnormals="false" />
-    <torus material="red" center="0 2 1.5" ro="1" ri="0.5" tessu="30" tessv="15" shadingnormals="true" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="2 0 0" />
+    <torus material="red" center="0 -2 1.5" ro="1" ri="0.5" tessu="30" tessv="15" shadingNormals="false" />
+    <torus material="red" center="0 2 1.5" ro="1" ri="0.5" tessu="30" tessv="15" shadingNormals="true" />
     
     <tonemapper type="nonlinear" p="2" />
     <tonemapper type="maxlinear" />

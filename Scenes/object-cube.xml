@@ -13,7 +13,7 @@
     <material id="cyan" ambient="0 0.1 0.1" diffuse="0 1 1" />
     <material id="magenta" ambient="0.1 0 0.1" diffuse="1 0 1" />
     
-    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="1 0 0" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="1 0 0" />
     <cube material="red" center="-1 -2 1" side="2" />
     <cube material="green" center="0 0 1" side="2" />
     <cube material="green" center="-2 0 1" side="2" />

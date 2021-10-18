@@ -13,7 +13,7 @@
     <material id="cyan" ambient="0 0.1 0.1" diffuse="0 0.8 0.8" specular="0.5 0.5 0.5" shine="50"/>
     <material id="magenta" ambient="0.1 0 0.1" diffuse="0.8 0 0.8" specular="0.5 0.5 0.5" shine="50"/>
     
-    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="3 0 0" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="3 0 0" />
     <sphere material="red" center="-1 -2 1" radius="1" />
     <sphere material="green" center="0 0 1" radius="1" />
     <sphere material="blue" center="1 2 1" radius="1" />

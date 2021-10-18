@@ -6,9 +6,9 @@
     <material id="red" ambient="0.1 0 0" diffuse="0.9 0 0" />
     <material id="green" ambient="0 0.1 0" diffuse="0 0.4 0" specular="0.55 0.55 0.55" shine="25" />
     <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.9" />
-    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="1 0 0" />
-    <checkerboard mat1="black" mat2="white" center="-2 0 0" normal="1 0 0" matdir="0 1 0" />
-    <checkerboard mat1="black" mat2="white" center="-2 -3 0" normal="0 1 0" matdir="0 0 1" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="1 0 0" />
+    <checkerboard mat1="black" mat2="white" center="-2 0 0" normal="1 0 0" matDir="0 1 0" />
+    <checkerboard mat1="black" mat2="white" center="-2 -3 0" normal="0 1 0" matDir="0 0 1" />
     <cube material="red" center="0 -1 1" side="2" />
     <sphere material="green" center="0 -1 3" radius="1" />
     <sphere material="blue" center="0 1 1" radius="1" />

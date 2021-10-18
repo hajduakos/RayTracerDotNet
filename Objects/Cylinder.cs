@@ -18,13 +18,13 @@ namespace RayTracer.Objects
         /// </summary>
         /// <param name="cap1center">Center of one cap</param>
         /// <param name="cap2center">Center of the other cap</param>
-        /// <param name="r">Radius</param>
+        /// <param name="radius">Radius</param>
         /// <param name="material">Material</param>
-        public Cylinder(Vec3 cap1center, Vec3 cap2center, float r, Material material)
+        public Cylinder(Vec3 cap1center, Vec3 cap2center, float radius, Material material)
         {
             this.c1 = cap1center;
             this.c2 = cap2center;
-            this.r = r;
+            this.r = radius;
             this.mat = material;
         }
 

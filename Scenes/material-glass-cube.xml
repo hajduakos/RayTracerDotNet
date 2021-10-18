@@ -6,7 +6,7 @@
     
     <material id="glass" rough="0" smooth="1" isreflective="true" isrefractive="true" n="1.5 1.5 1.5" kap="0 0 0" />
     
-    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="2 0 0" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="2 0 0" />
     <cube material="glass" center="0 0 1.01" side="2" />
     
     <tonemapper type="nonlinear" p="2" />

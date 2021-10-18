@@ -11,7 +11,7 @@
     
     <material id="refl" rough="0" smooth="0.3" isreflective="true" n="0 0 0" kap="0 0 0" />
     
-    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matdir="3 0 0" />
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="3 0 0" />
     <sphere material="red" center="0 -2.2 1" radius="1" />
     <sphere material="green" center="0 0 1" radius="1" />
     <sphere material="blue" center="0 2.2 1" radius="1" />

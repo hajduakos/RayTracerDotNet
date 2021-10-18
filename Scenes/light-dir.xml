@@ -7,7 +7,7 @@
     
     <material id="red" ambient="0 0 0.1" diffuse="0 0 0.9"/>
     
-    <checkerboard mat1="orange" mat2="white" center="0 0 0" normal="0 0 1" matdir="0.5 0 0" />
+    <checkerboard mat1="orange" mat2="white" center="0 0 0" normal="0 0 1" matDir="0.5 0 0" />
     <cube material="red" center="0 0 1" side="2" />
     <cube material="red" center="-6 -4 1" side="2" />
     
