@@ -1,6 +1,7 @@
 ﻿using RayTracer.Common;
+using RayTracer.Objects;
 
-namespace RayTracer.Objects
+namespace RayTracer.Common
 {
     /// <summary>
     /// Intersection data for a ray and an object

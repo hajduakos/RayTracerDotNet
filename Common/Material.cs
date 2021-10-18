@@ -1,8 +1,7 @@
-﻿using RayTracer.Common;
-using System;
+﻿using System;
 using System.Diagnostics.Contracts;
 
-namespace RayTracer.Objects
+namespace RayTracer.Common
 {
     public class Material
     {
