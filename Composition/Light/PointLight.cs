@@ -1,6 +1,6 @@
 ﻿using RayTracer.Common;
 
-namespace RayTracer.Composition
+namespace RayTracer.Composition.Light
 {
     /// <summary>
     /// Point light source

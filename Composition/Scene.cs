@@ -1,4 +1,6 @@
 ﻿using RayTracer.Common;
+using RayTracer.Composition.Camera;
+using RayTracer.Composition.Light;
 using RayTracer.Filters;
 using RayTracer.Objects;
 using RayTracer.Reporting;

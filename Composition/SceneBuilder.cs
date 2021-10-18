@@ -1,4 +1,6 @@
 ﻿using RayTracer.Common;
+using RayTracer.Composition.Camera;
+using RayTracer.Composition.Light;
 using RayTracer.Filters;
 using RayTracer.Objects;
 using System;
@@ -21,7 +23,7 @@ namespace RayTracer.Composition
 
             int scenew = 1080;
             int sceneh = 720;
-            ICamera camera = new Camera(new Vec3(1, 1, 1), new Vec3(0, 0, 0), 50 * MathF.PI / 180, 1, scenew, sceneh);
+            ICamera camera = new PerspectiveCamera(new Vec3(1, 1, 1), new Vec3(0, 0, 0), 50 * MathF.PI / 180, 1, scenew, sceneh);
             int spp = 1;
             int dofs = 1;
             float dofr = 0;
@@ -51,7 +53,7 @@ namespace RayTracer.Composition
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
                     if (node.Attributes["diagonal"] != null) diagonal = Convert.ToBoolean(node.Attributes["diagonal"].Value);
                     if (node.Name == "camera")
-                        scene.Cam = new Camera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
+                        scene.Cam = new PerspectiveCamera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
                     else
                         scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
                 }

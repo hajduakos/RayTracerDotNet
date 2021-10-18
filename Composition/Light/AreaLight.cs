@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace RayTracer.Composition
+namespace RayTracer.Composition.Light
 {
     public class AreaLight
     {
