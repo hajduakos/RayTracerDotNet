@@ -43,7 +43,7 @@ namespace RayTracer.Composition
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                if (Eq(node.Name, typeof(PerspectiveCamera)) || Eq(node.Name, typeof(FisheyeCamera)))
+                if (IsType(node, typeof(PerspectiveCamera)) || IsType(node, typeof(FisheyeCamera)))
                 {
                     Vec3 eye = Vec3FromString(node.Attributes["eye"].Value);
                     Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
@@ -53,12 +53,12 @@ namespace RayTracer.Composition
                     if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
                     if (node.Attributes["diagonal"] != null) diagonal = Convert.ToBoolean(node.Attributes["diagonal"].Value);
-                    if (Eq(node.Name, typeof(PerspectiveCamera)))
+                    if (IsType(node, typeof(PerspectiveCamera)))
                         scene.Cam = new PerspectiveCamera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
                     else
                         scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
                 }
-                else if (Eq(node.Name, typeof(Material)))
+                else if (IsType(node, typeof(Material)))
                 {
                     string id = node.Attributes["id"].Value;
                     float rough = node.Attributes["rough"] == null ? 1 : Convert.ToSingle(node.Attributes["rough"].Value, nfi);
@@ -77,43 +77,43 @@ namespace RayTracer.Composition
 
                     materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap, blur, blursamples));
                 }
-                else if (Eq(node.Name, typeof(PointLight)))
+                else if (IsType(node, typeof(PointLight)))
                 {
                     scene.AddLight(Construct<PointLight>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(DirLight)))
+                else if (IsType(node, typeof(DirLight)))
                 {
                     scene.AddLight(Construct<DirLight>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(AreaLight)))
+                else if (IsType(node, typeof(AreaLight)))
                 {
                     scene.AddLight(Construct<AreaLight>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(Plane)))
+                else if (IsType(node, typeof(Plane)))
                 {
                     scene.AddObject(Construct<Plane>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(CheckerBoard)))
+                else if (IsType(node, typeof(CheckerBoard)))
                 {
                     scene.AddObject(Construct<CheckerBoard>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(Sphere)))
+                else if (IsType(node, typeof(Sphere)))
                 {
                     scene.AddObject(Construct<Sphere>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(Cube)))
+                else if (IsType(node, typeof(Cube)))
                 {
                     scene.AddObject(Construct<Cube>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(Torus)))
+                else if (IsType(node, typeof(Torus)))
                 {
                     scene.AddObject(Construct<Torus>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(Cylinder)))
+                else if (IsType(node, typeof(Cylinder)))
                 {
                     scene.AddObject(Construct<Cylinder>(node, materials));
                 }
-                else if (Eq(node.Name, typeof(Cone)))
+                else if (IsType(node, typeof(Cone)))
                 {
                     scene.AddObject(Construct<Cone>(node, materials));
                 }
@@ -140,9 +140,9 @@ namespace RayTracer.Composition
             return scene;
         }
 
-        private static bool Eq(string str, Type t)
+        private static bool IsType(XmlNode n, Type t)
         {
-            return string.Equals(str, t.Name, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(n.Name, t.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static T Construct<T>(XmlNode n, Dictionary<string, Material> materials)
@@ -153,7 +153,7 @@ namespace RayTracer.Composition
             {
                 var pi = ci.GetParameters()[i];
                 if (n.Attributes[pi.Name] == null)
-                    throw new Exception($"Attribute {pi.Name} not found for {typeof(T).Name}");
+                    throw new Exception($"Attribute {pi.Name} not found for {typeof(T).Name}.");
                 string txt = n.Attributes[pi.Name].Value;
                 if (pi.ParameterType == typeof(Vec3))
                     parameters[i] = Vec3FromString(txt);
@@ -167,6 +167,8 @@ namespace RayTracer.Composition
                     parameters[i] = Convert.ToBoolean(txt);
                 else if (pi.ParameterType == typeof(Material))
                     parameters[i] = materials[txt];
+                else
+                    throw new Exception($"Type {pi.ParameterType.Name} of attribute {pi.Name} not supported.");
             }
             return (T)ci.Invoke(parameters);
         }
