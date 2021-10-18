@@ -42,7 +42,7 @@ namespace RayTracer.Composition
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                if (node.Name == "camera" || node.Name == "fisheye")
+                if (Eq(node.Name, typeof(PerspectiveCamera)) || Eq(node.Name, typeof(FisheyeCamera)))
                 {
                     Vec3 eye = Vec3FromString(node.Attributes["eye"].Value);
                     Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
@@ -52,12 +52,12 @@ namespace RayTracer.Composition
                     if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
                     if (node.Attributes["diagonal"] != null) diagonal = Convert.ToBoolean(node.Attributes["diagonal"].Value);
-                    if (node.Name == "camera")
+                    if (Eq(node.Name, typeof(PerspectiveCamera)))
                         scene.Cam = new PerspectiveCamera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
                     else
                         scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
                 }
-                else if (node.Name == "material")
+                else if (Eq(node.Name, typeof(Material)))
                 {
                     string id = node.Attributes["id"].Value;
                     float rough = node.Attributes["rough"] == null ? 1 : Convert.ToSingle(node.Attributes["rough"].Value, nfi);
@@ -76,19 +76,19 @@ namespace RayTracer.Composition
 
                     materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap, blur, blursamples));
                 }
-                else if (node.Name == "pointlight")
+                else if (Eq(node.Name, typeof(PointLight)))
                 {
                     scene.AddLight(new PointLight(
                         Vec3FromString(node.Attributes["pos"].Value),
                         ColorFromString(node.Attributes["lum"].Value)));
                 }
-                else if (node.Name == "dirlight")
+                else if (Eq(node.Name, typeof(DirLight)))
                 {
                     scene.AddLight(new DirLight(
                         Vec3FromString(node.Attributes["dir"].Value),
                         ColorFromString(node.Attributes["lum"].Value)));
                 }
-                else if (node.Name == "arealight")
+                else if (Eq(node.Name, typeof(AreaLight)))
                 {
                     scene.AddLight(new AreaLight(
                         Vec3FromString(node.Attributes["pos"].Value),
@@ -96,14 +96,14 @@ namespace RayTracer.Composition
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
                         Convert.ToInt32(node.Attributes["samples"].Value)));
                 }
-                else if (node.Name == "plane")
+                else if (Eq(node.Name, typeof(Plane)))
                 {
                     scene.AddObject(new Plane(
                         Vec3FromString(node.Attributes["center"].Value),
                         Vec3FromString(node.Attributes["normal"].Value),
                         materials[node.Attributes["material"].Value]));
                 }
-                else if (node.Name == "checkerboard")
+                else if (Eq(node.Name, typeof(CheckerBoard)))
                 {
                     scene.AddObject(new CheckerBoard(
                         Vec3FromString(node.Attributes["center"].Value),
@@ -112,21 +112,21 @@ namespace RayTracer.Composition
                         materials[node.Attributes["mat1"].Value],
                         materials[node.Attributes["mat2"].Value]));
                 }
-                else if (node.Name == "sphere")
+                else if (Eq(node.Name, typeof(Sphere)))
                 {
                     scene.AddObject(new Sphere(
                         Vec3FromString(node.Attributes["center"].Value),
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
                         materials[node.Attributes["material"].Value]));
                 }
-                else if (node.Name == "cube")
+                else if (Eq(node.Name, typeof(Cube)))
                 {
                     scene.AddObject(new Cube(
                         Vec3FromString(node.Attributes["center"].Value),
                         Convert.ToSingle(node.Attributes["side"].Value, nfi),
                         materials[node.Attributes["material"].Value]));
                 }
-                else if (node.Name == "torus")
+                else if (Eq(node.Name, typeof(Torus)))
                 {
                     scene.AddObject(new Torus(
                         Vec3FromString(node.Attributes["center"].Value),
@@ -137,7 +137,7 @@ namespace RayTracer.Composition
                         Convert.ToBoolean(node.Attributes["shadingnormals"].Value),
                         materials[node.Attributes["material"].Value]));
                 }
-                else if (node.Name == "cylinder")
+                else if (Eq(node.Name, typeof(Cylinder)))
                 {
                     scene.AddObject(new Cylinder(
                         Vec3FromString(node.Attributes["cap1center"].Value),
@@ -145,7 +145,7 @@ namespace RayTracer.Composition
                         Convert.ToSingle(node.Attributes["radius"].Value, nfi),
                         materials[node.Attributes["material"].Value]));
                 }
-                else if (node.Name == "cone")
+                else if (Eq(node.Name, typeof(Cone)))
                 {
                     scene.AddObject(new Cone(
                         Vec3FromString(node.Attributes["cap1center"].Value),
@@ -175,6 +175,11 @@ namespace RayTracer.Composition
             }
 
             return scene;
+        }
+
+        private static bool Eq(string str, Type t)
+        {
+            return string.Equals(str, t.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static Vec3 Vec3FromString(string s)
