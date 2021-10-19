@@ -12,8 +12,8 @@ namespace RayTracer.Composition.Camera
         private readonly Vec3 dir;
         private readonly Vec3 right;
         private readonly Vec3 up;
-        private readonly int width;
-        private readonly int height;
+        private readonly int screenWidth;
+        private readonly int screenHeight;
         private readonly int screenSize;
         private readonly float focalDist;
         private readonly float normalizer;
@@ -34,12 +34,12 @@ namespace RayTracer.Composition.Camera
             this.dir = (lookat - eye).Normalize();
             this.focalDist = focalDist ?? (lookat - eye).Length;
             this.screenSize = Math.Min(screenHeight, screenWidth);
-            this.width = screenWidth;
-            this.height = screenHeight;
+            this.screenWidth = screenWidth;
+            this.screenHeight = screenHeight;
             if (diagonal)
                 this.normalizer = MathF.Sqrt(
-                    width * width / (float)screenSize / screenSize +
-                    height * height / (float)screenSize / screenSize);
+                    this.screenWidth * this.screenWidth / (float)screenSize / screenSize +
+                    this.screenHeight * this.screenHeight / (float)screenSize / screenSize);
             else
                 this.normalizer = 1.0f;
             Vec3 w = eye - lookat;
@@ -50,8 +50,8 @@ namespace RayTracer.Composition.Camera
         /// <inheritdoc/>
         public Vec3? GetRayEnd(int x, int y, float xOffset = .5f, float yOffset = .5f)
         {
-            float xNorm = ((x + xOffset) - width / 2.0f) / ( screenSize / 2.0f) / normalizer;
-            float yNorm = ((y + yOffset) - height / 2.0f) / (screenSize / 2.0f) / normalizer;
+            float xNorm = ((x + xOffset) - screenWidth / 2.0f) / ( screenSize / 2.0f) / normalizer;
+            float yNorm = ((y + yOffset) - screenHeight / 2.0f) / (screenSize / 2.0f) / normalizer;
             float diag = xNorm * xNorm + yNorm * yNorm;
             if (diag > 1) return null;
             float z = MathF.Sqrt(1 - diag);
@@ -59,18 +59,18 @@ namespace RayTracer.Composition.Camera
         }
 
         /// <inheritdoc/>
-        public Vec3 Up { get { return up; } }
+        public Vec3 Up => up;
 
         /// <inheritdoc/>
-        public Vec3 Right { get { return right; } }
+        public Vec3 Right => right;
 
         /// <inheritdoc/>
-        public Vec3 Eye { get { return eye; } }
+        public Vec3 Eye => eye;
 
         /// <inheritdoc/>
-        public int ScreenWidth => width;
+        public int ScreenWidth => screenWidth;
 
         /// <inheritdoc/>
-        public int ScreenHeight => height;
+        public int ScreenHeight => screenHeight;
     }
 }
