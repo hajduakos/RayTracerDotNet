@@ -23,40 +23,11 @@ namespace RayTracer.Composition
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(text);
             materials.Clear();
-
-            int scenew = 1080;
-            int sceneh = 720;
-            ICamera camera = new PerspectiveCamera(new Vec3(1, 1, 1), new Vec3(0, 0, 0), 50 * MathF.PI / 180, 1, scenew, sceneh);
-            int spp = 1;
-            int dofs = 1;
-            float dofr = 0;
-
             XmlNode sceneNode = doc.ChildNodes[0];
-            if (sceneNode.Attributes != null)
-            {
-                if (sceneNode.Attributes["samplesperpixel"] != null) spp = Convert.ToInt32(sceneNode.Attributes["samplesperpixel"].Value);
-                if (sceneNode.Attributes["dofsamples"] != null) dofs = Convert.ToInt32(sceneNode.Attributes["dofsamples"].Value);
-                if (sceneNode.Attributes["dofradius"] != null) dofr = Convert.ToSingle(sceneNode.Attributes["dofradius"].Value, nfi);
-            }
-            Scene scene = new Scene(camera, spp, dofs, dofr);
+            Scene scene = Construct<Scene>(sceneNode);
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                /*if (IsType(node, typeof(PerspectiveCamera)) || IsType(node, typeof(FisheyeCamera)))
-                {
-                    Vec3 eye = Vec3FromString(node.Attributes["eye"].Value);
-                    Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
-                    float hfov = 50;
-                    float focalDist = (lookat - eye).Length;
-                    bool diagonal = false;
-                    if (node.Attributes["hfov"] != null) hfov = Convert.ToSingle(node.Attributes["hfov"].Value, nfi);
-                    if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
-                    if (node.Attributes["diagonal"] != null) diagonal = Convert.ToBoolean(node.Attributes["diagonal"].Value);
-                    if (IsType(node, typeof(PerspectiveCamera)))
-                        scene.Cam = new PerspectiveCamera(eye, lookat, hfov, focalDist, scenew, sceneh);
-                    else
-                        scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
-                }*/
                 if (IsType(node, typeof(PerspectiveCamera)))
                     scene.Cam = Construct<PerspectiveCamera>(node);
                 else if (IsType(node, typeof(FisheyeCamera)))

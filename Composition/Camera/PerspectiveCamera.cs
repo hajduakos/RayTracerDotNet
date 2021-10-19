@@ -29,7 +29,7 @@ namespace RayTracer.Composition.Camera
             hfov = hfov * MathF.PI / 180;
             Vec3 vup = new Vec3(0, 0, 1);
             this.eye = eye;
-            float fd = focalDist.HasValue ? focalDist.Value : (lookat - eye).Length;
+            float fd = focalDist ?? (lookat - eye).Length;
             this.lookat = eye + (lookat - eye).Normalize() * fd;
             this.width = screenWidth;
             this.height = screenHeight;

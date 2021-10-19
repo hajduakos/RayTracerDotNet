@@ -1,4 +1,4 @@
-<scene samplesperpixel="1" dofsamples="8" dofradius="0.6">
+<scene samplesPerPixel="1" dofSamples="8" dofRadius="0.6">
 	<perspectivecamera screenWidth="720" screenHeight="405" eye="9 -3 6" lookat="0 0 0.5" hfov="50" focaldist="10"/>
     <pointlight pos="40 40 40" lum="6400 6400 6400" />
 

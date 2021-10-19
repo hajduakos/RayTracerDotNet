@@ -1,4 +1,4 @@
-<scene samplesperpixel="2">
+<scene samplesPerPixel="2">
 	<perspectivecamera screenWidth="720" screenHeight="405" eye="4 -1 2.5" lookat="0 0 1" hfov="50"/>
     <pointlight pos="10 10 10" lum="400 400 400" />
     <material id="black" ambient="0 0 0" diffuse="0 0 0" />

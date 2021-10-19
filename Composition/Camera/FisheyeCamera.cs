@@ -32,7 +32,7 @@ namespace RayTracer.Composition.Camera
             Vec3 vup = new Vec3(0, 0, 1);
             this.eye = eye;
             this.dir = (lookat - eye).Normalize();
-            this.focalDist = focalDist.HasValue ? focalDist.Value : (lookat - eye).Length;
+            this.focalDist = focalDist ?? (lookat - eye).Length;
             this.screenSize = Math.Min(screenHeight, screenWidth);
             this.width = screenWidth;
             this.height = screenHeight;

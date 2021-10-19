@@ -41,9 +41,8 @@ namespace RayTracer.Composition
         /// <param name="dofSamples">Samples to simulate depth of field</param>
         /// <param name="dofRadius">Radius for depth of field (aperture)</param>
         /// <param name="cam">Camera</param>
-        public Scene(ICamera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
+        public Scene(ICamera cam = null, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
         {
-            Contract.Requires(cam != null, "Camera must not be null");
             Contract.Requires(samplesPerPixel > 0, "Samples per pixel must be greater than 0");
             Contract.Requires(dofSamples > 0, "DoF samples must be greater than 0");
             this.Cam = cam;
@@ -90,6 +89,7 @@ namespace RayTracer.Composition
         /// <returns>Rendered raw image</returns>
         public RawImage Render()
         {
+            Contract.Requires(Cam != null, "Camera must not be null");
             Reporter?.Restart("Rendering");
             // Step 1: render the raw image
             RawImage img = new RawImage(Cam.ScreenWidth, Cam.ScreenHeight);
