@@ -16,6 +16,6 @@
     <sphere material="silver" center="-1.5 2.6 1" radius="1" />
     <sphere material="silver" center="-1.5 -2.6 1" radius="1" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="2" />
+    <maxlineartonemapper />
 </scene>

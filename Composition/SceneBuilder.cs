@@ -78,63 +78,33 @@ namespace RayTracer.Composition
                     materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap, blur, blursamples));
                 }
                 else if (IsType(node, typeof(PointLight)))
-                {
                     scene.AddLight(Construct<PointLight>(node, materials));
-                }
                 else if (IsType(node, typeof(DirLight)))
-                {
                     scene.AddLight(Construct<DirLight>(node, materials));
-                }
                 else if (IsType(node, typeof(AreaLight)))
-                {
                     scene.AddLight(Construct<AreaLight>(node, materials));
-                }
                 else if (IsType(node, typeof(Plane)))
-                {
                     scene.AddObject(Construct<Plane>(node, materials));
-                }
                 else if (IsType(node, typeof(CheckerBoard)))
-                {
                     scene.AddObject(Construct<CheckerBoard>(node, materials));
-                }
                 else if (IsType(node, typeof(Sphere)))
-                {
                     scene.AddObject(Construct<Sphere>(node, materials));
-                }
                 else if (IsType(node, typeof(Cube)))
-                {
                     scene.AddObject(Construct<Cube>(node, materials));
-                }
                 else if (IsType(node, typeof(Torus)))
-                {
                     scene.AddObject(Construct<Torus>(node, materials));
-                }
                 else if (IsType(node, typeof(Cylinder)))
-                {
                     scene.AddObject(Construct<Cylinder>(node, materials));
-                }
                 else if (IsType(node, typeof(Cone)))
-                {
                     scene.AddObject(Construct<Cone>(node, materials));
-                }
-                else if (node.Name == "tonemapper")
-                {
-                    if (node.Attributes["type"].Value == "maxlinear")
-                        scene.AddToneMapper(new MaxLinearToneMapper());
-                    else if (node.Attributes["type"].Value == "shlick")
-                        scene.AddToneMapper(new MaxLinearToneMapper());
-                    else if (node.Attributes["type"].Value == "nonlinear")
-                    {
-                        float p = node.Attributes["p"] == null ? 1 : Convert.ToSingle(node.Attributes["p"].Value, nfi);
-                        scene.AddToneMapper(new NonLinearToneMapper(p));
-                    }
-                    else
-                        throw new XmlException($"Unknown tone mapper: {node.Attributes["type"]}");
-                }
+                else if (IsType(node, typeof(MaxLinearToneMapper)))
+                    scene.AddToneMapper(Construct<MaxLinearToneMapper>(node, materials));
+                else if (IsType(node, typeof(NonLinearToneMapper)))
+                    scene.AddToneMapper(Construct<NonLinearToneMapper>(node, materials));
+                else if (IsType(node, typeof(SchlickToneMapper)))
+                    scene.AddToneMapper(Construct<SchlickToneMapper>(node, materials));
                 else
-                {
                     throw new XmlException($"Unknown node: {node.Name}");
-                }
             }
 
             return scene;

@@ -9,6 +9,6 @@
     <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="1 0 0" />
     <sphere material="glass" center="0 0 1.01" radius="1" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="2" />
+    <maxlineartonemapper />
 </scene>

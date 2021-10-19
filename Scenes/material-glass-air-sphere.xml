@@ -11,6 +11,6 @@
     <sphere material="glass" center="0 0 1.01" radius="1" />
     <sphere material="air" center="0 0 1.01" radius="0.98" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="2" />
+    <maxlineartonemapper />
 </scene>

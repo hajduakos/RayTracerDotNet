@@ -11,6 +11,6 @@
     <cube material="red" center="0 0 1" side="2" />
     <cube material="red" center="-6 -4 1" side="2" />
     
-    <tonemapper type="nonlinear" p="3" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="3" />
+    <maxlineartonemapper />
 </scene>

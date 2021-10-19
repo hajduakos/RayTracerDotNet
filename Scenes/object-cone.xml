@@ -11,6 +11,6 @@
     <cone material="green" cap1center="0 0 0" cap2center="0 0 2" cap1radius="1" cap2radius="0.5" />
     <cone material="blue" cap1center="2 0 0" cap2center="2 2 1" cap1radius="0" cap2radius="1" />
     
-    <tonemapper type="nonlinear" p="1" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="1" />
+    <maxlineartonemapper />
 </scene>

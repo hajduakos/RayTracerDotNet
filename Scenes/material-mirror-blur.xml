@@ -13,6 +13,6 @@
     <sphere material="red" center="0 0 1" radius="1" />
     <sphere material="refl2" center="0.2 2.2 1" radius="1" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="2" />
+    <maxlineartonemapper />
 </scene>

@@ -9,6 +9,6 @@
     <torus material="red" center="0 -2 1.5" ro="1" ri="0.5" tessu="30" tessv="15" shadingNormals="false" />
     <torus material="red" center="0 2 1.5" ro="1" ri="0.5" tessu="30" tessv="15" shadingNormals="true" />
     
-    <tonemapper type="nonlinear" p="2" />
-    <tonemapper type="maxlinear" />
+    <nonlineartonemapper p="2" />
+    <maxlineartonemapper />
 </scene>
