@@ -87,7 +87,7 @@ namespace RayTracer.Composition
                     if (pi.HasDefaultValue)
                         parameters[i] = pi.DefaultValue;
                     else
-                        throw new Exception($"Attribute {pi.Name} not found for {typeof(T).Name}.");
+                        throw new XmlException($"Attribute {pi.Name} not found for {typeof(T).Name}.");
                 }
                 else
                 {
@@ -114,6 +114,8 @@ namespace RayTracer.Composition
         private static Vec3 Vec3FromString(string s)
         {
             string[] values = s.Split(" ");
+            if (values.Length != 3 && values.Length != 6)
+                throw new XmlException($"Invalid vector '{s}', expected exactly 3 or 6 components.");
             Vec3 origin = new Vec3(
                 Convert.ToSingle(values[0], nfi),
                 Convert.ToSingle(values[1], nfi),
@@ -129,6 +131,8 @@ namespace RayTracer.Composition
         private static Color ColorFromString(string s)
         {
             string[] values = s.Split(" ");
+            if (values.Length != 3)
+                throw new XmlException($"Invalid color '{s}', expected exactly 3 components.");
             return new Color(
                 Convert.ToSingle(values[0], nfi),
                 Convert.ToSingle(values[1], nfi),
