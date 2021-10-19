@@ -59,24 +59,7 @@ namespace RayTracer.Composition
                         scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
                 }
                 else if (IsType(node, typeof(Material)))
-                {
-                    string id = node.Attributes["id"].Value;
-                    float rough = node.Attributes["rough"] == null ? 1 : Convert.ToSingle(node.Attributes["rough"].Value, nfi);
-                    Color ambient = node.Attributes["ambient"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["ambient"].Value);
-                    Color diffuse = node.Attributes["diffuse"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["diffuse"].Value);
-                    Color specular = node.Attributes["specular"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["specular"].Value);
-                    float shine = node.Attributes["shine"] == null ? 0 : Convert.ToSingle(node.Attributes["shine"].Value, nfi);
-
-                    float smooth = node.Attributes["smooth"] == null ? 0 : Convert.ToSingle(node.Attributes["smooth"].Value, nfi);
-                    Color n = node.Attributes["n"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["n"].Value);
-                    Color kap = node.Attributes["kap"] == null ? new Color(0, 0, 0) : ColorFromString(node.Attributes["kap"].Value);
-                    bool isReflective = node.Attributes["isreflective"] != null && Convert.ToBoolean(node.Attributes["isreflective"].Value);
-                    bool isRefractive = node.Attributes["isrefractive"] != null && Convert.ToBoolean(node.Attributes["isrefractive"].Value);
-                    float blur = node.Attributes["blur"] == null ? 0 : Convert.ToSingle(node.Attributes["blur"].Value, nfi);
-                    int blursamples = node.Attributes["blursamples"] == null ? 1 : Convert.ToInt32(node.Attributes["blursamples"].Value);
-
-                    materials.Add(id, new Material(rough, ambient, diffuse, specular, shine, smooth, isReflective, isRefractive, n, kap, blur, blursamples));
-                }
+                    materials.Add(node.Attributes["id"].Value, Construct<Material>(node, materials));
                 else if (IsType(node, typeof(PointLight)))
                     scene.AddLight(Construct<PointLight>(node, materials));
                 else if (IsType(node, typeof(DirLight)))
@@ -117,28 +100,39 @@ namespace RayTracer.Composition
 
         private static T Construct<T>(XmlNode n, Dictionary<string, Material> materials)
         {
-            ConstructorInfo ci = typeof(T).GetConstructors()[0];
+            var constructors = typeof(T).GetConstructors();
+            if (constructors.Length != 1)
+                throw new Exception($"Object {typeof(T).Name} does not have an unique constructor.");
+            ConstructorInfo ci = constructors[0];
             object[] parameters = new object[ci.GetParameters().Length];
             for (int i = 0; i < ci.GetParameters().Length; ++i)
             {
                 var pi = ci.GetParameters()[i];
                 if (n.Attributes[pi.Name] == null)
-                    throw new Exception($"Attribute {pi.Name} not found for {typeof(T).Name}.");
-                string txt = n.Attributes[pi.Name].Value;
-                if (pi.ParameterType == typeof(Vec3))
-                    parameters[i] = Vec3FromString(txt);
-                else if (pi.ParameterType == typeof(Color))
-                    parameters[i] = ColorFromString(txt);
-                else if (pi.ParameterType == typeof(Int32))
-                    parameters[i] = Convert.ToInt32(txt);
-                else if (pi.ParameterType == typeof(Single))
-                    parameters[i] = Convert.ToSingle(txt, nfi);
-                else if (pi.ParameterType == typeof(Boolean))
-                    parameters[i] = Convert.ToBoolean(txt);
-                else if (pi.ParameterType == typeof(Material))
-                    parameters[i] = materials[txt];
+                {
+                    if (pi.HasDefaultValue)
+                        parameters[i] = pi.DefaultValue;
+                    else
+                        throw new Exception($"Attribute {pi.Name} not found for {typeof(T).Name}.");
+                }
                 else
-                    throw new Exception($"Type {pi.ParameterType.Name} of attribute {pi.Name} not supported.");
+                {
+                    string txt = n.Attributes[pi.Name].Value;
+                    if (pi.ParameterType == typeof(Vec3))
+                        parameters[i] = Vec3FromString(txt);
+                    else if (pi.ParameterType == typeof(Color))
+                        parameters[i] = ColorFromString(txt);
+                    else if (pi.ParameterType == typeof(Int32))
+                        parameters[i] = Convert.ToInt32(txt);
+                    else if (pi.ParameterType == typeof(Single))
+                        parameters[i] = Convert.ToSingle(txt, nfi);
+                    else if (pi.ParameterType == typeof(Boolean))
+                        parameters[i] = Convert.ToBoolean(txt);
+                    else if (pi.ParameterType == typeof(Material))
+                        parameters[i] = materials[txt];
+                    else
+                        throw new Exception($"Type {pi.ParameterType.Name} of attribute {pi.Name} not supported.");
+                }
             }
             return (T)ci.Invoke(parameters);
         }

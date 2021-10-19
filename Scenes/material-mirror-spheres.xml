@@ -4,7 +4,7 @@
     <material id="black" ambient="0 0 0" diffuse="0 0 0" />
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
     
-    <material id="refl" rough="0" smooth="0.7" isreflective="true" n="0 0 0" kap="0 0 0" />
+    <material id="refl" rough="0" smooth="0.7" isReflective="true" n="0 0 0" kap="0 0 0" />
     
     <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>
     <material id="green" ambient="0 0.1 0" diffuse="0 0.8 0" specular="0.5 0.5 0.5" shine="50" />

@@ -5,7 +5,7 @@ namespace RayTracer.Reporting
     public class ConsoleReporter : IReporter
     {
         private int prevBar = -1;
-        private readonly int barWidth = 40;
+        private readonly int barWidth = 60;
         public void End(string message = "")
         {
             Console.Write("\r[");

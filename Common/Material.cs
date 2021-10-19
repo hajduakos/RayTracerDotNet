@@ -24,8 +24,19 @@ namespace RayTracer.Common
         public int BlurSamples { get; }
         private readonly Color f0;
 
-        public Material(float rough, Color ambient, Color diffuse, Color specular, float shine,
-            float smooth, bool isReflective, bool isRefractive, Color n, Color kap, float blur, int blurSamples)
+        public Material(
+            float rough = 1,
+            Color ambient = default,
+            Color diffuse = default,
+            Color specular = default,
+            float shine = 0,
+            float smooth = 0,
+            bool isReflective = false,
+            bool isRefractive = false,
+            Color n = default,
+            Color kap = default,
+            float blur = 0,
+            int blurSamples = 1)
         {
             Contract.Requires(blurSamples > 0, "Blur samples must be greater than 0");
             this.Rough = rough;

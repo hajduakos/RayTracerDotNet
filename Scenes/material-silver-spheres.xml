@@ -4,8 +4,8 @@
     <material id="black" ambient="0 0 0" diffuse="0.1 0.1 0.1" />
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
     
-    <material id="gold" rough="0" smooth="1" isreflective="true" n="0.17 0.35 1.5" kap="3.1 2.7 1.9" />
-    <material id="silver" rough="0" smooth="1" isreflective="true" n="0.14 0.16 0.13" kap="4.1 2.3 3.1" />
+    <material id="gold" rough="0" smooth="1" isReflective="true" n="0.17 0.35 1.5" kap="3.1 2.7 1.9" />
+    <material id="silver" rough="0" smooth="1" isReflective="true" n="0.14 0.16 0.13" kap="4.1 2.3 3.1" />
     
     <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="1 0 0" />
     <sphere material="gold" center="0 0 1" radius="1" />

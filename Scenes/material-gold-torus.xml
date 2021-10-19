@@ -4,7 +4,7 @@
     <material id="black" ambient="0 0 0" diffuse="0 0 0" />
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
     
-    <material id="gold" rough="0" smooth="1" isreflective="true" n="0.17 0.35 1.5" kap="3.1 2.7 1.9" />
+    <material id="gold" rough="0" smooth="1" isReflective="true" n="0.17 0.35 1.5" kap="3.1 2.7 1.9" />
     
     <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="2 0 0" />
     <torus material="gold" center="0 0 1.5" ro="1" ri="0.5" tessu="20" tessv="15" shadingNormals="true" />
