@@ -1,5 +1,5 @@
-<scene w="720" h="405" samplesperpixel="2">
-	<perspectivecamera eye="8 -2 2.5" lookat="0 0 1" hfov="50"/>
+<scene samplesperpixel="2">
+	<perspectivecamera screenWidth="720" screenHeight="405" eye="8 -2 2.5" lookat="0 0 1" hfov="50"/>
     <pointlight pos="10 2 5" lum="400 400 400" />
     
     <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>

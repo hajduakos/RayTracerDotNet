@@ -17,8 +17,6 @@ namespace RayTracer.Composition
     /// </summary>
     public sealed class Scene
     {
-        private readonly int width;
-        private readonly int height;
         private readonly int samplesPerPixel;
         private readonly int dofSamples;
         private readonly float dofRadius;
@@ -37,23 +35,17 @@ namespace RayTracer.Composition
         private readonly ThreadSafeRandom rnd;
 
         /// <summary>
-        /// Create a scene with a given width, height and camera
+        /// Create a scene with a camera
         /// </summary>
-        /// <param name="screenWidth">Scene width (px)</param>
-        /// <param name="screenHeight">Scene height (px)</param>
         /// <param name="samplesPerPixel">Samples per pixel (in both directions)</param>
         /// <param name="dofSamples">Samples to simulate depth of field</param>
         /// <param name="dofRadius">Radius for depth of field (aperture)</param>
         /// <param name="cam">Camera</param>
-        public Scene(int screenWidth, int screenHeight, ICamera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
+        public Scene(ICamera cam, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
         {
-            Contract.Requires(screenWidth > 0, "Screen width must be greater than 0");
-            Contract.Requires(screenHeight > 0, "Screen height must be greater than 0");
             Contract.Requires(cam != null, "Camera must not be null");
             Contract.Requires(samplesPerPixel > 0, "Samples per pixel must be greater than 0");
             Contract.Requires(dofSamples > 0, "DoF samples must be greater than 0");
-            this.width = screenWidth;
-            this.height = screenHeight;
             this.Cam = cam;
             this.samplesPerPixel = samplesPerPixel;
             this.dofSamples = dofSamples;
@@ -100,11 +92,11 @@ namespace RayTracer.Composition
         {
             Reporter?.Restart("Rendering");
             // Step 1: render the raw image
-            RawImage img = new RawImage(width, height);
-            for (int x = 0; x < width; ++x)
+            RawImage img = new RawImage(Cam.ScreenWidth, Cam.ScreenHeight);
+            for (int x = 0; x < Cam.ScreenWidth; ++x)
             {
-                Parallel.For(0, height, y => img[x, y] = TracePixel(x, y));
-                Reporter?.Report(x, width - 1, "Rendering");
+                Parallel.For(0, Cam.ScreenHeight, y => img[x, y] = TracePixel(x, y));
+                Reporter?.Report(x, Cam.ScreenWidth - 1, "Rendering");
             }
             Reporter?.End("Rendering");
             // Step 2: apply tone mapping

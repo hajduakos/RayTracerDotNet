@@ -14,13 +14,15 @@ namespace RayTracer.Composition
     /// <summary>
     /// Scene loader from file
     /// </summary>
-    public static class SceneBuilder
+    public sealed class SceneBuilder
     {
         private static readonly NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
-        public static Scene FromXML(string text)
+        readonly Dictionary<string, Material> materials = new Dictionary<string, Material>();
+        public Scene FromXML(string text)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(text);
+            materials.Clear();
 
             int scenew = 1080;
             int sceneh = 720;
@@ -32,18 +34,15 @@ namespace RayTracer.Composition
             XmlNode sceneNode = doc.ChildNodes[0];
             if (sceneNode.Attributes != null)
             {
-                if (sceneNode.Attributes["w"] != null) scenew = Convert.ToInt32(sceneNode.Attributes["w"].Value);
-                if (sceneNode.Attributes["h"] != null) sceneh = Convert.ToInt32(sceneNode.Attributes["h"].Value);
                 if (sceneNode.Attributes["samplesperpixel"] != null) spp = Convert.ToInt32(sceneNode.Attributes["samplesperpixel"].Value);
                 if (sceneNode.Attributes["dofsamples"] != null) dofs = Convert.ToInt32(sceneNode.Attributes["dofsamples"].Value);
                 if (sceneNode.Attributes["dofradius"] != null) dofr = Convert.ToSingle(sceneNode.Attributes["dofradius"].Value, nfi);
             }
-            Scene scene = new Scene(scenew, sceneh, camera, spp, dofs, dofr);
-            Dictionary<string, Material> materials = new Dictionary<string, Material>();
+            Scene scene = new Scene(camera, spp, dofs, dofr);
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                if (IsType(node, typeof(PerspectiveCamera)) || IsType(node, typeof(FisheyeCamera)))
+                /*if (IsType(node, typeof(PerspectiveCamera)) || IsType(node, typeof(FisheyeCamera)))
                 {
                     Vec3 eye = Vec3FromString(node.Attributes["eye"].Value);
                     Vec3 lookat = Vec3FromString(node.Attributes["lookat"].Value);
@@ -54,38 +53,42 @@ namespace RayTracer.Composition
                     if (node.Attributes["focaldist"] != null) focalDist = Convert.ToSingle(node.Attributes["focaldist"].Value, nfi);
                     if (node.Attributes["diagonal"] != null) diagonal = Convert.ToBoolean(node.Attributes["diagonal"].Value);
                     if (IsType(node, typeof(PerspectiveCamera)))
-                        scene.Cam = new PerspectiveCamera(eye, lookat, hfov * MathF.PI / 180, focalDist, scenew, sceneh);
+                        scene.Cam = new PerspectiveCamera(eye, lookat, hfov, focalDist, scenew, sceneh);
                     else
                         scene.Cam = new FisheyeCamera(eye, lookat, focalDist, scenew, sceneh, diagonal);
-                }
+                }*/
+                if (IsType(node, typeof(PerspectiveCamera)))
+                    scene.Cam = Construct<PerspectiveCamera>(node);
+                else if (IsType(node, typeof(FisheyeCamera)))
+                    scene.Cam = Construct<FisheyeCamera>(node);
                 else if (IsType(node, typeof(Material)))
-                    materials.Add(node.Attributes["id"].Value, Construct<Material>(node, materials));
+                    materials.Add(node.Attributes["id"].Value, Construct<Material>(node));
                 else if (IsType(node, typeof(PointLight)))
-                    scene.AddLight(Construct<PointLight>(node, materials));
+                    scene.AddLight(Construct<PointLight>(node));
                 else if (IsType(node, typeof(DirLight)))
-                    scene.AddLight(Construct<DirLight>(node, materials));
+                    scene.AddLight(Construct<DirLight>(node));
                 else if (IsType(node, typeof(AreaLight)))
-                    scene.AddLight(Construct<AreaLight>(node, materials));
+                    scene.AddLight(Construct<AreaLight>(node));
                 else if (IsType(node, typeof(Plane)))
-                    scene.AddObject(Construct<Plane>(node, materials));
+                    scene.AddObject(Construct<Plane>(node));
                 else if (IsType(node, typeof(CheckerBoard)))
-                    scene.AddObject(Construct<CheckerBoard>(node, materials));
+                    scene.AddObject(Construct<CheckerBoard>(node));
                 else if (IsType(node, typeof(Sphere)))
-                    scene.AddObject(Construct<Sphere>(node, materials));
+                    scene.AddObject(Construct<Sphere>(node));
                 else if (IsType(node, typeof(Cube)))
-                    scene.AddObject(Construct<Cube>(node, materials));
+                    scene.AddObject(Construct<Cube>(node));
                 else if (IsType(node, typeof(Torus)))
-                    scene.AddObject(Construct<Torus>(node, materials));
+                    scene.AddObject(Construct<Torus>(node));
                 else if (IsType(node, typeof(Cylinder)))
-                    scene.AddObject(Construct<Cylinder>(node, materials));
+                    scene.AddObject(Construct<Cylinder>(node));
                 else if (IsType(node, typeof(Cone)))
-                    scene.AddObject(Construct<Cone>(node, materials));
+                    scene.AddObject(Construct<Cone>(node));
                 else if (IsType(node, typeof(MaxLinearToneMapper)))
-                    scene.AddToneMapper(Construct<MaxLinearToneMapper>(node, materials));
+                    scene.AddToneMapper(Construct<MaxLinearToneMapper>(node));
                 else if (IsType(node, typeof(NonLinearToneMapper)))
-                    scene.AddToneMapper(Construct<NonLinearToneMapper>(node, materials));
+                    scene.AddToneMapper(Construct<NonLinearToneMapper>(node));
                 else if (IsType(node, typeof(SchlickToneMapper)))
-                    scene.AddToneMapper(Construct<SchlickToneMapper>(node, materials));
+                    scene.AddToneMapper(Construct<SchlickToneMapper>(node));
                 else
                     throw new XmlException($"Unknown node: {node.Name}");
             }
@@ -98,7 +101,7 @@ namespace RayTracer.Composition
             return string.Equals(n.Name, t.Name, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        private static T Construct<T>(XmlNode n, Dictionary<string, Material> materials)
+        private T Construct<T>(XmlNode n)
         {
             var constructors = typeof(T).GetConstructors();
             if (constructors.Length != 1)

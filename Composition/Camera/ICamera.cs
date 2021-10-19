@@ -23,6 +23,16 @@ namespace RayTracer.Composition.Camera
         Vec3 Right { get; }
 
         /// <summary>
+        /// Widht of the screen in pixels
+        /// </summary>
+        int ScreenWidth { get; }
+
+        /// <summary>
+        /// Height of the screen in pixels
+        /// </summary>
+        int ScreenHeight { get; }
+
+        /// <summary>
         /// Get the endpoint of a ray, corresponding to a pixel,
         /// or null if the position is invalid
         /// </summary>

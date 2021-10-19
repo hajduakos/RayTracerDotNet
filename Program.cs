@@ -23,7 +23,7 @@ namespace RayTracer
                 for (int f = 0; f < ap.Frames; ++f)
                 {
                     Console.WriteLine("Frame " + (f + 1) + "/" + ap.Frames);
-                    Scene scene = SceneBuilder.FromXML(ap.GetFrame(f));
+                    Scene scene = new SceneBuilder().FromXML(ap.GetFrame(f));
                     scene.Reporter = new ConsoleReporter();
                     using System.Drawing.Bitmap bmp = scene.Render().ToBitmap();
                     bmp.Save(args[0] + f.ToString("D3") + ".png");

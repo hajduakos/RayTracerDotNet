@@ -20,23 +20,25 @@ namespace RayTracer.Composition.Camera
         /// </summary>
         /// <param name="eye">Position of the camera</param>
         /// <param name="lookat">Point where camera is looking</param>
-        /// <param name="hfov">Horizontal field of view (in radians)</param>
+        /// <param name="hfov">Horizontal field of view (in degrees)</param>
         /// <param name="focalDist">Focal distance (defines the focal plane)</param>
-        /// <param name="screenWidthPx">Width of the screen (in pixels)</param>
-        /// <param name="screenHeightPx">Height of the screen (in pixels)</param>
-        public PerspectiveCamera(Vec3 eye, Vec3 lookat, float hfov, float focalDist, int screenWidthPx, int screenHeightPx)
+        /// <param name="screenWidth">Width of the screen (in pixels)</param>
+        /// <param name="screenHeight">Height of the screen (in pixels)</param>
+        public PerspectiveCamera(Vec3 eye, Vec3 lookat, float hfov, int screenWidth, int screenHeight, float? focalDist = null)
         {
+            hfov = hfov * MathF.PI / 180;
             Vec3 vup = new Vec3(0, 0, 1);
             this.eye = eye;
-            this.lookat = eye + (lookat - eye).Normalize() * focalDist;
-            this.width = screenWidthPx;
-            this.height = screenHeightPx;
+            float fd = focalDist.HasValue ? focalDist.Value : (lookat - eye).Length;
+            this.lookat = eye + (lookat - eye).Normalize() * fd;
+            this.width = screenWidth;
+            this.height = screenHeight;
             Vec3 w = eye - this.lookat;
             float f = w.Length;
             right = vup % w;
             right = right.Normalize() * f * MathF.Tan(hfov / 2);
             up = w % right;
-            up = up.Normalize() * f * MathF.Tan(hfov / 2) * (screenHeightPx / (float)screenWidthPx);
+            up = up.Normalize() * f * MathF.Tan(hfov / 2) * (screenHeight / (float)screenWidth);
         }
 
         /// <inheritdoc/>
@@ -53,5 +55,11 @@ namespace RayTracer.Composition.Camera
 
         /// <inheritdoc/>
         public Vec3 Eye { get { return eye; } }
+
+        /// <inheritdoc/>
+        public int ScreenWidth => width;
+
+        /// <inheritdoc/>
+        public int ScreenHeight => height;
     }
 }
