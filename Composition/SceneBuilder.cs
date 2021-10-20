@@ -98,7 +98,7 @@ namespace RayTracer.Composition
                         parameters[i] = ColorFromString(txt);
                     else if (pi.ParameterType == typeof(Int32))
                         parameters[i] = Convert.ToInt32(txt);
-                    else if (pi.ParameterType == typeof(Single))
+                    else if (pi.ParameterType == typeof(Single) || pi.ParameterType == typeof(Single?))
                         parameters[i] = Convert.ToSingle(txt, nfi);
                     else if (pi.ParameterType == typeof(Boolean))
                         parameters[i] = Convert.ToBoolean(txt);
