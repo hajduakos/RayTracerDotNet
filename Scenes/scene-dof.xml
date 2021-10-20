@@ -1,5 +1,5 @@
 <scene samplesPerPixel="1" dofSamples="8" dofRadius="0.6">
-	<perspectivecamera screenWidth="720" screenHeight="405" eye="9 -3 6" lookat="0 0 0.5" hfov="50" focaldist="10"/>
+	<perspectivecamera screenWidth="720" screenHeight="405" eye="9 -3 6" lookat="0 0 0.5" hfov="50" focalDist="10"/>
     <pointlight pos="40 40 40" lum="6400 6400 6400" />
 
     <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
