@@ -1,0 +1,26 @@
+<scene samplesPerPixel="2">
+	<perspectivecamera screenWidth="400" screenHeight="400" eye="3 0 0" lookat="0 0 0" hfov="50"/>
+    <arealight pos="0 0 0.95" lum="15 15 15" radius="0.05" samples="20"/>
+
+    <material id="red" ambient="0.1 0 0" diffuse="0.7 0 0" />
+    <material id="green" ambient="0 0.1 0" diffuse="0 0.7 0" />
+    <material id="black" ambient="0 0 0" diffuse="0 0 0" />
+    <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 1"/>
+	
+	<material id="glass" rough="0" smooth="1" isReflective="true" isRefractive="true" n="1.5 1.5 1.5" kap="0 0 0" />
+    <material id="air" rough="0" smooth="1" isReflective="true" isRefractive="true" n="0.66667 0.66667 0.66667" kap="0 0 0" />
+	
+    <checkerboard mat1="black" mat2="white" center="0 0 -1" normal="0 0 1" matDir="0.25 0 0"/>
+    <plane material="white" center="-1 0 0" normal="1 0 0"/>
+    <plane material="white" center="0 0 1" normal="0 0 -1"/>
+    <plane material="red" center="0 -1 0" normal="0 1 0"/>
+    <plane material="green" center="0 1 0" normal="0 -1 0"/>
+
+	<sphere material="blue" center="-0.2 -0.3 -0.5" radius="0.5" />
+	<sphere material="glass" center="0.5 0.4 -0.5" radius="0.5" />
+	<sphere material="air" center="0.5 0.4 -0.5" radius="0.48" />
+
+    <nonlineartonemapper p="2" />
+    <maxlineartonemapper />
+</scene>
