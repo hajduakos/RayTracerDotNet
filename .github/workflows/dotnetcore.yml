@@ -17,6 +17,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
+    - name: Install GDI+ (Ubuntu 22)
+      if: ${{ matrix.os == 'ubuntu-22.04' }}
+      run: sudo apt install libc6-dev libgdiplus
     - name: Build
       run: dotnet build -c release
     - name: Render
