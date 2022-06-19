@@ -14,11 +14,10 @@ dotnet build -c release
 bin\Release\net6.0\RayTracer.exe Scenes\misc.xml
 ```
 
-**Linux**
-```
-sudo apt install libc6-dev
-sudo apt install libgdiplus
-```
+**Linux / Mac**
+- Dependencies on Linux: `sudo apt install libc6-dev libgdiplus`
+- Dependencies on Mac: `brew install mono-libgdiplus`
+  - `sudo ln -s /opt/homebrew/opt/mono-libgdiplus/lib/libgdiplus.dylib /usr/local/lib/` might also be needed
 
 ```
 dotnet build -c release
