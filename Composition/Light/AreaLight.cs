@@ -43,16 +43,15 @@ namespace RayTracer.Composition.Light
             // For only one sample, return the center
             if (Samples == 1) return new List<PointLight>() { new PointLight(Pos, Lum) };
 
-            List<PointLight> pl = new List<PointLight>(Samples);
+            List<PointLight> pl = new(Samples);
             float x, y, z;
-            ThreadSafeRandom trnd = new ThreadSafeRandom();
             while (pl.Count < Samples)
             {
                 do
                 {
-                    x = trnd.NextFloat() * 2 * Radius - Radius;
-                    y = trnd.NextFloat() * 2 * Radius - Radius;
-                    z = trnd.NextFloat() * 2 * Radius - Radius;
+                    x = ThreadSafeRandom.NextFloat() * 2 * Radius - Radius;
+                    y = ThreadSafeRandom.NextFloat() * 2 * Radius - Radius;
+                    z = ThreadSafeRandom.NextFloat() * 2 * Radius - Radius;
                 } while (x * x + y * y + z * z > Radius * Radius);
                 pl.Add(new PointLight(Pos + new Vec3(x, y, z), Lum / Samples));
             }

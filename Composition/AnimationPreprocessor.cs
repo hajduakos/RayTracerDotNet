@@ -69,9 +69,9 @@ namespace RayTracer.Composition
                 int frames = Convert.ToInt32(animTxt[1]);
                 float animEnd = Convert.ToSingle(animTxt[2]);
                 Frames = Math.Max(frames, frames);
-                elements.Add(new TextBlock(scene.Substring(0, pos)));
+                elements.Add(new TextBlock(scene[..pos]));
                 elements.Add(new Animation(animStart, frames, animEnd));
-                scene = scene.Substring(end + 1);
+                scene = scene[(end + 1)..];
             }
             if (scene != "") elements.Add(new TextBlock(scene));
         }

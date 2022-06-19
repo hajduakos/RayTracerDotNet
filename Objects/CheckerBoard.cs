@@ -51,6 +51,6 @@ namespace RayTracer.Objects
             return new Intersection(this, ray, t, normal, mat);
         }
 
-        private int Mod(int k, int n) => ((k %= n) < 0) ? k + n : k;
+        private static int Mod(int k, int n) => ((k %= n) < 0) ? k + n : k;
     }
 }

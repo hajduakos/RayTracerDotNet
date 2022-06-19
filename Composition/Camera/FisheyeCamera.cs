@@ -29,7 +29,7 @@ namespace RayTracer.Composition.Camera
         /// <param name="diagonal">Make the camera diagonal instead of circular</param>
         public FisheyeCamera(Vec3 eye, Vec3 lookat, int screenWidth, int screenHeight, float? focalDist = null, bool diagonal = false)
         {
-            Vec3 vup = new Vec3(0, 0, 1);
+            Vec3 vup = new(0, 0, 1);
             this.eye = eye;
             this.dir = (lookat - eye).Normalize();
             this.focalDist = focalDist ?? (lookat - eye).Length;

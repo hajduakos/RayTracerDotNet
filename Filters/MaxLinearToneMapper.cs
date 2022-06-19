@@ -29,7 +29,7 @@ namespace RayTracer.Filters
             Reporter?.End("Tone mapping");
         }
 
-        private float NoNaN(float f)
+        private static float NoNaN(float f)
         {
             if (Single.IsNaN(f)) return 0;
             return f;

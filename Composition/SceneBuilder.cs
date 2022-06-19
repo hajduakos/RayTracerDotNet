@@ -17,10 +17,10 @@ namespace RayTracer.Composition
     public sealed class SceneBuilder
     {
         private static readonly NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
-        readonly Dictionary<string, Material> materials = new Dictionary<string, Material>();
+        readonly Dictionary<string, Material> materials = new();
         public Scene FromXML(string text)
         {
-            XmlDocument doc = new XmlDocument();
+            XmlDocument doc = new();
             doc.LoadXml(text);
             materials.Clear();
             XmlNode sceneNode = doc.ChildNodes[0];
@@ -116,7 +116,7 @@ namespace RayTracer.Composition
             string[] values = s.Split(" ");
             if (values.Length != 3 && values.Length != 6)
                 throw new XmlException($"Invalid vector '{s}', expected exactly 3 or 6 components.");
-            Vec3 origin = new Vec3(
+            Vec3 origin = new(
                 Convert.ToSingle(values[0], nfi),
                 Convert.ToSingle(values[1], nfi),
                 Convert.ToSingle(values[2], nfi));

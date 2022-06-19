@@ -32,8 +32,6 @@ namespace RayTracer.Composition
 
         public IReporter Reporter { get; set; }
 
-        private readonly ThreadSafeRandom rnd;
-
         /// <summary>
         /// Create a scene with a camera
         /// </summary>
@@ -54,7 +52,6 @@ namespace RayTracer.Composition
             this.dirLights = new List<DirLight>();
             this.objects = new List<IObject>();
             this.toneMappers = new List<IToneMapper>();
-            this.rnd = new ThreadSafeRandom();
         }
 
         /// <summary>
@@ -92,7 +89,7 @@ namespace RayTracer.Composition
             Contract.Requires(Cam != null, "Camera must not be null");
             Reporter?.Restart("Rendering");
             // Step 1: render the raw image
-            RawImage img = new RawImage(Cam.ScreenWidth, Cam.ScreenHeight);
+            RawImage img = new(Cam.ScreenWidth, Cam.ScreenHeight);
             for (int x = 0; x < Cam.ScreenWidth; ++x)
             {
                 Parallel.For(0, Cam.ScreenHeight, y => img[x, y] = TracePixel(x, y));
@@ -118,7 +115,7 @@ namespace RayTracer.Composition
         {
             int samples = 0;
             // Multiple samples: trace N x N grid and calculate average
-            Color totalColor = new Color(0, 0, 0);
+            Color totalColor = new(0, 0, 0);
             Vec3 camr = Cam.Right.Normalize();
             Vec3 camu = Cam.Up.Normalize();
             for (int dx = 0; dx < samplesPerPixel; ++dx)
@@ -140,7 +137,7 @@ namespace RayTracer.Composition
                             Vec3 eyeOffset = dofXoff + dofYoff;
                             if (eyeOffset.Length > dofRadius + Global.EPS) continue; // Drop points outside of circle
                             Vec3 eyePos = Cam.Eye + eyeOffset;
-                            Ray ray = new Ray(eyePos, rayEnd.Value - eyePos);
+                            Ray ray = new(eyePos, rayEnd.Value - eyePos);
                             totalColor += Trace(ray, 0);
 
                             ++samples;
@@ -177,7 +174,7 @@ namespace RayTracer.Composition
         /// <returns>Color coming from direct light sources</returns>
         private Color DirectLightSource(Intersection ints, Ray ray)
         {
-            Color totalColor = new Color(0, 0, 0); // Start with black
+            Color totalColor = new(0, 0, 0); // Start with black
             foreach (PointLight light in pointLights)
             {
                 // Check if light is directly visible
@@ -226,7 +223,7 @@ namespace RayTracer.Composition
         /// <param name="normal">Intersection normal</param>
         /// <param name="n">Index of refraction</param>
         /// <returns>Refracted ray or null</returns>
-        private Vec3? RefractRay(Ray ray, Vec3 normal, float n)
+        private static Vec3? RefractRay(Ray ray, Vec3 normal, float n)
         {
             float cosIn = ray.Dir * -normal;
             if (MathF.Abs(cosIn) < Global.EPS) return null; // No refraction
@@ -243,11 +240,11 @@ namespace RayTracer.Composition
         /// </summary>
         /// <param name="radius">Radius</param>
         /// <returns>Random vector with length <= radius</returns>
-        private Vec3 RndVec(float radius)
+        private static Vec3 RndVec(float radius)
         {
-            float theta = rnd.NextFloat() * MathF.PI;
-            float phi = rnd.NextFloat() * MathF.PI * 2;
-            float r2 = rnd.NextFloat() * radius;
+            float theta = ThreadSafeRandom.NextFloat() * MathF.PI;
+            float phi = ThreadSafeRandom.NextFloat() * MathF.PI * 2;
+            float r2 = ThreadSafeRandom.NextFloat() * radius;
             return new Vec3(r2 * MathF.Sin(theta) * MathF.Cos(phi), r2 * MathF.Sin(theta) * MathF.Sin(phi), r2 * MathF.Cos(theta));
         }
 
@@ -275,7 +272,7 @@ namespace RayTracer.Composition
             }
 
             // Rough materials: ambient and direct light source
-            Color roughColor = new Color(0, 0, 0);
+            Color roughColor = new(0, 0, 0);
             if (ints.Mat.IsRough)
             {
                 roughColor = ints.Mat.Ambient * ambient;
@@ -283,7 +280,7 @@ namespace RayTracer.Composition
             }
 
             // Smooth objects: reflection / refraction
-            Color smoothColor = new Color(0, 0, 0);
+            Color smoothColor = new(0, 0, 0);
             if (ints.Mat.IsSmooth)
             {
                 Vec3 originalNormal = ints.Normal;

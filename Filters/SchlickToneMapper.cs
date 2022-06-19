@@ -21,7 +21,7 @@ namespace RayTracer.Filters
                 Reporter?.Report(x, image.Width * 2 - 1, "Tone mapping");
             }
             float p = (imax - imin) / (255 * imin - imin);
-            Color i = new Color(imax, imax, imax);
+            Color i = new(imax, imax, imax);
             for (int x = 0; x < image.Width; ++x)
             {
                 Parallel.For(0, image.Height, y => image[x, y] = image[x, y] * p / (image[x, y] * (p - 1) - i));

@@ -80,7 +80,7 @@ namespace RayTracer.Objects
                 }
             }
 
-            private float Area(Vec3 pa, Vec3 pb, Vec3 pc)
+            private static float Area(Vec3 pa, Vec3 pb, Vec3 pc)
             {
                 float a = (pb - pc).Length;
                 float b = (pc - pa).Length;

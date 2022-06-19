@@ -27,7 +27,7 @@ namespace RayTracer.Composition.Camera
         public PerspectiveCamera(Vec3 eye, Vec3 lookat, float hfov, int screenWidth, int screenHeight, float? focalDist = null)
         {
             float hfovRadTan = MathF.Tan(hfov * MathF.PI / 180 / 2);
-            Vec3 vup = new Vec3(0, 0, 1);
+            Vec3 vup = new(0, 0, 1);
             this.eye = eye;
             float fd = focalDist ?? (lookat - eye).Length;
             this.lookat = eye + (lookat - eye).Normalize() * fd;

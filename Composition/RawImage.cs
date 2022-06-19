@@ -38,7 +38,7 @@ namespace RayTracer.Composition
         /// <returns>Bitmap</returns>
         public System.Drawing.Bitmap ToBitmap()
         {
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(Width, Height);
+            System.Drawing.Bitmap bmp = new(Width, Height);
             // Map [0,1] float to [0,255] integer
             for (int x = 0; x < Width; ++x)
                 for (int y = 0; y < Height; ++y)

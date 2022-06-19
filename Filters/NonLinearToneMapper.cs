@@ -18,7 +18,7 @@ namespace RayTracer.Filters
         public void ToneMap(RawImage image)
         {
             Reporter?.Restart("Tone mapping");
-            Color one = new Color(1, 1, 1);
+            Color one = new(1, 1, 1);
             for (int x = 0; x < image.Width; ++x)
             {
                 Parallel.For(0, image.Height, y => image[x, y] = image[x, y] / (image[x, y] * p + one));
