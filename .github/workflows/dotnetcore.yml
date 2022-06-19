@@ -28,9 +28,12 @@ jobs:
       run: sudo apt install libc6-dev libgdiplus
     - name: Build
       run: dotnet build -c release
-    - name: Render
+    - name: Render (Mac / Ubuntu)
       if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
       run: ./render-all.sh 180
+    - name: Render (Win)
+      if: ${{ startsWith(matrix.os, 'windows') }}
+      run: .\render-all.bat 180
     - name: Create HTML (from master on Ubuntu 22)
       if: ${{ github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-22.04' }}
       run: ./deploy.sh
