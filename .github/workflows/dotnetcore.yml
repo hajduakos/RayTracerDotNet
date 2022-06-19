@@ -20,6 +20,9 @@ jobs:
     - name: Install coreutils for timeout (Mac)
       if: ${{ startsWith(matrix.os, 'macos') }}
       run: brew install coreutils
+    - name: Install GDI+ (Mac)
+      if: ${{ startsWith(matrix.os, 'macos') }}
+      run: brew install mono-libgdiplus
     - name: Install GDI+ (Ubuntu 22)
       if: ${{ matrix.os == 'ubuntu-22.04' }}
       run: sudo apt install libc6-dev libgdiplus
@@ -28,8 +31,8 @@ jobs:
     - name: Render
       if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
       run: ./render-all.sh 180
-    - name: Create HTML
-      if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
+    - name: Create HTML (from master on Ubuntu 22)
+      if: ${{ github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-22.04' }}
       run: ./deploy.sh
     - name: Deploy to gh-pages (from master on Ubuntu 22)
       if: ${{ github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-22.04' }}
