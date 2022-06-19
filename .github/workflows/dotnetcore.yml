@@ -3,35 +3,31 @@ name: .NET Core
 on: [push, pull_request]
 
 jobs:
-  build-ubuntu:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-20.04, macos-12, windows-2022]
+    runs-on: ${{ matrix.os }}
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out code
+      uses: actions/checkout@v2
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: 6.0.x
     - name: Build
       run: dotnet build -c release
     - name: Render
+      if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
       run: ./render-all.sh 180
     - name: Create HTML
+      if: ${{ startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu') }}
       run: ./deploy.sh
-    - name: Deploy to gh-pages
-      if: github.ref == 'refs/heads/master'
+    - name: Deploy to gh-pages (from master on Ubuntu 22)
+      if: ${{ github.ref == 'refs/heads/master' && matrix.os == 'ubuntu-22.04' }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         publish_dir: out/
         github_token: ${{ secrets.GH_PAT }}
-
-  build-win:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '6.0.x'
-    - name: Build
-      run: dotnet build -c release
-  
