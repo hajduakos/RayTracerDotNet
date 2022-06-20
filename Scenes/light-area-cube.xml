@@ -1,4 +1,4 @@
-<scene samplesPerPixel="1">
+<scene samplesPerPixel="1" seed="182">
 	<perspectivecamera screenWidth="720" screenHeight="405" eye="5 -2 5" lookat="0 -1 1" hfov="50"/>
     <arealight pos="6 14 12" lum="400 400 400" radius="1.5" samples="50"/>
     

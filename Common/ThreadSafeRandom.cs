@@ -8,10 +8,15 @@ namespace RayTracer.Common
     /// </summary>
     public class ThreadSafeRandom
     {
-        private static readonly Random _global = new();
+        public ThreadSafeRandom(int seed = 0)
+        {
+            _global = new(seed);
+        }
+
+        private readonly Random _global;
         [ThreadStatic] private static Random _local;
 
-        public static float NextFloat()
+        public float NextFloat()
         {
             if (_local == null)
             {

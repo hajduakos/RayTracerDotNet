@@ -20,6 +20,7 @@ namespace RayTracer.Composition
         private readonly int samplesPerPixel;
         private readonly int dofSamples;
         private readonly float dofRadius;
+        private readonly ThreadSafeRandom rnd;
 
         /// <summary> Camera </summary>
         public ICamera Cam { get; set; }
@@ -39,7 +40,8 @@ namespace RayTracer.Composition
         /// <param name="dofSamples">Samples to simulate depth of field</param>
         /// <param name="dofRadius">Radius for depth of field (aperture)</param>
         /// <param name="cam">Camera</param>
-        public Scene(ICamera cam = null, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f)
+        /// <param name="seed">Random generator seed</param>
+        public Scene(ICamera cam = null, int samplesPerPixel = 1, int dofSamples = 1, float dofRadius = 0.0f, int seed = 0)
         {
             Contract.Requires(samplesPerPixel > 0, "Samples per pixel must be greater than 0");
             Contract.Requires(dofSamples > 0, "DoF samples must be greater than 0");
@@ -52,6 +54,7 @@ namespace RayTracer.Composition
             this.dirLights = new List<DirLight>();
             this.objects = new List<IObject>();
             this.toneMappers = new List<IToneMapper>();
+            rnd = new ThreadSafeRandom(seed);
         }
 
         /// <summary>
@@ -76,7 +79,7 @@ namespace RayTracer.Composition
         /// Add a new light to the scene
         /// </summary>
         /// <param name="light">Light to be added</param>
-        public void AddLight(AreaLight light) => pointLights.AddRange(light.ToPointLights());
+        public void AddLight(AreaLight light) => pointLights.AddRange(light.ToPointLights(rnd));
 
         public void AddToneMapper(IToneMapper tm) => toneMappers.Add(tm);
 
@@ -240,11 +243,11 @@ namespace RayTracer.Composition
         /// </summary>
         /// <param name="radius">Radius</param>
         /// <returns>Random vector with length <= radius</returns>
-        private static Vec3 RndVec(float radius)
+        private Vec3 RndVec(float radius)
         {
-            float theta = ThreadSafeRandom.NextFloat() * MathF.PI;
-            float phi = ThreadSafeRandom.NextFloat() * MathF.PI * 2;
-            float r2 = ThreadSafeRandom.NextFloat() * radius;
+            float theta = rnd.NextFloat() * MathF.PI;
+            float phi = rnd.NextFloat() * MathF.PI * 2;
+            float r2 = rnd.NextFloat() * radius;
             return new Vec3(r2 * MathF.Sin(theta) * MathF.Cos(phi), r2 * MathF.Sin(theta) * MathF.Sin(phi), r2 * MathF.Cos(theta));
         }
 

@@ -37,8 +37,9 @@ namespace RayTracer.Composition.Light
         /// <summary>
         /// Convert light to a list of point lights by random sampling
         /// </summary>
+        /// <param name="rnd">Random generator for sampling</param>
         /// <returns>List of point lights</returns>
-        public List<PointLight> ToPointLights()
+        public List<PointLight> ToPointLights(ThreadSafeRandom rnd)
         {
             // For only one sample, return the center
             if (Samples == 1) return new List<PointLight>() { new PointLight(Pos, Lum) };
@@ -49,9 +50,9 @@ namespace RayTracer.Composition.Light
             {
                 do
                 {
-                    x = ThreadSafeRandom.NextFloat() * 2 * Radius - Radius;
-                    y = ThreadSafeRandom.NextFloat() * 2 * Radius - Radius;
-                    z = ThreadSafeRandom.NextFloat() * 2 * Radius - Radius;
+                    x = rnd.NextFloat() * 2 * Radius - Radius;
+                    y = rnd.NextFloat() * 2 * Radius - Radius;
+                    z = rnd.NextFloat() * 2 * Radius - Radius;
                 } while (x * x + y * y + z * z > Radius * Radius);
                 pl.Add(new PointLight(Pos + new Vec3(x, y, z), Lum / Samples));
             }
