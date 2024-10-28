@@ -20,12 +20,6 @@ jobs:
     - name: Install coreutils for timeout (Mac)
       if: ${{ startsWith(matrix.os, 'macos') }}
       run: brew install coreutils
-    - name: Install GDI+ (Mac)
-      if: ${{ startsWith(matrix.os, 'macos') }}
-      run: brew install mono-libgdiplus
-    - name: Install GDI+ (Ubuntu 22)
-      if: ${{ matrix.os == 'ubuntu-22.04' }}
-      run: sudo apt install libc6-dev libgdiplus
     - name: Build
       run: dotnet build -c release
     - name: Render (Mac / Ubuntu)

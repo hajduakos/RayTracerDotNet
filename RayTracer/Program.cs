@@ -25,8 +25,7 @@ namespace RayTracer
                     Console.WriteLine($"Frame {(f + 1)}/{ap.Frames}");
                     Scene scene = new SceneBuilder().FromXML(ap.GetFrame(f));
                     scene.Reporter = new ConsoleReporter();
-                    using System.Drawing.Bitmap bmp = scene.Render().ToBitmap();
-                    bmp.Save($"{args[0]}{f:D3}.png");
+                    scene.Render().WriteToFile($"{args[0]}{f:D3}.bmp");
                 }
                 sw.Stop();
                 Console.WriteLine($"Elapsed: {sw.Elapsed}");

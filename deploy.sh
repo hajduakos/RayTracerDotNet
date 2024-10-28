@@ -6,12 +6,12 @@ set -e # exit with nonzero exit code if anything fails
 rm -rf out || exit 0
 mkdir out
 
-# copy all pngs
-cp -r Scenes/*.png out/ || true
+# copy all bmps
+cp -r Scenes/*.bmp out/ || true
 
 cd out
 echo "<html><head></head><body style=\"color: white; background-color: #333; text-align: center;\">" > index.html
-for f in *.png
+for f in *.bmp
 do
     echo "$f<br />" >> index.html
     echo "<img src=\"$f\" /> <br/><br />" >> index.html
