@@ -19,3 +19,7 @@ RayTracer\bin\Release\net6.0\RayTracer.exe Scenes\misc.xml
 dotnet build -c release
 dotnet RayTracer/bin/Release/net6.0/RayTracer.dll Scenes/misc.xml
 ```
+
+## Samples
+
+![Sample](../gh-pages/misc.xml000.bmp)
