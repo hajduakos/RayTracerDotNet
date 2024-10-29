@@ -23,3 +23,7 @@ dotnet RayTracer/bin/Release/net6.0/RayTracer.dll Scenes/misc.xml
 ## Samples
 
 ![Sample](../gh-pages/misc.xml000.bmp)
+
+![Sample](../gh-pages/material-mirror-color.xml000.bmp)
+
+![Sample](../gh-pages/misc-box.xml000.bmp)
