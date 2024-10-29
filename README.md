@@ -1,5 +1,7 @@
 # RayTracer.Net
 
+[![.NET Core](https://github.com/hajduakos/RayTracerDotNet/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/hajduakos/RayTracerDotNet/actions/workflows/dotnetcore.yml)
+
 A simple ray tracer implemented in .net core 6.0.
 See the scene files in the `Scenes` folder for examples.
 
