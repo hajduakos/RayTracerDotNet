@@ -11,11 +11,11 @@ When running the program the single parameter specifies the input scene.
 **Windows**
 ```
 dotnet build -c release
-bin\Release\net6.0\RayTracer.exe Scenes\misc.xml
+RayTracer\bin\Release\net6.0\RayTracer.exe Scenes\misc.xml
 ```
 
 **Linux / Mac**
 ```
 dotnet build -c release
-dotnet bin/Release/net6.0/RayTracer.dll Scenes/misc.xml
+dotnet RayTracer/bin/Release/net6.0/RayTracer.dll Scenes/misc.xml
 ```
