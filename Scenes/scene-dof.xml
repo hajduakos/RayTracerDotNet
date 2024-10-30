@@ -2,21 +2,21 @@
 	<perspectivecamera screenWidth="720" screenHeight="405" eye="9 -3 6" lookat="0 0 0.5" hfov="50" focalDist="10"/>
     <pointlight pos="40 40 40" lum="6400 6400 6400" />
 
-    <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
-    
+    <material id="orange" ambient="0.06 0.06 0" diffuse="0.9 0.3 0" />
+
     <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>
     <material id="green" ambient="0 0.1 0" diffuse="0 0.8 0" specular="0.5 0.5 0.5" shine="50" />
     <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.8" specular="0.5 0.5 0.5" shine="50"/>
-    
-    <plane material="brown" center="0 0 0" normal="0 0 1" />
-    
+
+    <plane material="orange" center="0 0 0" normal="0 0 1" />
+
     <sphere material="blue" center="2 -2 1" radius="1" />
     <sphere material="red" center="1 -1 1" radius="1" />
     <sphere material="green" center="0 0 1" radius="1" />
     <sphere material="blue" center="-1 1 1" radius="1" />
     <sphere material="red" center="-2 2 1" radius="1" />
     <sphere material="green" center="-3 3 1" radius="1" />
-    
+
     <nonlineartonemapper p="2" />
     <maxlineartonemapper />
 </scene>

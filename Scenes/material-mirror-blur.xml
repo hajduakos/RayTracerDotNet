@@ -1,18 +1,18 @@
 <scene samplesPerPixel="2">
 	<perspectivecamera screenWidth="720" screenHeight="405" eye="8 -2 2.5" lookat="0 0 1" hfov="50"/>
     <pointlight pos="10 2 5" lum="400 400 400" />
-    
-    <material id="red" ambient="0.1 0 0" diffuse="0.8 0 0" specular="0.5 0.5 0.5" shine="50"/>
-    <material id="brown" ambient="0.06 0.04 0" diffuse="0.6 0.4 0" />
-    
+
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 0.8" specular="0.5 0.5 0.5" shine="50"/>
+    <material id="orange" ambient="0.06 0.06 0" diffuse="0.9 0.3 0" />
+
     <material id="refl0" rough="0" smooth="0.6" isReflective="true" n="0 0 0" kap="0 0 0" />
     <material id="refl2" rough="0" smooth="0.6" isReflective="true" n="0 0 0" kap="0 0 0" blur="0.2" blurSamples="50" />
-    
-    <plane material="brown" center="0 0 0" normal="0 0 1"/>
+
+    <plane material="orange" center="0 0 0" normal="0 0 1"/>
     <sphere material="refl0" center="0.2 -2.2 1" radius="1" />
-    <sphere material="red" center="0 0 1" radius="1" />
+    <sphere material="blue" center="0 0 1" radius="1" />
     <sphere material="refl2" center="0.2 2.2 1" radius="1" />
-    
+
     <nonlineartonemapper p="2" />
     <maxlineartonemapper />
 </scene>
