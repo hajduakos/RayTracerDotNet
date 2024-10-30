@@ -29,3 +29,7 @@ dotnet RayTracer/bin/Release/net6.0/RayTracer.dll Scenes/misc.xml
 ![Sample](../gh-pages/material-mirror-color.xml000.bmp)
 
 ![Sample](../gh-pages/misc-box.xml000.bmp)
+
+![Sample](../gh-pages/material-mirror-blur.xml000.bmp)
+
+![Sample](../gh-pages/scene-dof.xml000.bmp)
