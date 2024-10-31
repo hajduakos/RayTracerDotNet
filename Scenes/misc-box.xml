@@ -1,12 +1,12 @@
 <scene samplesPerPixel="2">
 	<perspectivecamera screenWidth="720" screenHeight="405" eye="5 0 0" lookat="0 0 0" hfov="50"/>
-    <arealight pos="0 0 0.95" lum="15 15 15" radius="0.05" samples="20"/>
+    <arealight pos="1 0 0.95" lum="15 15 15" radius="0.05" samples="20"/>
 
     <material id="red" ambient="0.1 0 0" diffuse="0.7 0 0" />
     <material id="green" ambient="0 0.1 0" diffuse="0 0.7 0" />
     <material id="black" ambient="0 0 0" diffuse="0 0 0" />
     <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
-    <material id="blue" ambient="0 0 0.1" diffuse="0 0 1"/>
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 1" />
 	
 	<material id="glass" rough="0" smooth="1" isReflective="true" isRefractive="true" n="1.5 1.5 1.5" kap="0 0 0" />
     <material id="air" rough="0" smooth="1" isReflective="true" isRefractive="true" n="0.66667 0.66667 0.66667" kap="0 0 0" />
