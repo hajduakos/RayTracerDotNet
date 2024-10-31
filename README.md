@@ -33,3 +33,5 @@ dotnet RayTracer/bin/Release/net8.0/RayTracer.dll Scenes/misc.xml
 ![Sample](../gh-pages/material-mirror-blur.xml000.bmp)
 
 ![Sample](../gh-pages/scene-dof.xml000.bmp)
+
+![Sample](../gh-pages/material-glass-air-sphere.xml000.bmp)
