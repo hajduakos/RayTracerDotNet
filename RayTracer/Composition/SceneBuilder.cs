@@ -28,7 +28,9 @@ namespace RayTracer.Composition
 
             foreach (XmlNode node in sceneNode.ChildNodes)
             {
-                if (IsType(node, typeof(PerspectiveCamera)))
+                if (node.Name == "#comment")
+                    continue; // Ignore comments
+                else if (IsType(node, typeof(PerspectiveCamera)))
                     scene.Cam = Construct<PerspectiveCamera>(node);
                 else if (IsType(node, typeof(FisheyeCamera)))
                     scene.Cam = Construct<FisheyeCamera>(node);
