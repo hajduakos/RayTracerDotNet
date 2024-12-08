@@ -7,10 +7,6 @@ namespace RayTracer.Composition.Camera
     /// </summary>
     public interface ICamera
     {
-        /// <summary>
-        /// Eye position (where rays originate from)
-        /// </summary>
-        Vec3 Eye { get; }
 
         /// <summary>
         /// Upwards direction
@@ -42,5 +38,16 @@ namespace RayTracer.Composition.Camera
         /// <param name="yOffset">Y offset within the pixel [0;1]</param>
         /// <returns>Ray endpoint</returns>
         Vec3? GetRayEnd(int x, int y, float xOffset = .5f, float yOffset = .5f);
+
+
+        /// <summary>
+        /// Get the eye position (where rays originate from)
+        /// </summary>
+        /// <param name="x">Pixel X</param>
+        /// <param name="y">Pixel Y</param>
+        /// <param name="xOffset">X offset within the pixel [0;1]</param>
+        /// <param name="yOffset">Y offset within the pixel [0;1]</param>
+        /// <returns>Ray start point</returns>
+        Vec3 GetEye(int x, int y, float xOffset = .5f, float yOffset = .5f);
     }
 }

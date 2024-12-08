@@ -59,13 +59,13 @@ namespace RayTracer.Composition.Camera
         }
 
         /// <inheritdoc/>
+        public Vec3 GetEye(int x, int y, float xOffset = 0.5F, float yOffset = 0.5F) => eye;
+
+        /// <inheritdoc/>
         public Vec3 Up => up;
 
         /// <inheritdoc/>
         public Vec3 Right => right;
-
-        /// <inheritdoc/>
-        public Vec3 Eye => eye;
 
         /// <inheritdoc/>
         public int ScreenWidth => screenWidth;

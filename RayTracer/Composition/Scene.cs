@@ -139,7 +139,7 @@ namespace RayTracer.Composition
                             Vec3 dofYoff = camu * (-dofRadius + (dofy + 1) * 2 * dofRadius / (dofSamples + 1));
                             Vec3 eyeOffset = dofXoff + dofYoff;
                             if (eyeOffset.Length > dofRadius + Global.EPS) continue; // Drop points outside of circle
-                            Vec3 eyePos = Cam.Eye + eyeOffset;
+                            Vec3 eyePos = Cam.GetEye(x, y, xOffset, yOffset) + eyeOffset;
                             Ray ray = new(eyePos, rayEnd.Value - eyePos);
                             totalColor += Trace(ray, 0);
 

@@ -1,0 +1,25 @@
+<scene samplesPerPixel="1">
+	<orthogonalcamera screenWidth="720" screenHeight="405" eye="7 7 8" lookat="-1 -1 0" width="15"/>
+    <pointlight pos="0 10 10" lum="400 400 400" />
+
+    <material id="black" ambient="0.01 0.01 0.01" diffuse="0.1 0.1 0.1" />
+    <material id="white" ambient="0.2 0.2 0.2" diffuse="1 1 1" />
+
+    <material id="red" ambient="0.1 0 0" diffuse="1 0 0" />
+    <material id="green" ambient="0 0.1 0" diffuse="0 1 0" />
+    <material id="blue" ambient="0 0 0.1" diffuse="0 0 1"/>
+    
+    <checkerboard mat1="black" mat2="white" center="0 0 0" normal="0 0 1" matDir="1 0 0" />
+    <cube material="red" center="3 3 1" side="2" />
+    <cube material="green" center="3 0 1" side="2" />
+    <cube material="blue" center="3 -3 1" side="2" />
+    <cube material="green" center="0 3 1" side="2" />
+    <cube material="blue" center="0 0 1" side="2" />
+    <cube material="red" center="0 -3 1" side="2" />
+    <cube material="blue" center="-3 3 1" side="2" />
+    <cube material="red" center="-3 0 1" side="2" />
+    <cube material="green" center="-3 -3 1" side="2" />
+    
+    <nonlineartonemapper p="3" />
+    <maxlineartonemapper />
+</scene>

@@ -34,6 +34,8 @@ namespace RayTracer.Composition
                     scene.Cam = Construct<PerspectiveCamera>(node);
                 else if (IsType(node, typeof(FisheyeCamera)))
                     scene.Cam = Construct<FisheyeCamera>(node);
+                else if (IsType(node, typeof(OrthogonalCamera)))
+                    scene.Cam = Construct<OrthogonalCamera>(node);
                 else if (IsType(node, typeof(Material)))
                     materials.Add(node.Attributes["id"].Value, Construct<Material>(node));
                 else if (IsType(node, typeof(PointLight)))

@@ -3,10 +3,7 @@ using System;
 
 namespace RayTracer.Composition.Camera
 {
-    /// <summary>
-    /// Camera with perspective projection
-    /// </summary>
-    public sealed class PerspectiveCamera : ICamera
+    public sealed class OrthogonalCamera : ICamera
     {
         private readonly Vec3 eye;
         private readonly Vec3 lookat;
@@ -16,17 +13,16 @@ namespace RayTracer.Composition.Camera
         private readonly int screenHeight;
 
         /// <summary>
-        /// Create a new perspective camera
+        /// Create a new orthogonal camera
         /// </summary>
         /// <param name="eye">Position of the camera</param>
         /// <param name="lookat">Point where camera is looking</param>
-        /// <param name="hfov">Horizontal field of view (in degrees)</param>
+        /// <param name="width">Width of hypothetical sensor (defines field of view)</param>
         /// <param name="focalDist">Focal distance (defines the focal plane)</param>
         /// <param name="screenWidth">Width of the screen (in pixels)</param>
         /// <param name="screenHeight">Height of the screen (in pixels)</param>
-        public PerspectiveCamera(Vec3 eye, Vec3 lookat, float hfov, int screenWidth, int screenHeight, float? focalDist = null)
+        public OrthogonalCamera(Vec3 eye, Vec3 lookat, float width, int screenWidth, int screenHeight, float? focalDist = null)
         {
-            float hfovRadTan = MathF.Tan(hfov * MathF.PI / 180 / 2);
             Vec3 vup = new(0, 0, 1);
             this.eye = eye;
             float fd = focalDist ?? (lookat - eye).Length;
@@ -34,11 +30,10 @@ namespace RayTracer.Composition.Camera
             this.screenWidth = screenWidth;
             this.screenHeight = screenHeight;
             Vec3 w = eye - this.lookat;
-            float f = w.Length;
             right = vup % w;
-            right = right.Normalize() * f * hfovRadTan;
+            right = right.Normalize() * (width / 2);
             up = w % right;
-            up = up.Normalize() * f * hfovRadTan * (screenHeight / (float)screenWidth);
+            up = up.Normalize() * (width / 2) * (screenHeight / (float)screenWidth);
         }
 
         /// <inheritdoc/>
@@ -46,7 +41,8 @@ namespace RayTracer.Composition.Camera
             lookat + right * (2 * (x + xOffset) / screenWidth - 1) + up * (2 * (y + yOffset) / screenHeight - 1);
 
         /// <inheritdoc/>
-        public Vec3 GetEye(int x, int y, float xOffset = 0.5F, float yOffset = 0.5F) => eye;
+        public Vec3 GetEye(int x, int y, float xOffset = 0.5F, float yOffset = 0.5F) =>
+            eye + right * (2 * (x + xOffset) / screenWidth - 1) + up * (2 * (y + yOffset) / screenHeight - 1);
 
         /// <inheritdoc/>
         public Vec3 Up => up;
