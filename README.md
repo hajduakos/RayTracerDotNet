@@ -2,7 +2,7 @@
 
 [![.NET Core](https://github.com/hajduakos/RayTracerDotNet/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/hajduakos/RayTracerDotNet/actions/workflows/dotnetcore.yml)
 
-A simple, cross platform ray tracer implemented in .NET 8.0.
+A simple, cross platform ray tracer implemented in .NET 10.0.
 See the scene files in the `Scenes` folder for examples.
 
 ## Building and running
@@ -13,13 +13,13 @@ When running the program the single parameter specifies the input scene.
 **Windows**
 ```
 dotnet build -c release
-RayTracer\bin\Release\net8.0\RayTracer.exe Scenes\misc.xml
+RayTracer\bin\Release\net10.0\RayTracer.exe Scenes\misc.xml
 ```
 
 **Linux / Mac**
 ```
 dotnet build -c release
-dotnet RayTracer/bin/Release/net8.0/RayTracer.dll Scenes/misc.xml
+dotnet RayTracer/bin/Release/net10.0/RayTracer.dll Scenes/misc.xml
 ```
 
 ## Samples
