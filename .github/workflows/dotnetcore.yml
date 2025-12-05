@@ -19,7 +19,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
     - name: Install coreutils for timeout (Mac)
       if: ${{ startsWith(matrix.os, 'macos') }}
       run: brew install coreutils
